@@ -1,16 +1,12 @@
 #pragma once
 
+#include "Shader.h"
+
 namespace Renderer
 {
-    class PixelShader
+    class PixelShader: public Shader
     {
     public:
-        virtual ~PixelShader() = default;
-
-    public:
-        virtual bool Compile() = 0;
-
-    public:
-        static PixelShader* Create(const char* shaderContent);
+        static PixelShader* Create();
     };
 }

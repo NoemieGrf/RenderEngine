@@ -7,11 +7,11 @@ namespace Renderer
     class VertexShaderOpenGL : public VertexShader
     {
     public:
-        explicit VertexShaderOpenGL(const char* shaderContent);
         ~VertexShaderOpenGL() override;
 
     public: // override
         bool Compile() override;
+        bool LoadFromString(const char* data) override;
 
     public:
         unsigned int GetShaderId() const;

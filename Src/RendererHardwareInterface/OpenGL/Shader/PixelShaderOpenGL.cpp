@@ -4,15 +4,16 @@
 namespace Renderer
 {
 
-    PixelShaderOpenGL::PixelShaderOpenGL(const char* shaderContent)
-    {
-        _shaderId = ::glCreateShader(GL_FRAGMENT_SHADER);
-        ::glShaderSource(_shaderId, 1, &shaderContent, nullptr);
-    }
-
     PixelShaderOpenGL::~PixelShaderOpenGL()
     {
         ::glDeleteShader(_shaderId);
+    }
+
+    bool PixelShaderOpenGL::LoadFromString(const char* data)
+    {
+        _shaderId = ::glCreateShader(GL_FRAGMENT_SHADER);
+        ::glShaderSource(_shaderId, 1, &data, nullptr);
+        return true;
     }
 
     bool PixelShaderOpenGL::Compile()

@@ -4,15 +4,16 @@
 namespace Renderer
 {
 
-    VertexShaderOpenGL::VertexShaderOpenGL(const char* shaderContent)
-    {
-        _shaderId = ::glCreateShader(GL_VERTEX_SHADER);
-        ::glShaderSource(_shaderId, 1, &shaderContent, nullptr);
-    }
-
     VertexShaderOpenGL::~VertexShaderOpenGL()
     {
         ::glDeleteShader(_shaderId);
+    }
+
+    bool VertexShaderOpenGL::LoadFromString(const char* data)
+    {
+        _shaderId = ::glCreateShader(GL_VERTEX_SHADER);
+        ::glShaderSource(_shaderId, 1, &data, nullptr);
+        return true;
     }
 
     bool VertexShaderOpenGL::Compile()

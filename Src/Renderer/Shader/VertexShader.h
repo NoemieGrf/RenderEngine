@@ -1,16 +1,12 @@
 #pragma once
 
+#include "Shader.h"
+
 namespace Renderer
 {
-    class VertexShader
+    class VertexShader: public Shader
     {
     public:
-        virtual ~VertexShader() = default;
-
-    public:
-        virtual bool Compile() = 0;
-
-    public:
-        static VertexShader* Create(const char* shaderContent);
+        static VertexShader* Create();
     };
 }

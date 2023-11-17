@@ -7,11 +7,11 @@ namespace Renderer
     class PixelShaderOpenGL : public PixelShader
     {
     public:
-        explicit PixelShaderOpenGL(const char* shaderContent);
         ~PixelShaderOpenGL() override;
 
     public: // override
         bool Compile() override;
+        bool LoadFromString(const char* data) override;
 
     public:
         unsigned int GetShaderId() const;

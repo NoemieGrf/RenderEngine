@@ -6,12 +6,12 @@
 namespace Renderer
 {
 
-    PixelShader* PixelShader::Create(const char* shaderContent)
+    PixelShader* PixelShader::Create()
     {
         switch (Renderer::GetApi())
         {
             case RendererApi::OpenGL:
-                return new PixelShaderOpenGL(shaderContent);
+                return new PixelShaderOpenGL();
             case RendererApi::Vulkan:
                 break;
             case RendererApi::D3D11:

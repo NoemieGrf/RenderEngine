@@ -6,12 +6,12 @@
 namespace Renderer
 {
 
-    VertexShader* VertexShader::Create(const char* shaderContent)
+    VertexShader* VertexShader::Create()
     {
         switch (Renderer::GetApi())
         {
             case RendererApi::OpenGL:
-                return new VertexShaderOpenGL(shaderContent);
+                return new VertexShaderOpenGL();
             case RendererApi::Vulkan:
                 break;
             case RendererApi::D3D11:

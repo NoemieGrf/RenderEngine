@@ -69,10 +69,12 @@ namespace Renderer
         ShaderProgram* pShader = ShaderProgram::Create();
 
         {
-            VertexShader* pVertexShader = VertexShader::Create(pvsCode);
+            VertexShader* pVertexShader = VertexShader::Create();
+            pVertexShader->LoadFromString(pvsCode);
             pVertexShader->Compile();
 
-            PixelShader* pPixelShader = PixelShader::Create(pfsCode);
+            PixelShader* pPixelShader = PixelShader::Create();
+            pPixelShader->LoadFromString(pfsCode);
             pPixelShader->Compile();
 
             pShader->AddVertexShader(pVertexShader);
