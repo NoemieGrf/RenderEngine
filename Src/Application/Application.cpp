@@ -1,9 +1,12 @@
 #include "Define/Math.h"
 #include "Application.h"
 #include "RendererHardwareInterface/OpenGL/RhiOpenGL.h"
+#include "Util/Logger/Logger.h"
 
 Application::Application()
 {
+    Util::Logger::InitConsoleLogger();
+
     _pImpl = new ApplicationWinImp();
 }
 

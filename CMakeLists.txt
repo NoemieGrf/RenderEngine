@@ -25,6 +25,10 @@ add_executable(${TargetName}
         ${ImGuiDir}/imgui_widgets.cpp
 )
 
+if (CMAKE_BUILD_TYPE STREQUAL Debug)
+    target_compile_definitions(${TargetName} PRIVATE ENABLE_CONSOLE_LOG)
+endif ()
+
 set_target_properties(${TargetName} PROPERTIES
         LINK_FLAGS "/SUBSYSTEM:WINDOWS"
 )
