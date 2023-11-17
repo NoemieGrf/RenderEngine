@@ -1,5 +1,6 @@
 #include "PixelShaderOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/GLAD/Glad.h"
+#include "Util/Logger/Logger.h"
 
 namespace Renderer
 {
@@ -13,6 +14,17 @@ namespace Renderer
     {
         _shaderId = ::glCreateShader(GL_FRAGMENT_SHADER);
         ::glShaderSource(_shaderId, 1, &data, nullptr);
+
+        GLint flag;
+        GLchar infoLog[512];
+        glGetShaderiv(_shaderId, GL_COMPILE_STATUS, &flag);
+        if (!flag)
+        {
+            glGetShaderInfoLog(_shaderId, 512, nullptr, infoLog);
+            Util::Logger::LogError(std::string("Shader Compile Fail, ") + infoLog);
+            return false;
+        }
+
         return true;
     }
 
