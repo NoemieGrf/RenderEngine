@@ -1,0 +1,15 @@
+{
+	"EnumGenConfig": [
+		{
+			"EnumName": "RendererApi",
+			"Type": "int",
+			"Value": [
+				"OpenGL",
+				"Vulkan",
+				"D3D11",
+				"D3D12"
+			],
+			"FilePath": "Src/Define/"
+		}
+	]
+}
