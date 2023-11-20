@@ -9,7 +9,7 @@
 				"D3D11",
 				"D3D12"
 			],
-			"FilePath": "Src/Define/"
+			"FilePath": "../CppProject/Src/Define/"
 		}
 	]
 }
