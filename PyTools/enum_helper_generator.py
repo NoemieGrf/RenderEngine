@@ -23,6 +23,7 @@ class Processor:
         cg: CodeGenerator = CodeGenerator()
 
         codegen.code_generator.gen_header_comment(cg)
+        codegen.code_generator.gen_pragma_once(cg)
 
         if self.namespace is not None:
             codegen.code_generator.gen_namespace_begin(cg, self.namespace)

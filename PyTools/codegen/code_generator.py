@@ -32,7 +32,7 @@ class CodeGenerator:
         self.indent -= 1
 
     def write_to_file(self, path: str) -> None:
-        f = open(path, 'w')
+        f = open(path, 'w', encoding='utf-8')
         f.write(self.content)
         f.close()
 
@@ -41,6 +41,12 @@ def gen_header_comment(cg: CodeGenerator) -> None:
     cg.append('/* ****************************** \n')
     cg.append(' * Auto Generated File ! \n')
     cg.append(' * ******************************/\n')
+    cg.new_line()
+
+
+def gen_pragma_once(cg: CodeGenerator) -> None:
+    cg.append('#pragma once')
+    cg.new_line()
 
 
 def gen_namespace_begin(cg: CodeGenerator, namespace_name: str) -> None:

@@ -2,6 +2,8 @@
  * Auto Generated File ! 
  * ******************************/
 
+#pragma once
+
 enum class RendererApi: int
 {
 	OpenGL,
