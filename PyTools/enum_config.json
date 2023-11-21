@@ -33,7 +33,46 @@
 				"Int4"
 			],
 			"StringConverter": true,
-			"CustomConverter": []
+			"CustomConverter": [
+				{
+					"Name": "GetShaderDataTypeSize",
+					"ReturnValue": "unsigned int",
+					"DefaultReturn": "0",
+					"Map": [
+						{ "None":       "0" },
+						{ "Bool":       "1" },
+						{ "Float":      "4" },
+						{ "Float2":     "4 * 2" },
+						{ "Float3":     "4 * 3" },
+						{ "Float4":     "4 * 4" },
+						{ "Matrix3x3":  "4 * 3 * 3" },
+						{ "Matrix4x4":  "4 * 4 * 4" },
+						{ "Int":        "4" },
+						{ "Int2":       "4 * 2" },
+						{ "Int3":       "4 * 3" },
+						{ "Int4":       "4 * 4" }
+					]
+				},
+				{
+					"Name": "GetShaderDataCount",
+					"ReturnValue": "unsigned int",
+					"DefaultReturn": "0",
+					"Map": [
+						{ "None":       "0" },
+						{ "Bool":       "1" },
+						{ "Float":      "1" },
+						{ "Float2":     "2" },
+						{ "Float3":     "3" },
+						{ "Float4":     "4" },
+						{ "Matrix3x3":  "3 * 3" },
+						{ "Matrix4x4":  "4 * 4" },
+						{ "Int":        "1" },
+						{ "Int2":       "2" },
+						{ "Int3":       "3" },
+						{ "Int4":       "4" }
+					]
+				}
+			]
 		}
 	]
 }

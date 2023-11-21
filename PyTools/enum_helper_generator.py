@@ -4,6 +4,24 @@ from codegen.function_gen_config import FunctionConfig
 from codegen.code_generator import CodeGenerator
 
 
+class CustomEnumConverterConfig:
+    def __init__(self, name: str, return_type: str, return_default: str, mapping: list[dict[str, str]]) -> None:
+        self.name: str = name
+        self.return_type: str = return_type
+        self.return_default: str = return_default
+        self.mapping: list[dict[str, str]] = mapping
+
+    def get_function(self, enum_name: str, class_name: str) -> FunctionConfig:
+        f: FunctionConfig = FunctionConfig(
+            self.name,
+            self.return_type,
+            {enum_name: 'data'},
+            class_name
+        )
+        f.add_static()
+        return f
+
+
 class Processor:
     def __init__(self, single_enum_config: dict):
         self.enum_config: EnumConfig = EnumConfig(single_enum_config)
@@ -14,8 +32,6 @@ class Processor:
             self.namespace: str | None = None
 
         self.has_string_converter: bool = single_enum_config['StringConverter']
-        self.custom_converter: list[str] | None = single_enum_config['CustomConverter']
-
         self.helper_class_name: str = self.enum_config.enum_name + 'Helper'
 
         if self.has_string_converter:
@@ -40,6 +56,18 @@ class Processor:
                 self.helper_class_name
             )
             self.string_to_enum_function_config.add_static()
+
+        if 'CustomConverter' not in single_enum_config.keys():
+            self.custom_converter: list[CustomEnumConverterConfig] | None = None
+        else:
+            self.custom_converter: list[CustomEnumConverterConfig] | None = []
+            for single_custom_converter_config in single_enum_config['CustomConverter']:
+                self.custom_converter.append(CustomEnumConverterConfig(
+                    single_custom_converter_config['Name'],
+                    single_custom_converter_config['ReturnValue'],
+                    single_custom_converter_config['DefaultReturn'],
+                    single_custom_converter_config['Map']
+                ))
 
         file_name: str = single_enum_config['EnumName']
         file_base_path: str = single_enum_config['FilePath']
@@ -115,9 +143,14 @@ class Processor:
         cg.gen_function(self.enum_to_string_function_config, True).semicolon()
         cg.new_line()
         cg.gen_function(self.string_to_enum_function_config, True).semicolon()
+        cg.new_line()
         pass
 
     def generator_custom_converter_declaration(self, cg: CodeGenerator) -> None:
+        for custom_converter_config in self.custom_converter:
+            cg.gen_function(custom_converter_config.get_function(self.enum_config.enum_name, self.helper_class_name),
+                            True).semicolon()
+            cg.new_line()
         pass
 
     def generate_cpp_file(self) -> None:
@@ -180,11 +213,12 @@ class Processor:
         cg.left_bracket().indent_increase().new_line()
 
         cg.append('static std::unordered_map<std::string, ' + self.enum_config.enum_name + '> map = ').new_line()
-        cg.left_bracket().indent_increase().new_line()
+        cg.left_bracket().indent_increase()
 
         for enum_value in self.enum_config.value_array:
+            cg.new_line()
             cg.left_bracket().append(' \"' + enum_value + '\", ' + self.enum_config.enum_name + '::' + enum_value + ' ')
-            cg.right_bracket().append(',').new_line()
+            cg.right_bracket().append(',')
 
         cg.indent_decrease().new_line().right_bracket().semicolon().new_line()
 
@@ -194,13 +228,40 @@ class Processor:
 
         cg.new_line()
         cg.append('return ' + self.enum_config.enum_name + '::' + self.enum_config.value_array[0]).semicolon()
-        cg.new_line()
 
         cg.indent_decrease().new_line()
         cg.right_bracket().new_line()
         pass
 
     def generator_custom_converter_implement(self, cg: CodeGenerator) -> None:
+        for custom_converter_config in self.custom_converter:
+            function_config = custom_converter_config.get_function(self.enum_config.enum_name, self.helper_class_name)
+            cg.new_line()
+            cg.gen_function(function_config, False).new_line()
+            cg.left_bracket().indent_increase().new_line()
+
+            cg.append('static std::unordered_map<' + self.enum_config.enum_name + ', ')
+            cg.append(custom_converter_config.return_type + '> map = ').new_line()
+            cg.left_bracket().indent_increase()
+
+            for single_map in custom_converter_config.mapping:
+                for map_key, map_value in single_map.items():
+                    cg.new_line()
+                    cg.left_bracket().append(self.enum_config.enum_name + '::' + map_key + ', ' + map_value + ' ')
+                    cg.right_bracket().append(',')
+
+            cg.indent_decrease().new_line().right_bracket().semicolon().new_line()
+
+            cg.new_line()
+            cg.append('if (map.contains(data))').indent_increase().new_line()
+            cg.append('return map[data];').indent_decrease().new_line()
+
+            cg.new_line()
+            cg.append('return ' + custom_converter_config.return_default).semicolon()
+
+            cg.indent_decrease().new_line()
+            cg.right_bracket().new_line()
+            cg.new_line()
         pass
 
 
