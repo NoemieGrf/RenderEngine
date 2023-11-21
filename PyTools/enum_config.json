@@ -3,13 +3,37 @@
 		{
 			"EnumName": "RendererApi",
 			"Type": "int",
+			"FilePath": "../CppProject/Src/Define/",
 			"Value": [
 				"OpenGL",
 				"Vulkan",
 				"D3D11",
 				"D3D12"
 			],
-			"FilePath": "../CppProject/Src/Define/"
+			"StringConverter": true,
+			"CustomConverter": []
+		},
+		{
+			"EnumName": "ShaderDataType",
+			"Type": "int",
+			"Namespace": "Renderer",
+			"FilePath": "../CppProject/Src/Renderer/Shader/",
+			"Value": [
+				"None",
+				"Bool",
+				"Float",
+				"Float2",
+				"Float3",
+				"Float4",
+				"Matrix3x3",
+				"Matrix4x4",
+				"Int",
+				"Int2",
+				"Int3",
+				"Int4"
+			],
+			"StringConverter": true,
+			"CustomConverter": []
 		}
 	]
 }

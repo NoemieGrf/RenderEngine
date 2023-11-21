@@ -1,18 +1,45 @@
 import json
-import codegen.code_generator
 from codegen.enum_gen_config import EnumConfig
+from codegen.function_gen_config import FunctionConfig
 from codegen.code_generator import CodeGenerator
-from typing import Dict, List
 
 
 class Processor:
-    def __init__(self, single_enum_config: Dict):
+    def __init__(self, single_enum_config: dict):
         self.enum_config: EnumConfig = EnumConfig(single_enum_config)
 
         if 'Namespace' in single_enum_config.keys():
             self.namespace: str | None = single_enum_config['Namespace']
         else:
             self.namespace: str | None = None
+
+        self.has_string_converter: bool = single_enum_config['StringConverter']
+        self.custom_converter: list[str] | None = single_enum_config['CustomConverter']
+
+        self.helper_class_name: str = self.enum_config.enum_name + 'Helper'
+
+        if self.has_string_converter:
+            enum_to_string_func_name: str = self.enum_config.enum_name + 'ToString'
+            enum_to_string_input: dict[str, str] = {self.enum_config.enum_name: 'data'}
+
+            self.enum_to_string_function_config = FunctionConfig(
+                enum_to_string_func_name,
+                'std::string',
+                enum_to_string_input,
+                self.helper_class_name
+            )
+            self.enum_to_string_function_config.add_static()
+
+            string_to_enum_func_name: str = 'StringTo' + self.enum_config.enum_name
+            string_to_enum_input: dict[str, str] = {'std::string': 'data'}
+
+            self.string_to_enum_function_config = FunctionConfig(
+                string_to_enum_func_name,
+                self.enum_config.enum_name,
+                string_to_enum_input,
+                self.helper_class_name
+            )
+            self.string_to_enum_function_config.add_static()
 
         file_name: str = single_enum_config['EnumName']
         file_base_path: str = single_enum_config['FilePath']
@@ -22,30 +49,141 @@ class Processor:
     def generator_header_file(self) -> None:
         cg: CodeGenerator = CodeGenerator()
 
-        codegen.code_generator.gen_header_comment(cg)
-        codegen.code_generator.gen_pragma_once(cg)
+        # auto gen comment
+        cg.gen_header_comment().new_line()
 
+        # header pragma once
+        cg.gen_pragma_once().new_line()
+
+        # include string
+        cg.gen_include('<string>').new_line()
+
+        # namespace begin
         if self.namespace is not None:
-            codegen.code_generator.gen_namespace_begin(cg, self.namespace)
+            cg.gen_namespace(self.namespace).new_line().left_bracket()
+            cg.indent_increase().new_line()
+
+        # enum class
+        cg.gen_enum_class(self.enum_config)
+
+        # converter function declaration
+        cg.new_line()
+        self.generator_converter_declaration(cg)
+
+        # namespace end
+        if self.namespace is not None:
+            cg.indent_decrease().new_line().right_bracket()
 
         cg.new_line()
-        codegen.code_generator.gen_enum_class(cg, self.enum_config)
-        cg.new_line()
-
-        if self.namespace is not None:
-            codegen.code_generator.gen_namespace_end(cg)
-
         cg.write_to_file(self.header_file_path)
         pass
 
-    def generate_cpp_file(self) -> None:
+    def generator_converter_declaration(self, cg: CodeGenerator) -> None:
+        cg.new_line()
 
+        # class begin
+        cg.append('class ').append(self.helper_class_name).new_line()
+        cg.left_bracket().new_line()
+
+        # public begin
+        cg.append('public:').indent_increase().new_line()
+
+        # deleted constructor
+        cctor: FunctionConfig = FunctionConfig(self.helper_class_name, None, {}, self.helper_class_name)
+        cg.gen_function(cctor, True)
+        cg.append(' = delete;').new_line()
+
+        # public end
+        cg.indent_decrease().new_line()
+
+        # public begin
+        cg.append('public:').indent_increase().new_line()
+
+        # converter method declarations
+        self.generator_string_converter_declaration(cg)
+        self.generator_custom_converter_declaration(cg)
+
+        # public end
+        cg.indent_decrease().new_line()
+
+        # class end
+        cg.right_bracket().semicolon().indent_decrease().new_line()
+
+        pass
+
+    def generator_string_converter_declaration(self, cg: CodeGenerator) -> None:
+        cg.gen_function(self.enum_to_string_function_config, True).semicolon()
+        cg.new_line()
+        cg.gen_function(self.string_to_enum_function_config, True).semicolon()
+        pass
+
+    def generator_custom_converter_declaration(self, cg: CodeGenerator) -> None:
+        pass
+
+    def generate_cpp_file(self) -> None:
+        if not self.has_string_converter and self.custom_converter is None:
+            return
+
+        cg: CodeGenerator = CodeGenerator()
+
+        # auto gen comment
+        cg.gen_header_comment().new_line()
+
+        # include header
+        cg.gen_include('\"' + self.enum_config.enum_name + '.h\"').new_line()
+
+        # namespace begin
+        if self.namespace is not None:
+            cg.gen_namespace(self.namespace).new_line().left_bracket()
+            cg.indent_increase().new_line()
+
+        self.generator_string_converter_implement(cg)
+        self.generator_custom_converter_implement(cg)
+
+        # namespace end
+        if self.namespace is not None:
+            cg.indent_decrease().new_line().right_bracket()
+
+        cg.new_line()
+        cg.write_to_file(self.cpp_file_path)
+        pass
+
+    def generator_string_converter_implement(self, cg: CodeGenerator) -> None:
+        # enum to string
+        cg.new_line()
+        cg.gen_function(self.enum_to_string_function_config, False).new_line()
+        cg.left_bracket().indent_increase().new_line()
+
+        cg.append('switch (data)').new_line()
+        cg.left_bracket().indent_increase().new_line()
+
+        for enum_value in self.enum_config.value_array:
+            cg.append('case ' + self.enum_config.enum_name + '::' + enum_value + ': ').indent_increase().new_line()
+            cg.append('return \"' + enum_value + '\"').semicolon().indent_decrease().new_line()
+
+        cg.indent_decrease().new_line()
+        cg.right_bracket().new_line()
+
+        cg.indent_decrease().new_line()
+        cg.right_bracket().new_line()
+
+        # string to enum
+        cg.new_line()
+        cg.gen_function(self.string_to_enum_function_config, False).new_line()
+        cg.left_bracket().indent_increase().new_line()
+
+        cg.indent_decrease().new_line()
+        cg.right_bracket().new_line()
+
+        pass
+
+    def generator_custom_converter_implement(self, cg: CodeGenerator) -> None:
         pass
 
 
 def main() -> None:
     config_file: str = 'enum_config.json'
-    with open(config_file, 'r', encoding='utf8') as fp:
+    with open(config_file, 'r', encoding='utf-8') as fp:
         enum_config_array = json.load(fp)['EnumGenConfig']
         for single_enum_config in enum_config_array:
             processor: Processor = Processor(single_enum_config)
