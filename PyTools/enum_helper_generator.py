@@ -179,7 +179,7 @@ class Processor:
         cg.gen_function(self.string_to_enum_function_config, False).new_line()
         cg.left_bracket().indent_increase().new_line()
 
-        cg.append('static std::unordered_map<std::string, ShaderDataType> map = ').new_line()
+        cg.append('static std::unordered_map<std::string, ' + self.enum_config.enum_name + '> map = ').new_line()
         cg.left_bracket().indent_increase().new_line()
 
         for enum_value in self.enum_config.value_array:
