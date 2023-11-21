@@ -31,7 +31,7 @@ class Processor:
             self.enum_to_string_function_config.add_static()
 
             string_to_enum_func_name: str = 'StringTo' + self.enum_config.enum_name
-            string_to_enum_input: dict[str, str] = {'std::string': 'data'}
+            string_to_enum_input: dict[str, str] = {'const std::string&': 'data'}
 
             self.string_to_enum_function_config = FunctionConfig(
                 string_to_enum_func_name,
@@ -131,14 +131,19 @@ class Processor:
 
         # include header
         cg.gen_include('\"' + self.enum_config.enum_name + '.h\"').new_line()
+        cg.gen_include('<unordered_map>').new_line()
 
         # namespace begin
         if self.namespace is not None:
             cg.gen_namespace(self.namespace).new_line().left_bracket()
             cg.indent_increase().new_line()
 
-        self.generator_string_converter_implement(cg)
-        self.generator_custom_converter_implement(cg)
+        if self.has_string_converter:
+            self.generator_enum_to_string_converter_implement(cg)
+            self.generator_string_to_enum_converter_implement(cg)
+
+        if self.custom_converter is not None:
+            self.generator_custom_converter_implement(cg)
 
         # namespace end
         if self.namespace is not None:
@@ -148,7 +153,7 @@ class Processor:
         cg.write_to_file(self.cpp_file_path)
         pass
 
-    def generator_string_converter_implement(self, cg: CodeGenerator) -> None:
+    def generator_enum_to_string_converter_implement(self, cg: CodeGenerator) -> None:
         # enum to string
         cg.new_line()
         cg.gen_function(self.enum_to_string_function_config, False).new_line()
@@ -166,15 +171,33 @@ class Processor:
 
         cg.indent_decrease().new_line()
         cg.right_bracket().new_line()
+        pass
 
+    def generator_string_to_enum_converter_implement(self, cg: CodeGenerator) -> None:
         # string to enum
         cg.new_line()
         cg.gen_function(self.string_to_enum_function_config, False).new_line()
         cg.left_bracket().indent_increase().new_line()
 
+        cg.append('static std::unordered_map<std::string, ShaderDataType> map = ').new_line()
+        cg.left_bracket().indent_increase().new_line()
+
+        for enum_value in self.enum_config.value_array:
+            cg.left_bracket().append(' \"' + enum_value + '\", ' + self.enum_config.enum_name + '::' + enum_value + ' ')
+            cg.right_bracket().append(',').new_line()
+
+        cg.indent_decrease().new_line().right_bracket().semicolon().new_line()
+
+        cg.new_line()
+        cg.append('if (map.contains(data))').indent_increase().new_line()
+        cg.append('return map[data];').indent_decrease().new_line()
+
+        cg.new_line()
+        cg.append('return ' + self.enum_config.enum_name + '::' + self.enum_config.value_array[0]).semicolon()
+        cg.new_line()
+
         cg.indent_decrease().new_line()
         cg.right_bracket().new_line()
-
         pass
 
     def generator_custom_converter_implement(self, cg: CodeGenerator) -> None:
