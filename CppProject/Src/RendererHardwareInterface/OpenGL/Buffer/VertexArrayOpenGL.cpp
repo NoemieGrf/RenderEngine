@@ -39,7 +39,7 @@ namespace Renderer
         {
             glEnableVertexAttribArray(index);
             glVertexAttribPointer(index,
-                                  GetShaderDataCount(element.dataType),
+                                  ShaderDataTypeHelper::GetShaderDataCount(element.dataType),
                                   GetShaderDataTypeGlEnum(element.dataType),
                                   element.normalized ? GL_TRUE : GL_FALSE,
                                   vertexBufferLayout.GetStride(),

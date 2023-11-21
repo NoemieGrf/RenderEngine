@@ -6,7 +6,7 @@ namespace Renderer
     BufferElement::BufferElement(ShaderDataType type, const std::string& name, bool normalized)
             : name(name)
             , dataType(type)
-            , size(GetShaderDataTypeSize(type))
+            , size(ShaderDataTypeHelper::GetShaderDataTypeSize(type))
             , offset(0)
             , normalized(normalized)
     {

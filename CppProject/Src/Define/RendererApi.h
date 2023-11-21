@@ -3,7 +3,7 @@
  * ******************************/
 
 #pragma once
-
+#include <string>
 enum class RendererApi: int
 {
 	OpenGL,
@@ -11,3 +11,15 @@ enum class RendererApi: int
 	D3D11,
 	D3D12
 };
+
+class RendererApiHelper
+{
+public:
+	RendererApiHelper() = delete;
+	
+public:
+	static std::string RendererApiToString(RendererApi data);
+	static RendererApi StringToRendererApi(const std::string& data);
+	
+};
+
