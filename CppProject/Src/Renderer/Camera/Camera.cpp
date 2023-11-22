@@ -4,14 +4,10 @@
 namespace Renderer
 {
     Camera::Camera(float left, float right, float bottom, float top, float near, float far)
-        : _left(left)
-        , _right(right)
-        , _bottom(bottom)
-        , _top(top)
-        , _near(near)
-        , _far(far)
+        : _frustum({left, right, bottom, top, near, far})
         , _needUpdateProjectionMatrix(true)
         , _needUpdateViewMatrix(true)
+        , _needUpdateCachedVPMatrix(true)
     {
     }
 
@@ -27,16 +23,10 @@ namespace Renderer
         SetNeedUpdateProjectionMatrix();
     }
 
-    const Eigen::Matrix4f& Camera::GetProjectionMatrix()
+    void Camera::SetFrustum(const Frustum& frustum)
     {
-        UpdateProjectionMatrix();
-        return _projectionMatrix;
-    }
-
-    const Eigen::Matrix4f& Camera::GetViewMatrix()
-    {
-        UpdateViewMatrix();
-        return _viewMatrix;
+        _frustum = frustum;
+        SetNeedUpdateViewMatrix();
     }
 
     const Eigen::Vector3f& Camera::GetPosition() const
@@ -47,6 +37,23 @@ namespace Renderer
     const Eigen::Quaternionf& Camera::GetRotation() const
     {
         return _rotation;
+    }
+
+    const Camera::Frustum& Camera::GetFrustum() const
+    {
+        return _frustum;
+    }
+
+    const Eigen::Matrix4f& Camera::GetProjectionMatrix()
+    {
+        UpdateProjectionMatrix();
+        return _projectionMatrix;
+    }
+
+    const Eigen::Matrix4f& Camera::GetViewMatrix()
+    {
+        UpdateViewMatrix();
+        return _viewMatrix;
     }
 
     void Camera::UpdateViewProjectionMatrix()

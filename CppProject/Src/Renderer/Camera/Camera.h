@@ -7,17 +7,30 @@ namespace Renderer
     class Camera
     {
     public:
+        struct Frustum
+        {
+            float left;
+            float right;
+            float bottom;
+            float top;
+            float near;
+            float far;
+        };
+
+    public:
         Camera(float left, float right, float bottom, float top, float near, float far);
         virtual ~Camera() = default;
 
     public:
         void SetPosition(const Eigen::Vector3f& pos);
         void SetRotation(const Eigen::Quaternionf& rot);
+        void SetFrustum(const Frustum& frustum);
+        const Eigen::Vector3f& GetPosition() const;
+        const Eigen::Quaternionf& GetRotation() const;
+        const Frustum& GetFrustum() const;
 
         const Eigen::Matrix4f& GetProjectionMatrix();
         const Eigen::Matrix4f& GetViewMatrix();
-        const Eigen::Vector3f& GetPosition() const;
-        const Eigen::Quaternionf& GetRotation() const;
 
         void UpdateViewMatrix();
         void UpdateProjectionMatrix();
@@ -32,12 +45,7 @@ namespace Renderer
 
     protected:
         // projection matrix
-        float _left;
-        float _right;
-        float _bottom;
-        float _top;
-        float _near;
-        float _far;
+        Frustum _frustum;
         Eigen::Matrix4f _projectionMatrix;
 
         // view matrix

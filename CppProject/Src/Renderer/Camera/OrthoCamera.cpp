@@ -10,7 +10,10 @@ namespace Renderer
 
     void OrthoCamera::UpdateProjectionMatrixImp()
     {
-        _projectionMatrix = Math::MakeOrthoProjectionMatrix(_left, _right, _bottom, _top, _near, _far);
+        _projectionMatrix = Math::MakeOrthoProjectionMatrix(
+                _frustum.left, _frustum.right,
+                _frustum.bottom, _frustum.top,
+                _frustum.near, _frustum.far);
     }
 
 }
