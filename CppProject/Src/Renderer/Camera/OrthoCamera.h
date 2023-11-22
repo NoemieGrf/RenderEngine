@@ -8,7 +8,7 @@ namespace Renderer
     class OrthoCamera: public Camera
     {
     public:
-        OrthoCamera(float left, float right, float bottom, float top);
+        OrthoCamera(float left, float right, float bottom, float top, float near, float far);
         ~OrthoCamera() override = default;
 
     public:
@@ -18,6 +18,9 @@ namespace Renderer
         const Eigen::Matrix4f& GetViewMatrix() const;
         const Eigen::Vector3f& GetPosition() const;
         float GetRotation() const;
+
+    public:
+        static Eigen::Matrix4f MakeOrthoCameraProjectionMatrix(float left, float right, float bottom, float top, float near, float far);
 
     private:
         void UpdateViewProjectionMatrix();
@@ -30,5 +33,6 @@ namespace Renderer
 
         Eigen::Vector3f _position;
         float _rotation = 0;
+
     };
 }
