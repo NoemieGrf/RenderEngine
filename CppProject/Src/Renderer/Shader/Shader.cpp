@@ -18,7 +18,9 @@ namespace Renderer
 
         fileStream.close();
 
-        return LoadFromString(content.str().c_str());
+        LoadFromString(content.str().c_str());
+
+        return true;
     }
 
     bool Shader::LoadFromFile(const std::string& path)

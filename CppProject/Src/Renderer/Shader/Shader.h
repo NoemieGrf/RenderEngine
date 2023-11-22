@@ -15,6 +15,6 @@ namespace Renderer
         bool LoadFromFile(const std::string& path);
 
         virtual bool Compile() = 0;
-        virtual bool LoadFromString(const char* data) = 0;
+        virtual void LoadFromString(const char* data) = 0;
     };
 }

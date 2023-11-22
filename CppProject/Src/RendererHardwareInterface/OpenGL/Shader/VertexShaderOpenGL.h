@@ -11,7 +11,7 @@ namespace Renderer
 
     public: // override
         bool Compile() override;
-        bool LoadFromString(const char* data) override;
+        void LoadFromString(const char* data) override;
 
     public:
         unsigned int GetShaderId() const;
