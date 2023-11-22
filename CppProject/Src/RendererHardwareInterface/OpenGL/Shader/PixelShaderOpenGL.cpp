@@ -1,10 +1,9 @@
 #include "PixelShaderOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/GLAD/Glad.h"
-#include "Util/Logger/Logger.h"
+#include "RendererHardwareInterface/OpenGL/Helper/OpenGLHelper.h"
 
 namespace Renderer
 {
-
     PixelShaderOpenGL::~PixelShaderOpenGL()
     {
         ::glDeleteShader(_shaderId);
@@ -18,19 +17,7 @@ namespace Renderer
 
     bool PixelShaderOpenGL::Compile()
     {
-        ::glCompileShader(_shaderId);
-
-        GLint flag;
-        GLchar infoLog[512];
-        ::glGetShaderiv(_shaderId, GL_COMPILE_STATUS, &flag);
-        if (flag == GL_FALSE)
-        {
-            ::glGetShaderInfoLog(_shaderId, 512, nullptr, infoLog);
-            Util::Logger::LogError(std::string("Shader Compile Fail: ") + infoLog);
-            return false;
-        }
-
-        return true;
+        return OpenGLHelper::CompileShader(_shaderId);
     }
 
     unsigned int PixelShaderOpenGL::GetShaderId() const
