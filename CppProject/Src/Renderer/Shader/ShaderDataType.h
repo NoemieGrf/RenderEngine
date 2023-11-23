@@ -3,7 +3,9 @@
  * ******************************/
 
 #pragma once
+
 #include <string>
+
 namespace Renderer
 {
 	enum class ShaderDataType: int

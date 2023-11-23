@@ -3,7 +3,9 @@
  * ******************************/
 
 #pragma once
+
 #include <string>
+
 enum class RendererApi: int
 {
 	OpenGL,
