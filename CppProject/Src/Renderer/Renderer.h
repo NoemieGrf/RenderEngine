@@ -2,7 +2,7 @@
 
 #include "Util/NonCopyable.h"
 #include "Define/RendererApi.h"
-#include "RendererCommand.h"
+#include "Renderer/RenderCommand/RenderCommand.h"
 
 namespace Renderer
 {
@@ -13,7 +13,7 @@ namespace Renderer
         static RendererApi GetApi();
 
     public:
-        void Render(RendererCommand* pCommand);
+        void Render(RenderCommand* pCommand);
 
     private:
         inline static RendererApi _api;

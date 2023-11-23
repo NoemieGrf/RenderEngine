@@ -1,6 +1,6 @@
 #include "Define/Math.h"
 #include "Application.h"
-#include "RendererHardwareInterface/OpenGL/RhiOpenGL.h"
+#include "RendererHardwareInterface/OpenGL/RenderCommand/RenderCommandOpenGL.h"
 #include "Util/Logger/Logger.h"
 
 Application::Application()
@@ -36,7 +36,7 @@ void Application::SetupRenderer(RendererApi api)
 
     _pRender = new Renderer::Renderer();
 
-    _pRenderCommand = Renderer::RendererCommand::Create(api);
+    _pRenderCommand = Renderer::RenderCommand::Create(api);
     _pRenderCommand->SetUp();
 
     _pEditor = new Editor::Editor(api);

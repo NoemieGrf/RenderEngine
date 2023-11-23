@@ -1,17 +1,17 @@
 #pragma once
 
 #include "RendererHardwareInterface/OpenGL/GLAD/Glad.h"
-#include "Renderer/RendererCommand.h"
+#include "Renderer/RenderCommand/RenderCommand.h"
 
 namespace Renderer
 {
     struct RhiOpenGLData;
 
-    class RhiOpenGL : public RendererCommand
+    class RenderCommandOpenGL : public RenderCommand
     {
     public:
-        RhiOpenGL();
-        ~RhiOpenGL() override;
+        RenderCommandOpenGL();
+        ~RenderCommandOpenGL() override;
 
     public:
         bool SetUp() override;

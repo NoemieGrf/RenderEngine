@@ -1,15 +1,15 @@
-#include "RendererCommand.h"
-#include "RendererHardwareInterface/OpenGL/RhiOpenGL.h"
+#include "RenderCommand.h"
+#include "RendererHardwareInterface/OpenGL/RenderCommand/RenderCommandOpenGL.h"
 
 namespace Renderer
 {
 
-    RendererCommand* RendererCommand::Create(RendererApi api)
+    RenderCommand* RenderCommand::Create(RendererApi api)
     {
         switch (api)
         {
             case RendererApi::OpenGL:
-                return new RhiOpenGL();
+                return new RenderCommandOpenGL();
             case RendererApi::Vulkan:
                 break;
             case RendererApi::D3D11:

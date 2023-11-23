@@ -2,16 +2,16 @@
 
 #include "Util/NonCopyable.h"
 #include "Define/RendererApi.h"
-#include "Buffer/VertexArray.h"
-#include "Shader/ShaderProgram.h"
-#include <eigen/Eigen>
+#include "Renderer/Buffer/VertexArray.h"
+#include "Renderer/Shader/ShaderProgram.h"
+#include "eigen/Eigen"
 
 namespace Renderer
 {
-    class RendererCommand : public NonCopyable
+    class RenderCommand : public NonCopyable
     {
     public:
-        virtual ~RendererCommand() = default;
+        virtual ~RenderCommand() = default;
 
     public:
         virtual bool SetUp() = 0;
@@ -21,6 +21,6 @@ namespace Renderer
         virtual void Submit(VertexArray* pVertArray) = 0;
 
     public:
-        static RendererCommand* Create(RendererApi api);
+        static RenderCommand* Create(RendererApi api);
     };
 }

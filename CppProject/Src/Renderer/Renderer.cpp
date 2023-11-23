@@ -67,7 +67,7 @@ namespace Renderer
         return _api;
     }
 
-    void Renderer::Render(RendererCommand* pCommand)
+    void Renderer::Render(RenderCommand* pCommand)
     {
         OrthoCamera camera(-1, 1, -1, 1, -1, 1);
 

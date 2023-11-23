@@ -1,26 +1,26 @@
-#include "RhiOpenGL.h"
+#include "RenderCommandOpenGL.h"
 #include "Application/Application.h"
 #include "Define/WindowsPlatform.h"
 
 namespace Renderer
 {
-    void RhiOpenGL::ClearColor(Eigen::Vector4f color)
+    void RenderCommandOpenGL::ClearColor(Eigen::Vector4f color)
     {
         glClearColor(color.x(), color.y(), color.z(), color.w());
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     }
 
-    RhiOpenGL::RhiOpenGL()
+    RenderCommandOpenGL::RenderCommandOpenGL()
     {
         _pData = new RhiOpenGLData();
     }
 
-    RhiOpenGL::~RhiOpenGL()
+    RenderCommandOpenGL::~RenderCommandOpenGL()
     {
         delete _pData;
     }
 
-    bool RhiOpenGL::SetUp()
+    bool RenderCommandOpenGL::SetUp()
     {
         auto pApplication = Application::GetInstance();
         HWND hWnd = reinterpret_cast<HWND>(pApplication->GetWindowHandle());
@@ -87,7 +87,7 @@ namespace Renderer
         return true;
     }
 
-    void RhiOpenGL::Destroy()
+    void RenderCommandOpenGL::Destroy()
     {
         ::wglMakeCurrent(nullptr, nullptr);
         ::wglDeleteContext(_pData->_hRC);
@@ -96,12 +96,12 @@ namespace Renderer
         ::ReleaseDC(hWnd, _pData->_hDC);
     }
 
-    void RhiOpenGL::SwapBuffer()
+    void RenderCommandOpenGL::SwapBuffer()
     {
         ::SwapBuffers(_pData->_hDC);
     }
 
-    void RhiOpenGL::Submit(VertexArray* pVertArray)
+    void RenderCommandOpenGL::Submit(VertexArray* pVertArray)
     {
         pVertArray->Bind();
         ::glDrawElements(
@@ -111,7 +111,7 @@ namespace Renderer
                 nullptr);
     }
 
-    const RhiOpenGLData* RhiOpenGL::GetData() const
+    const RhiOpenGLData* RenderCommandOpenGL::GetData() const
     {
         return _pData;
     }

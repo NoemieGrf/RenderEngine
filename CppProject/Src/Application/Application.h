@@ -5,7 +5,7 @@
 #include "Input/Mouse/Mouse.h"
 #include "Define/RendererApi.h"
 #include "Renderer/Renderer.h"
-#include "Renderer/RendererCommand.h"
+#include "Renderer/RenderCommand/RenderCommand.h"
 #include "Editor/Editor.h"
 #include "ApplicationWinImp/ApplicationWinImp.h"
 
@@ -46,7 +46,7 @@ private:
     Input::Mouse _mouse = Input::Mouse{};
 
     /* Rhi */
-    Renderer::RendererCommand* _pRenderCommand = nullptr;
+    Renderer::RenderCommand* _pRenderCommand = nullptr;
 
     /* Render */
     Renderer::Renderer* _pRender = nullptr;
