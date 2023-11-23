@@ -1,8 +1,8 @@
 
 #include "Define/RendererApi.h"
 #include "Application/Application.h"
-#include "Looper/RenderLooper.h"
-#include "Looper/EditorLooper.h"
+#include "Renderer/RenderLooper.h"
+#include "Editor/EditorLooper.h"
 
 int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PWSTR lpCmdLine, int nCmdShow)
 {
