@@ -1,6 +1,7 @@
 #include "RenderCommandOpenGL.h"
 #include "Application/Application.h"
 #include "Define/WindowsPlatform.h"
+#include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
 
 namespace Renderer
 {

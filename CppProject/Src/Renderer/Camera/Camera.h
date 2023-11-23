@@ -9,12 +9,12 @@ namespace Renderer
     public:
         struct Frustum
         {
-            float left;
-            float right;
-            float bottom;
-            float top;
-            float near;
-            float far;
+            float leftCoord;
+            float rightCoord;
+            float bottomCoord;
+            float topCoord;
+            float nearCoord;
+            float farCoord;
         };
 
     public:

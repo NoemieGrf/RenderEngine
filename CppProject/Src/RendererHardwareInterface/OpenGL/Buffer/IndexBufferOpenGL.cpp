@@ -1,5 +1,5 @@
 #include "IndexBufferOpenGL.h"
-#include "RendererHardwareInterface/OpenGL/GLAD/Glad.h"
+#include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
 
 namespace Renderer
 {

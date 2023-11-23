@@ -6,7 +6,6 @@
 #include "Input/Mouse/Mouse.h"
 #include "Define/RendererApi.h"
 #include "Renderer/RenderCommand/RenderCommand.h"
-#include "Editor/Editor.h"
 #include "ApplicationWinImp/ApplicationWinImp.h"
 
 class Application : public NonCopyable
@@ -18,8 +17,6 @@ public:
     ~Application();
     void InitWindow(RendererApi api, int windowWidth, int windowHeight);
     void DestroyWindow();
-    void SetupRenderer();
-    void DestroyRenderer();
     void RunLoop();
 
     template<AppLooperImpl T, class... Types>
@@ -66,9 +63,6 @@ private:
 
     /* Looper */
     std::vector<AppLooper*> _loopLogic {};
-
-    /* Editor */
-    Editor::Editor* _pEditor = nullptr;
 
 private:
     inline static Application* _instance = nullptr;

@@ -1,5 +1,5 @@
 #include "PixelShaderOpenGL.h"
-#include "RendererHardwareInterface/OpenGL/GLAD/Glad.h"
+#include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
 #include "RendererHardwareInterface/OpenGL/Helper/OpenGLHelper.h"
 
 namespace Renderer

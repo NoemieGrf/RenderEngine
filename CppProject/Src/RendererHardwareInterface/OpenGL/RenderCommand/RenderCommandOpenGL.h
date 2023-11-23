@@ -1,6 +1,5 @@
 #pragma once
 
-#include "RendererHardwareInterface/OpenGL/GLAD/Glad.h"
 #include "Renderer/RenderCommand/RenderCommand.h"
 
 namespace Renderer

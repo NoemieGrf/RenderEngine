@@ -15,8 +15,6 @@ Application::~Application()
     for (auto pLooper : _loopLogic)
         delete pLooper;
 
-    DestroyRenderer();
-
     if (!_pRenderCommand)
         _pRenderCommand->Destroy();
 
@@ -44,20 +42,6 @@ void Application::DestroyWindow()
     _pImpl->DestroyWindow();
 }
 
-void Application::SetupRenderer()
-{
-    _pEditor = new Editor::Editor(RendererApi::OpenGL);
-    _pEditor->SetUp();
-}
-
-void Application::DestroyRenderer()
-{
-    if (_pEditor != nullptr)
-        _pEditor->Destroy();
-
-    delete _pEditor;
-}
-
 void Application::RunLoop()
 {
     while (true)
@@ -79,8 +63,6 @@ void Application::RunLoop()
 
             for (auto& looper : _loopLogic)
                 looper->Loop();
-
-            _pEditor->Update();
 
             _pRenderCommand->SwapBuffer();
         }

@@ -11,9 +11,9 @@ namespace Renderer
     void OrthoCamera::UpdateProjectionMatrixImp()
     {
         _projectionMatrix = Math::MakeOrthoProjectionMatrix(
-                _frustum.left, _frustum.right,
-                _frustum.bottom, _frustum.top,
-                _frustum.near, _frustum.far);
+                _frustum.leftCoord, _frustum.rightCoord,
+                _frustum.bottomCoord, _frustum.topCoord,
+                _frustum.nearCoord, _frustum.farCoord);
     }
 
 }

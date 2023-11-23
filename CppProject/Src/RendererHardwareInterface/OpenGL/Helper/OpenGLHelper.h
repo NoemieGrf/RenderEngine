@@ -2,7 +2,7 @@
 
 #include <string>
 #include <eigen/Eigen>
-#include "RendererHardwareInterface/OpenGL/GLAD/Glad.h"
+#include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
 #include "Renderer/Shader/ShaderDataType.h"
 
 namespace Renderer

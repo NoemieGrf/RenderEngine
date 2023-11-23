@@ -1,5 +1,5 @@
 #include "VertexArrayOpenGL.h"
-#include "RendererHardwareInterface/OpenGL/GLAD/Glad.h"
+#include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
 #include "RendererHardwareInterface/OpenGL/Helper/OpenGLHelper.h"
 
 namespace Renderer
@@ -43,7 +43,7 @@ namespace Renderer
                                   OpenGLHelper::GetShaderDataTypeGlEnum(element.dataType),
                                   element.normalized ? GL_TRUE : GL_FALSE,
                                   vertexBufferLayout.GetStride(),
-                                  (GLvoid*)element.offset);
+                                  reinterpret_cast<const void*>(element.offset));
 
             index++;
         }

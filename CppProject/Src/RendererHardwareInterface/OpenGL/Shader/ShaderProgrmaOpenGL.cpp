@@ -1,8 +1,7 @@
 #include "ShaderProgrmaOpenGL.h"
 #include "VertexShaderOpenGL.h"
 #include "PixelShaderOpenGL.h"
-#include "RendererHardwareInterface/OpenGL/GLAD/Glad.h"
-#include "Util/Logger/Logger.h"
+#include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
 
 namespace Renderer
 {

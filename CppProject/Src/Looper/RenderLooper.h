@@ -7,7 +7,7 @@ class RenderLooper : public AppLooper
 {
 public:
     RenderLooper();
-    ~RenderLooper();
+    ~RenderLooper() override;
 
 public:
     void Loop() override;
