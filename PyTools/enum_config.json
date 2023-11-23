@@ -10,8 +10,22 @@
 				"D3D11",
 				"D3D12"
 			],
-			"StringConverter": true,
-			"CustomConverter": []
+			"StringConverter": true
+		},
+		{
+			"EnumName": "AppEventType",
+			"Type": "int",
+			"FilePath": "../CppProject/Src/Application/Event/",
+			"StringConverter": false,
+			"Value": [
+				"MouseDown",
+				"MouseUp",
+				"KeyboardDown",
+				"KeyboardUp",
+				"ResolutionChange",
+				"WindowFocus",
+				"WindowLostFocus"
+			]
 		},
 		{
 			"EnumName": "ShaderDataType",

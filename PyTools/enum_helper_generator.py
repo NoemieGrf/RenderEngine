@@ -81,10 +81,10 @@ class Processor:
         cg.gen_header_comment().new_line()
 
         # header pragma once
-        cg.gen_pragma_once().new_line()
+        cg.gen_pragma_once().new_line().new_line()
 
         # include string
-        cg.gen_include('<string>').new_line()
+        cg.gen_include('<string>').new_line().new_line()
 
         # namespace begin
         if self.namespace is not None:
@@ -96,7 +96,7 @@ class Processor:
 
         # converter function declaration
         cg.new_line()
-        self.generator_converter_declaration(cg)
+        self.generator_helper_class(cg)
 
         # namespace end
         if self.namespace is not None:
@@ -106,7 +106,10 @@ class Processor:
         cg.write_to_file(self.header_file_path)
         pass
 
-    def generator_converter_declaration(self, cg: CodeGenerator) -> None:
+    def generator_helper_class(self, cg: CodeGenerator) -> None:
+        if not self.has_string_converter and self.custom_converter is None:
+            return
+
         cg.new_line()
 
         # class begin
@@ -140,6 +143,9 @@ class Processor:
         pass
 
     def generator_string_converter_declaration(self, cg: CodeGenerator) -> None:
+        if not self.has_string_converter:
+            return
+
         cg.gen_function(self.enum_to_string_function_config, True).semicolon()
         cg.new_line()
         cg.gen_function(self.string_to_enum_function_config, True).semicolon()
@@ -147,6 +153,9 @@ class Processor:
         pass
 
     def generator_custom_converter_declaration(self, cg: CodeGenerator) -> None:
+        if self.custom_converter is None:
+            return
+
         for custom_converter_config in self.custom_converter:
             cg.gen_function(custom_converter_config.get_function(self.enum_config.enum_name, self.helper_class_name),
                             True).semicolon()
