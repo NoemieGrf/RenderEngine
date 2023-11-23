@@ -18,7 +18,7 @@ namespace Renderer
         void Destroy() override;
         void SwapBuffer() override;
         void ClearColor(Eigen::Vector4f color) override;
-        void Submit(VertexArray* pVertArray, ShaderProgram* pShader) override;
+        void Submit(VertexArray* pVertArray) override;
 
     public:
         const RhiOpenGLData* GetData() const;

@@ -18,7 +18,7 @@ namespace Renderer
         virtual void Destroy() = 0;
         virtual void SwapBuffer() = 0;
         virtual void ClearColor(Eigen::Vector4f color) = 0;
-        virtual void Submit(VertexArray* pVertArray, ShaderProgram* pShader) = 0;
+        virtual void Submit(VertexArray* pVertArray) = 0;
 
     public:
         static RendererCommand* Create(RendererApi api);

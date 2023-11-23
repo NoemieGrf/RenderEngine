@@ -31,6 +31,7 @@ namespace Renderer
 
         const Eigen::Matrix4f& GetProjectionMatrix();
         const Eigen::Matrix4f& GetViewMatrix();
+        const Eigen::Matrix4f& GetVPMatrix();
 
         void UpdateViewMatrix();
         void UpdateProjectionMatrix();

@@ -2,6 +2,7 @@
 #include "VertexShaderOpenGL.h"
 #include "PixelShaderOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/GLAD/Glad.h"
+#include "Util/Logger/Logger.h"
 
 namespace Renderer
 {
@@ -40,5 +41,14 @@ namespace Renderer
     void ShaderProgramOpenGL::Bind()
     {
         ::glUseProgram(_shaderProgramId);
+    }
+
+    void ShaderProgramOpenGL::SetUniformMat4(const std::string& name, const Eigen::Matrix4f& mat)
+    {
+        GLuint location = ::glGetUniformLocation(_shaderProgramId, name.c_str());
+
+        assert(location != GL_INVALID_VALUE && location != GL_INVALID_OPERATION);
+
+        ::glUniformMatrix4fv(location, 1, GL_FALSE, mat.data());
     }
 }

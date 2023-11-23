@@ -14,6 +14,7 @@ namespace Renderer
         void AddPixelShader(PixelShader* pPixelShader) override;
         bool Link() override;
         void Bind() override;
+        void SetUniformMat4(const std::string& name, const Eigen::Matrix4f& mat) override;
 
     private:
         unsigned int _shaderProgramId = 0;

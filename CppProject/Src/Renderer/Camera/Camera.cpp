@@ -56,6 +56,12 @@ namespace Renderer
         return _viewMatrix;
     }
 
+    const Eigen::Matrix4f& Camera::GetVPMatrix()
+    {
+        UpdateViewProjectionMatrix();
+        return _cachedViewProjectionMatrix;
+    }
+
     void Camera::UpdateViewProjectionMatrix()
     {
         if (!_needUpdateCachedVPMatrix)

@@ -1,6 +1,6 @@
 #include "VertexArrayOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/GLAD/Glad.h"
-#include "RendererHardwareInterface/OpenGL/Shader/ShaderDataTypeOpenGL.h"
+#include "RendererHardwareInterface/OpenGL/Helper/OpenGLHelper.h"
 
 namespace Renderer
 {
@@ -40,7 +40,7 @@ namespace Renderer
             glEnableVertexAttribArray(index);
             glVertexAttribPointer(index,
                                   ShaderDataTypeHelper::GetShaderDataCount(element.dataType),
-                                  GetShaderDataTypeGlEnum(element.dataType),
+                                  OpenGLHelper::GetShaderDataTypeGlEnum(element.dataType),
                                   element.normalized ? GL_TRUE : GL_FALSE,
                                   vertexBufferLayout.GetStride(),
                                   (GLvoid*)element.offset);

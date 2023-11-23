@@ -40,18 +40,22 @@ Eigen::Matrix4f Math::MakeOrthoProjectionMatrix(float left, float right, float b
 {
     Eigen::Matrix4f result = Eigen::Matrix4f::Identity();
 
+    assert(right > left);
+    assert(top > bottom);
+    assert(far > near);
+
     // Translation
     result.col(3) = Eigen::Vector4f {
             -(right + left) / (right - left),
             -(top + bottom) / (top - bottom),
-            -(near + far) / (near - far),
+            -(far + near) / (far - near),
             1
     };
 
     // Scale
     result(0, 0) = 2 / (right - left);
     result(1, 1) = 2 / (top - bottom);
-    result(2, 2) = 2 / (near - far);
+    result(2, 2) = 2 / (far - near);
 
     return result;
 }
