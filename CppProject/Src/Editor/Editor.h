@@ -16,6 +16,7 @@ namespace Editor
         void SetUp();
         void Update();
         void Destroy();
+        void OnWinMsg(int64_t hWnd, uint32_t msg, int64_t wParam, int64_t lParam);
 
     private:
         EditorBackend* _pBackend = nullptr;

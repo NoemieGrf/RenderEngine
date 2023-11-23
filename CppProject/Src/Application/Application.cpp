@@ -72,6 +72,16 @@ void Application::RunLoop()
     }
 }
 
+void Application::AddWinMsgProc(IWinMsgReceiver* pWinMsgReceiver)
+{
+    _pImpl->AddWinMsgProc(pWinMsgReceiver);
+}
+
+void Application::RemoveWinMsgProc(IWinMsgReceiver* pWinMsgReceiver)
+{
+    _pImpl->RemoveWinMsgProc(pWinMsgReceiver);
+}
+
 #pragma region [Getter]
 
 int Application::GetWindowHeight() const

@@ -3,6 +3,8 @@
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 namespace Editor
 {
     Editor::Editor(RendererApi api)
@@ -40,6 +42,15 @@ namespace Editor
         ImGui::DestroyContext();
 
         delete _pBackend;
+    }
+
+    void Editor::OnWinMsg(int64_t hWnd, uint32_t msg, int64_t wParam, int64_t lParam)
+    {
+        ImGui_ImplWin32_WndProcHandler(
+                reinterpret_cast<HWND>(hWnd),
+                static_cast<UINT>(msg),
+                static_cast<WPARAM>(wParam),
+                static_cast<LPARAM>(lParam));
     }
 
     void Editor::Update()

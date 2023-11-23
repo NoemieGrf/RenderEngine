@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+#include "IWinMsgReceiver.h"
 #include "Define/WindowsPlatform.h"
 #include "Util/NonCopyable.h"
 
@@ -15,6 +17,8 @@ public:
     void RegisterAndCreateWindow(int width, int height, const char* windowName);
     void ShowWindow();
     void DestroyWindow();
+    void AddWinMsgProc(IWinMsgReceiver* pWinMsgReceiver);
+    void RemoveWinMsgProc(IWinMsgReceiver* pWinMsgReceiver);
     LRESULT HandleMsgDispatch(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 private:
@@ -39,6 +43,9 @@ private:
 
 private:
     HWND _hWnd = nullptr;
+
+    /* Msg Receive */
+    std::vector<IWinMsgReceiver*> _winMsgReceiverVec;
 
 private:
     static constexpr const char* WND_CLASS_NAME = "Graphic Render";
