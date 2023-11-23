@@ -1,6 +1,6 @@
 #include "VertexShader.h"
 #include "Define/RendererApi.h"
-#include "Renderer/Renderer.h"
+#include "Application/Application.h"
 #include "RendererHardwareInterface/OpenGL/Shader/VertexShaderOpenGL.h"
 
 namespace Renderer
@@ -8,7 +8,7 @@ namespace Renderer
 
     VertexShader* VertexShader::Create()
     {
-        switch (Renderer::GetApi())
+        switch (Application::GetInstance()->GetRenderApi())
         {
             case RendererApi::OpenGL:
                 return new VertexShaderOpenGL();

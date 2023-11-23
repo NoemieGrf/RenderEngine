@@ -1,6 +1,6 @@
 #include "VertexArray.h"
 
-#include "Renderer/Renderer.h"
+#include "Application/Application.h"
 #include "RendererHardwareInterface/OpenGL/Buffer/VertexArrayOpenGL.h"
 
 namespace Renderer
@@ -8,7 +8,7 @@ namespace Renderer
 
     VertexArray* VertexArray::Create()
     {
-        switch (Renderer::GetApi())
+        switch (Application::GetInstance()->GetRenderApi())
         {
             case RendererApi::OpenGL:
                 return new VertexArrayOpenGL();

@@ -1,6 +1,6 @@
 #include "PixelShader.h"
 #include "Define/RendererApi.h"
-#include "Renderer/Renderer.h"
+#include "Application/Application.h"
 #include "RendererHardwareInterface/OpenGL/Shader/PixelShaderOpenGL.h"
 
 namespace Renderer
@@ -8,7 +8,7 @@ namespace Renderer
 
     PixelShader* PixelShader::Create()
     {
-        switch (Renderer::GetApi())
+        switch (Application::GetInstance()->GetRenderApi())
         {
             case RendererApi::OpenGL:
                 return new PixelShaderOpenGL();

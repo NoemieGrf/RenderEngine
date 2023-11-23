@@ -1,10 +1,10 @@
 #pragma once
 
+#include "AppLooper.h"
 #include "Util/NonCopyable.h"
 #include "Input/Keyboard/Keyboard.h"
 #include "Input/Mouse/Mouse.h"
 #include "Define/RendererApi.h"
-#include "Renderer/Renderer.h"
 #include "Renderer/RenderCommand/RenderCommand.h"
 #include "Editor/Editor.h"
 #include "ApplicationWinImp/ApplicationWinImp.h"
@@ -16,19 +16,34 @@ public:
 
 public:
     ~Application();
-    void InitWindow(int windowWidth, int windowHeight);
+    void InitWindow(RendererApi api, int windowWidth, int windowHeight);
     void DestroyWindow();
-    void SetupRenderer(RendererApi api);
+    void SetupRenderer();
     void DestroyRenderer();
     void RunLoop();
+
+    template<AppLooperImpl T, class... Types>
+    void AddLooper(Types&&... Args)
+    {
+        AppLooper* pLooper = new T(std::forward<Types&&...>(Args...));
+        _loopLogic.push_back(pLooper);
+    }
+
+    template<AppLooperImpl T>
+    void AddLooper()
+    {
+        AppLooper* pLooper = new T();
+        _loopLogic.push_back(pLooper);
+    }
 
 public: // Getter
     int GetWindowHeight() const;
     int GetWindowWidth() const;
+    RendererApi GetRenderApi() const;
+    Renderer::RenderCommand* GetRenderCommand();
     void* GetWindowHandle() const;
     const Input::Keyboard& GetKeyboard() const;
     const Input::Mouse& GetMouse() const;
-    const Renderer::Renderer* GetRenderer() const;
 
 private:
     Application();
@@ -36,6 +51,10 @@ private:
 private:
     /* imp */
     ApplicationWinImp* _pImpl = nullptr;
+
+    /* Rhi */
+    RendererApi _api = RendererApi::OpenGL;
+    Renderer::RenderCommand* _pRenderCommand = nullptr;
 
     /* Basic */
     int _height = 0;
@@ -45,11 +64,8 @@ private:
     Input::Keyboard _keyboard = Input::Keyboard{};
     Input::Mouse _mouse = Input::Mouse{};
 
-    /* Rhi */
-    Renderer::RenderCommand* _pRenderCommand = nullptr;
-
-    /* Render */
-    Renderer::Renderer* _pRender = nullptr;
+    /* Looper */
+    std::vector<AppLooper*> _loopLogic {};
 
     /* Editor */
     Editor::Editor* _pEditor = nullptr;

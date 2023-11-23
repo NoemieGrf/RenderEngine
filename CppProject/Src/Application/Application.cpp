@@ -1,4 +1,4 @@
-#include "Define/Math.h"
+
 #include "Application.h"
 #include "RendererHardwareInterface/OpenGL/RenderCommand/RenderCommandOpenGL.h"
 #include "Util/Logger/Logger.h"
@@ -12,17 +12,31 @@ Application::Application()
 
 Application::~Application()
 {
+    for (auto pLooper : _loopLogic)
+        delete pLooper;
+
     DestroyRenderer();
+
+    if (!_pRenderCommand)
+        _pRenderCommand->Destroy();
+
+    delete _pRenderCommand;
+
     DestroyWindow();
+
+    delete _pImpl;
 }
 
-void Application::InitWindow(int windowWidth, int windowHeight)
+void Application::InitWindow(RendererApi api, int windowWidth, int windowHeight)
 {
     _width = windowWidth;
     _height = windowHeight;
 
     _pImpl->RegisterAndCreateWindow(_width, _height, WINDOW_NAME);
     _pImpl->ShowWindow();
+
+    _pRenderCommand = Renderer::RenderCommand::Create(api);
+    _pRenderCommand->SetUp();
 }
 
 void Application::DestroyWindow()
@@ -30,16 +44,9 @@ void Application::DestroyWindow()
     _pImpl->DestroyWindow();
 }
 
-void Application::SetupRenderer(RendererApi api)
+void Application::SetupRenderer()
 {
-    Renderer::Renderer::SetApi(api);
-
-    _pRender = new Renderer::Renderer();
-
-    _pRenderCommand = Renderer::RenderCommand::Create(api);
-    _pRenderCommand->SetUp();
-
-    _pEditor = new Editor::Editor(api);
+    _pEditor = new Editor::Editor(RendererApi::OpenGL);
     _pEditor->SetUp();
 }
 
@@ -49,13 +56,6 @@ void Application::DestroyRenderer()
         _pEditor->Destroy();
 
     delete _pEditor;
-
-    if (_pRender != nullptr)
-        _pRenderCommand->Destroy();
-
-    delete _pRenderCommand;
-
-    delete _pRender;
 }
 
 void Application::RunLoop()
@@ -75,9 +75,11 @@ void Application::RunLoop()
             ::TranslateMessage(&msg);
             ::DispatchMessage(&msg);
 
-            _pRenderCommand->ClearColor(Vec4{0.2f, 0.2f, 0.2f, 1.0f});
+            _pRenderCommand->ClearColor(Eigen::Vector4f{0.2f, 0.2f, 0.2f, 1.0f});
 
-            _pRender->Render(_pRenderCommand);
+            for (auto& looper : _loopLogic)
+                looper->Loop();
+
             _pEditor->Update();
 
             _pRenderCommand->SwapBuffer();
@@ -100,6 +102,16 @@ int Application::GetWindowWidth() const
     return _height;
 }
 
+RendererApi Application::GetRenderApi() const
+{
+    return _api;
+}
+
+Renderer::RenderCommand* Application::GetRenderCommand()
+{
+    return _pRenderCommand;
+}
+
 void* Application::GetWindowHandle() const
 {
     return reinterpret_cast<void*>(_pImpl->GetWindowHandle());
@@ -113,11 +125,6 @@ const Input::Keyboard& Application::GetKeyboard() const
 const Input::Mouse& Application::GetMouse() const
 {
     return _mouse;
-}
-
-const Renderer::Renderer* Application::GetRenderer() const
-{
-    return _pRender;
 }
 
 #pragma endregion

@@ -7,7 +7,7 @@ namespace Renderer
 {
     IndexBuffer* IndexBuffer::Create(const unsigned int* indices, unsigned int length)
     {
-        switch (Renderer::GetApi())
+        switch (Application::GetInstance()->GetRenderApi())
         {
             case RendererApi::OpenGL:
                 return new IndexBufferOpenGL(indices, length);
