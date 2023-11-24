@@ -1,26 +1,26 @@
 #pragma once
 
-#include "Util/NonCopyable.h"
-#include "Define/RendererApi.h"
-#include "Renderer/Buffer/VertexArray.h"
-#include "Renderer/Shader/ShaderProgram.h"
-#include "eigen/Eigen"
+#include "RenderCommandImpl.h"
 
 namespace Renderer
 {
-    class RenderCommand : public NonCopyable
+    class RenderCommand
     {
     public:
-        virtual ~RenderCommand() = default;
+        RenderCommand() = delete;
+        ~RenderCommand() = delete;
+        RenderCommand& operator= (const RenderCommand&) = delete;
 
     public:
-        virtual bool SetUp() = 0;
-        virtual void Destroy() = 0;
-        virtual void SwapBuffer() = 0;
-        virtual void ClearColor(Eigen::Vector4f color) = 0;
-        virtual void Submit(VertexArray* pVertArray) = 0;
+        static void Init();
+        static void Destroy();
 
     public:
-        static RenderCommand* Create(RendererApi api);
+        static void SwapBuffer();
+        static void ClearColor(const Eigen::Vector4f& color);
+        static void Submit(VertexArray* pVertArray);
+
+    private:
+        inline static RenderCommandImpl* _pImpl = nullptr;
     };
 }

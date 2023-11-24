@@ -1,15 +1,16 @@
+#include "Application/Application.h"
 #include "RenderCommand.h"
 #include "RendererHardwareInterface/OpenGL/RenderCommand/RenderCommandOpenGL.h"
 
 namespace Renderer
 {
-
-    RenderCommand* RenderCommand::Create(RendererApi api)
+    void Renderer::RenderCommand::Init()
     {
+        auto api = Application::GetInstance()->GetRenderApi();
         switch (api)
         {
             case RendererApi::OpenGL:
-                return new RenderCommandOpenGL();
+                _pImpl = new RenderCommandOpenGL();
             case RendererApi::Vulkan:
                 break;
             case RendererApi::D3D11:
@@ -18,6 +19,32 @@ namespace Renderer
                 break;
         }
 
-        return nullptr;
+        assert(_pImpl != nullptr);
+
+        _pImpl->SetUp();
     }
+
+    void RenderCommand::Destroy()
+    {
+        _pImpl->Destroy();
+        delete _pImpl;
+    }
+
+    void RenderCommand::SwapBuffer()
+    {
+        _pImpl->SwapBuffer();
+    }
+
+    void RenderCommand::ClearColor(const Eigen::Vector4f& color)
+    {
+        _pImpl->ClearColor(color);
+    }
+
+    void RenderCommand::Submit(VertexArray* pVertArray)
+    {
+        _pImpl->Submit(pVertArray);
+    }
+
+
+
 }

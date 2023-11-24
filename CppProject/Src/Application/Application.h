@@ -3,7 +3,6 @@
 #include "AppLooper.h"
 #include "Util/NonCopyable.h"
 #include "Define/RendererApi.h"
-#include "Renderer/RenderCommand/RenderCommand.h"
 #include "ApplicationWinImp/ApplicationWinImp.h"
 #include "ApplicationWinImp/IWinMsgReceiver.h"
 
@@ -39,7 +38,6 @@ public: // Getter
     int GetWindowHeight() const;
     int GetWindowWidth() const;
     RendererApi GetRenderApi() const;
-    Renderer::RenderCommand* GetRenderCommand();
     void* GetWindowHandle() const;
 
 private:
@@ -51,7 +49,6 @@ private:
 
     /* Rhi */
     RendererApi _api = RendererApi::OpenGL;
-    Renderer::RenderCommand* _pRenderCommand = nullptr;
 
     /* Basic */
     int _height = 0;

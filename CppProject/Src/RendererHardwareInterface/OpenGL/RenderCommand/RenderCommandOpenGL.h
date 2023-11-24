@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Renderer/RenderCommand/RenderCommand.h"
+#include "Renderer/RenderCommand/RenderCommandImpl.h"
 
 namespace Renderer
 {
     struct RhiOpenGLData;
 
-    class RenderCommandOpenGL : public RenderCommand
+    class RenderCommandOpenGL : public RenderCommandImpl
     {
     public:
         RenderCommandOpenGL();
@@ -16,7 +16,7 @@ namespace Renderer
         bool SetUp() override;
         void Destroy() override;
         void SwapBuffer() override;
-        void ClearColor(Eigen::Vector4f color) override;
+        void ClearColor(const Eigen::Vector4f&) override;
         void Submit(VertexArray* pVertArray) override;
 
     public:

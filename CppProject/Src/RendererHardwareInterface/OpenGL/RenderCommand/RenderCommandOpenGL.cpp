@@ -5,7 +5,7 @@
 
 namespace Renderer
 {
-    void RenderCommandOpenGL::ClearColor(Eigen::Vector4f color)
+    void RenderCommandOpenGL::ClearColor(const Eigen::Vector4f& color)
     {
         glClearColor(color.x(), color.y(), color.z(), color.w());
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);

@@ -1,7 +1,7 @@
 
 #include "Application.h"
-#include "RendererHardwareInterface/OpenGL/RenderCommand/RenderCommandOpenGL.h"
 #include "Util/Logger/Logger.h"
+#include "Renderer/RenderCommand/RenderCommand.h"
 
 Application::Application()
 {
@@ -15,10 +15,7 @@ Application::~Application()
     for (auto pLooper : _loopLogic)
         delete pLooper;
 
-    if (!_pRenderCommand)
-        _pRenderCommand->Destroy();
-
-    delete _pRenderCommand;
+    Renderer::RenderCommand::Destroy();
 
     DestroyWindow();
 
@@ -33,8 +30,7 @@ void Application::InitWindow(RendererApi api, int windowWidth, int windowHeight)
     _pImpl->RegisterAndCreateWindow(_width, _height, WINDOW_NAME);
     _pImpl->ShowWindow();
 
-    _pRenderCommand = Renderer::RenderCommand::Create(api);
-    _pRenderCommand->SetUp();
+    Renderer::RenderCommand::Init();
 }
 
 void Application::DestroyWindow()
@@ -59,12 +55,12 @@ void Application::RunLoop()
             ::TranslateMessage(&msg);
             ::DispatchMessage(&msg);
 
-            _pRenderCommand->ClearColor(Eigen::Vector4f{0.2f, 0.2f, 0.2f, 1.0f});
+            Renderer::RenderCommand::ClearColor(Eigen::Vector4f{0.2f, 0.2f, 0.2f, 1.0f});
 
             for (auto& looper : _loopLogic)
                 looper->Loop();
 
-            _pRenderCommand->SwapBuffer();
+            Renderer::RenderCommand::SwapBuffer();
         }
 
         if (shouldStop)
@@ -97,11 +93,6 @@ int Application::GetWindowWidth() const
 RendererApi Application::GetRenderApi() const
 {
     return _api;
-}
-
-Renderer::RenderCommand* Application::GetRenderCommand()
-{
-    return _pRenderCommand;
 }
 
 void* Application::GetWindowHandle() const

@@ -1,4 +1,5 @@
 #include "RenderLooper.h"
+
 #include "Application/Application.h"
 #include "Renderer/Buffer/BufferLayout.h"
 #include "Renderer/Buffer/VertexArray.h"
@@ -8,6 +9,7 @@
 #include "Renderer/Shader/VertexShader.h"
 #include "Renderer/Shader/PixelShader.h"
 #include "Renderer/Camera/OrthoCamera.h"
+#include "Renderer/RenderCommand/RenderCommand.h"
 
 using namespace Renderer;
 
@@ -55,15 +57,6 @@ static constexpr std::array<float, 3 * (3 + 4)> Vert =  {
 };
 
 static constexpr std::array<unsigned int, 3> Indeices = { 0, 1, 2 };
-
-RenderLooper::RenderLooper()
-    : _pRenderCommand(Application::GetInstance()->GetRenderCommand())
-{
-}
-
-RenderLooper::~RenderLooper()
-{
-}
 
 void RenderLooper::Loop()
 {
@@ -113,7 +106,7 @@ void RenderLooper::Loop()
     pShader->SetUniformMat4("u_vpMatrix", camera.GetVPMatrix());
 
     // Draw Call
-    _pRenderCommand->Submit(pVertexArray);
+    Renderer::RenderCommand::Submit(pVertexArray);
 
     // Clear
     delete pVertexArray;
