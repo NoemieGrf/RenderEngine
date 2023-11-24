@@ -49,12 +49,12 @@ namespace Input
         }
     }
 
-    bool Keyboard::IsKeyPressed(unsigned char keycode) const
+    bool Keyboard::IsKeyPressed(unsigned char keycode)
     {
         return _keyStateSet[keycode];
     }
 
-    bool Keyboard::IsKeyEmpty() const
+    bool Keyboard::IsKeyEmpty()
     {
         return _keyBuffer.empty();
     }
@@ -79,7 +79,7 @@ namespace Input
         return 0;
     }
 
-    bool Keyboard::IsCharEmpty() const
+    bool Keyboard::IsCharEmpty()
     {
         return _charBuffer.empty();
     }
@@ -108,7 +108,7 @@ namespace Input
         _autoRepeat = false;
     }
 
-    bool Keyboard::IsAutoRepeatEnabled() const
+    bool Keyboard::IsAutoRepeatEnabled()
     {
         return _autoRepeat;
     }

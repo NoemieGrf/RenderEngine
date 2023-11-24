@@ -2,8 +2,6 @@
 
 #include "AppLooper.h"
 #include "Util/NonCopyable.h"
-#include "Input/Keyboard/Keyboard.h"
-#include "Input/Mouse/Mouse.h"
 #include "Define/RendererApi.h"
 #include "Renderer/RenderCommand/RenderCommand.h"
 #include "ApplicationWinImp/ApplicationWinImp.h"
@@ -43,8 +41,6 @@ public: // Getter
     RendererApi GetRenderApi() const;
     Renderer::RenderCommand* GetRenderCommand();
     void* GetWindowHandle() const;
-    const Input::Keyboard& GetKeyboard() const;
-    const Input::Mouse& GetMouse() const;
 
 private:
     Application();
@@ -60,10 +56,6 @@ private:
     /* Basic */
     int _height = 0;
     int _width = 0;
-
-    /* Input */
-    Input::Keyboard _keyboard = Input::Keyboard{};
-    Input::Mouse _mouse = Input::Mouse{};
 
     /* Looper */
     std::vector<AppLooper*> _loopLogic {};

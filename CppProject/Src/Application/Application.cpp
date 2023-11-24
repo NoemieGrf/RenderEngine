@@ -109,16 +109,6 @@ void* Application::GetWindowHandle() const
     return reinterpret_cast<void*>(_pImpl->GetWindowHandle());
 }
 
-const Input::Keyboard& Application::GetKeyboard() const
-{
-    return _keyboard;
-}
-
-const Input::Mouse& Application::GetMouse() const
-{
-    return _mouse;
-}
-
 #pragma endregion
 
 #pragma region [Static Instance]

@@ -47,37 +47,37 @@ namespace Input
 
 #pragma region [Accessor]
 
-    std::pair<int, int> Mouse::GetPosition() const
+    std::pair<int, int> Mouse::GetPosition()
     {
         return {_x, _y};
     }
 
-    int Mouse::GetPositionX() const
+    int Mouse::GetPositionX()
     {
         return _x;
     }
 
-    int Mouse::GetPositionY() const
+    int Mouse::GetPositionY()
     {
         return _y;
     }
 
-    bool Mouse::IsLeftPressed() const
+    bool Mouse::IsLeftPressed()
     {
         return _leftPressed;
     }
 
-    bool Mouse::IsMiddlePressed() const
+    bool Mouse::IsMiddlePressed()
     {
         return _middlePressed;
     }
 
-    bool Mouse::IsRightPressed() const
+    bool Mouse::IsRightPressed()
     {
         return _rightPressed;
     }
 
-    bool Mouse::IsInWindow() const
+    bool Mouse::IsInWindow()
     {
         return _isMouseInWindow;
     }
@@ -96,7 +96,7 @@ namespace Input
         }
     }
 
-    bool Mouse::IsEmpty() const
+    bool Mouse::IsEmpty()
     {
         return _buffer.empty();
     }
