@@ -54,10 +54,12 @@ private:
     std::vector<AppLooper*> _loopLogic {};
 
 private:
+    inline static uint64_t _frameCount = 0;
     inline static Application* _instance = nullptr;
     inline static constexpr const char* WINDOW_NAME = "Graphic Render";
 
 public:
     static void CreateInstance();
     static Application* GetInstance();
+    static uint64_t GetFrameCount();
 };

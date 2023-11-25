@@ -76,6 +76,8 @@ void Application::RunLoop()
 
             // Swap Buffer
             Renderer::RenderCommand::SwapBuffer();
+
+            _frameCount++;
         }
 
         if (shouldStop)
@@ -118,6 +120,11 @@ void Application::CreateInstance()
 Application* Application::GetInstance()
 {
     return _instance;
+}
+
+uint64_t Application::GetFrameCount()
+{
+    return _frameCount;
 }
 
 #pragma endregion

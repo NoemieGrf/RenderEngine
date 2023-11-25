@@ -1,12 +1,11 @@
 #include "TestLooper.h"
 
-#include "Application/Application.h"
 #include "Renderer/Buffer/BufferLayout.h"
 #include "Renderer/Buffer/VertexArray.h"
 #include "Renderer/Buffer/VertexBuffer.h"
 #include "Renderer/Buffer/IndexBuffer.h"
 #include "Renderer/Shader/Shader.h"
-#include "Renderer/Camera/OrthoCamera.h"
+
 #include "Renderer/RenderCommand/RenderCommand.h"
 
 #include "imgui.h"
@@ -58,14 +57,17 @@ static constexpr std::array<float, 3 * (3 + 4)> Vert =  {
 
 static constexpr std::array<unsigned int, 3> Indeices = { 0, 1, 2 };
 
-void TestLooper::RenderLoop()
+TestLooper::TestLooper()
+    : _orthoCamera(-1, 1, -1, 1, -1, 1)
+    , _pShader(Shader::Create())
+    , _pVertexArray(VertexArray::Create())
 {
-    OrthoCamera camera(-1, 1, -1, 1, -1, 1);
+    _orthoCamera.SetPosition(Eigen::Vector3f(0, 0, 0));
+    _orthoCamera.SetRotation(Eigen::Quaternionf::Identity());
 
-    Ptr<Shader> pShader = Shader::Create();
-    pShader->AddVertexShader(pvsCode);
-    pShader->AddPixelShader(pfsCode);
-    pShader->Link();
+    _pShader->AddVertexShader(pvsCode);
+    _pShader->AddPixelShader(pfsCode);
+    _pShader->Link();
 
     Ptr<VertexBuffer> pVertexBuffer = VertexBuffer::Create(Vert.data(), Vert.size());
 
@@ -82,16 +84,18 @@ void TestLooper::RenderLoop()
     Ptr<IndexBuffer> pIndexBuffer = IndexBuffer::Create(Indeices.data(), Indeices.size());
 
     // Vertex Array
-    Ptr<VertexArray> pVertexArray = VertexArray::Create();
-    pVertexArray->AddVertexBuffer(pVertexBuffer);
-    pVertexArray->SetIndexBuffer(pIndexBuffer);
+    _pVertexArray->AddVertexBuffer(pVertexBuffer);
+    _pVertexArray->SetIndexBuffer(pIndexBuffer);
+}
 
+void TestLooper::RenderLoop()
+{
     // Shader Uniform
-    pShader->Bind();
-    pShader->SetUniformMat4("u_vpMatrix", camera.GetVPMatrix());
+    _pShader->Bind();
+    _pShader->SetUniformMat4("u_vpMatrix", _orthoCamera.GetVPMatrix());
 
     // Draw Call
-    Renderer::RenderCommand::Submit(pVertexArray);
+    Renderer::RenderCommand::Submit(_pVertexArray);
 }
 
 void TestLooper::EditorLoop()
