@@ -4,7 +4,6 @@
 #include "Util/NonCopyable.h"
 #include "Define/RendererApi.h"
 #include "ApplicationWinImp/ApplicationWinImp.h"
-#include "ApplicationWinImp/IWinMsgReceiver.h"
 
 class Application : public NonCopyable
 {
@@ -16,9 +15,6 @@ public:
     void InitWindow(RendererApi api, int windowWidth, int windowHeight);
     void DestroyWindow();
     void RunLoop();
-
-    void AddWinMsgProc(IWinMsgReceiver* pWinMsgReceiver);
-    void RemoveWinMsgProc(IWinMsgReceiver* pWinMsgReceiver);
 
     template<AppLooperImpl T, class... Types>
     void AddLooper(Types&&... Args)

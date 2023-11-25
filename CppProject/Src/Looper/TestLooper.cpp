@@ -1,4 +1,4 @@
-#include "RenderLooper.h"
+#include "TestLooper.h"
 
 #include "Application/Application.h"
 #include "Renderer/Buffer/BufferLayout.h"
@@ -6,10 +6,10 @@
 #include "Renderer/Buffer/VertexBuffer.h"
 #include "Renderer/Buffer/IndexBuffer.h"
 #include "Renderer/Shader/Shader.h"
-#include "Renderer/Shader/SpecificShader/VertexShader.h"
-#include "Renderer/Shader/SpecificShader/PixelShader.h"
 #include "Renderer/Camera/OrthoCamera.h"
 #include "Renderer/RenderCommand/RenderCommand.h"
+
+#include "imgui.h"
 
 using namespace Renderer;
 
@@ -58,7 +58,7 @@ static constexpr std::array<float, 3 * (3 + 4)> Vert =  {
 
 static constexpr std::array<unsigned int, 3> Indeices = { 0, 1, 2 };
 
-void RenderLooper::Loop()
+void TestLooper::RenderLoop()
 {
     OrthoCamera camera(-1, 1, -1, 1, -1, 1);
 
@@ -94,3 +94,22 @@ void RenderLooper::Loop()
     Renderer::RenderCommand::Submit(pVertexArray);
 }
 
+void TestLooper::EditorLoop()
+{
+    // temp
+    const ImGuiViewport* main_viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(ImVec2(main_viewport->WorkPos.x, main_viewport->WorkPos.y), ImGuiCond_Always);
+    ImGui::SetNextWindowSize(ImVec2(main_viewport->WorkPos.x / 3, main_viewport->WorkPos.y / 2), ImGuiCond_Always);
+
+    ImGuiWindowFlags window_flags = 0;
+    window_flags |= ImGuiWindowFlags_NoTitleBar;
+    window_flags |= ImGuiWindowFlags_NoMove;
+    window_flags |= ImGuiWindowFlags_NoResize;
+    window_flags |= ImGuiWindowFlags_NoCollapse;
+
+    ImGui::Begin("Test", nullptr, window_flags);
+
+    ImGui::Button("Test");
+
+    ImGui::End();
+}

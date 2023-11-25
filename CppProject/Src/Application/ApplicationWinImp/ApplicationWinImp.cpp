@@ -2,6 +2,7 @@
 #include "Application/Application.h"
 #include "Input/Keyboard.h"
 #include "Input/Mouse.h"
+#include "Editor/Editor.h"
 
 ApplicationWinImp::ApplicationWinImp()
 {
@@ -67,20 +68,6 @@ void ApplicationWinImp::DestroyWindow()
     ::DestroyWindow(_hWnd);
 }
 
-void ApplicationWinImp::AddWinMsgProc(IWinMsgReceiver* pWinMsgReceiver)
-{
-    auto itr = std::find(_winMsgReceiverVec.begin(), _winMsgReceiverVec.end(), pWinMsgReceiver);
-    if (itr == _winMsgReceiverVec.end())
-        _winMsgReceiverVec.push_back(pWinMsgReceiver);
-}
-
-void ApplicationWinImp::RemoveWinMsgProc(IWinMsgReceiver* pWinMsgReceiver)
-{
-    auto itr = std::find(_winMsgReceiverVec.begin(), _winMsgReceiverVec.end(), pWinMsgReceiver);
-    if (itr != _winMsgReceiverVec.end())
-        _winMsgReceiverVec.erase(itr);
-}
-
 #pragma region [Windows Message]
 
 LRESULT ApplicationWinImp::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -91,17 +78,10 @@ LRESULT ApplicationWinImp::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 
 LRESULT ApplicationWinImp::HandleMsgDispatch(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    for (auto pWinMsgReceiver : _winMsgReceiverVec)
-    {
-        if (pWinMsgReceiver != nullptr)
-        {
-            pWinMsgReceiver->OnWinMsg(
-                    reinterpret_cast<int64_t>(hWnd),
-                    static_cast<uint32_t>(msg),
-                    static_cast<int64_t>(wParam),
-                    static_cast<int64_t>(lParam));
-        }
-    }
+    Editor::Environment::OnWinMsg(reinterpret_cast<int64_t>(hWnd),
+                                  static_cast<uint32_t>(msg),
+                                  static_cast<int64_t>(wParam),
+                                  static_cast<int64_t>(lParam));
 
     switch (msg)
     {

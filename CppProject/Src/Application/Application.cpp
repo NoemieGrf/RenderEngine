@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Util/Logger/Logger.h"
 #include "Renderer/RenderCommand/RenderCommand.h"
+#include "Editor/Editor.h"
 
 Application::Application()
 {
@@ -15,6 +16,7 @@ Application::~Application()
     for (auto pLooper : _loopLogic)
         delete pLooper;
 
+    Editor::Environment::Destroy();
     Renderer::RenderCommand::Destroy();
 
     DestroyWindow();
@@ -24,6 +26,8 @@ Application::~Application()
 
 void Application::InitWindow(RendererApi api, int windowWidth, int windowHeight)
 {
+    _api = api;
+
     _width = windowWidth;
     _height = windowHeight;
 
@@ -31,6 +35,7 @@ void Application::InitWindow(RendererApi api, int windowWidth, int windowHeight)
     _pImpl->ShowWindow();
 
     Renderer::RenderCommand::Init();
+    Editor::Environment::Init();
 }
 
 void Application::DestroyWindow()
@@ -57,25 +62,25 @@ void Application::RunLoop()
 
             Renderer::RenderCommand::ClearColor(Eigen::Vector4f{0.2f, 0.2f, 0.2f, 1.0f});
 
+            // Render Loop
             for (auto& looper : _loopLogic)
-                looper->Loop();
+                looper->RenderLoop();
 
+            // Editor Loop
+            Editor::Environment::BeforeLoop();
+
+            for (auto& looper : _loopLogic)
+                looper->EditorLoop();
+
+            Editor::Environment::AfterLoop();
+
+            // Swap Buffer
             Renderer::RenderCommand::SwapBuffer();
         }
 
         if (shouldStop)
             break;
     }
-}
-
-void Application::AddWinMsgProc(IWinMsgReceiver* pWinMsgReceiver)
-{
-    _pImpl->AddWinMsgProc(pWinMsgReceiver);
-}
-
-void Application::RemoveWinMsgProc(IWinMsgReceiver* pWinMsgReceiver)
-{
-    _pImpl->RemoveWinMsgProc(pWinMsgReceiver);
 }
 
 #pragma region [Getter]
