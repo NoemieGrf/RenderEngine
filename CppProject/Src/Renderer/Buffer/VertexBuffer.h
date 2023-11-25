@@ -1,6 +1,7 @@
 #pragma once
 
 #include "BufferLayout.h"
+#include "Define/Define.h"
 
 namespace Renderer
 {
@@ -17,6 +18,6 @@ namespace Renderer
         virtual const BufferLayout& GetLayout() const = 0;
 
     public:
-        static VertexBuffer* Create(const float* vertices, unsigned int length);
+        static Ptr<VertexBuffer> Create(const float* vertices, unsigned int length);
     };
 }

@@ -67,7 +67,7 @@ void RenderLooper::Loop()
     pShader->AddPixelShader(pfsCode);
     pShader->Link();
 
-    VertexBuffer* pVertexBuffer = VertexBuffer::Create(Vert.data(), Vert.size());
+    Ptr<VertexBuffer> pVertexBuffer = VertexBuffer::Create(Vert.data(), Vert.size());
 
     // Layout
     BufferLayout layout = {
@@ -79,10 +79,10 @@ void RenderLooper::Loop()
     pVertexBuffer->SetLayout(std::move(layout));
 
     // Index Buffer
-    IndexBuffer* pIndexBuffer = IndexBuffer::Create(Indeices.data(), Indeices.size());
+    Ptr<IndexBuffer> pIndexBuffer = IndexBuffer::Create(Indeices.data(), Indeices.size());
 
     // Vertex Array
-    VertexArray* pVertexArray = VertexArray::Create();
+    Ptr<VertexArray> pVertexArray = VertexArray::Create();
     pVertexArray->AddVertexBuffer(pVertexBuffer);
     pVertexArray->SetIndexBuffer(pIndexBuffer);
 
@@ -92,10 +92,5 @@ void RenderLooper::Loop()
 
     // Draw Call
     Renderer::RenderCommand::Submit(pVertexArray);
-
-    // Clear
-    delete pVertexArray;
-    delete pIndexBuffer;
-    delete pVertexBuffer;
 }
 

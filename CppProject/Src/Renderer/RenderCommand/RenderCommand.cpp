@@ -40,7 +40,7 @@ namespace Renderer
         _pImpl->ClearColor(color);
     }
 
-    void RenderCommand::Submit(VertexArray* pVertArray)
+    void RenderCommand::Submit(const Ptr<VertexArray>& pVertArray)
     {
         _pImpl->Submit(pVertArray);
     }

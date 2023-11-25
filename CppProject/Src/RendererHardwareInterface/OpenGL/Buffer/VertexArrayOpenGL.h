@@ -13,14 +13,14 @@ namespace Renderer
     public:
         void Bind() override;
         void UnBind() override;
-        void AddVertexBuffer(const VertexBuffer* pVertexBuffer) override;
-        void SetIndexBuffer(const IndexBuffer* pIndexBuffer) override;
-        const std::vector<const VertexBuffer*>& GetVertexBufferVector() const override;
-        const IndexBuffer* GetCurrentIndexBuffer() const override;
+        void AddVertexBuffer(const Ptr<const VertexBuffer>& pVertexBuffer) override;
+        void SetIndexBuffer(const Ptr<const IndexBuffer>& pIndexBuffer) override;
+        const std::vector<Ptr<const VertexBuffer>>& GetVertexBufferVector() const override;
+        Ptr<const IndexBuffer> GetCurrentIndexBuffer() const override;
 
     private:
         unsigned int _vertexArrayId = 0;
-        std::vector<const VertexBuffer*> _vertexBufferVec = {};
-        const IndexBuffer* _pCurrentIndexBuffer = nullptr;
+        std::vector<Ptr<const VertexBuffer>> _vertexBufferVec = {};
+        Ptr<const IndexBuffer> _pCurrentIndexBuffer = nullptr;
     };
 }

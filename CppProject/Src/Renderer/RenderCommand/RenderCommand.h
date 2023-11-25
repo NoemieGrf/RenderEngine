@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Define/Define.h"
 #include "RenderCommandImpl.h"
 
 namespace Renderer
@@ -18,7 +19,7 @@ namespace Renderer
     public:
         static void SwapBuffer();
         static void ClearColor(const Eigen::Vector4f& color);
-        static void Submit(VertexArray* pVertArray);
+        static void Submit(const Ptr<VertexArray>& pVertArray);
 
     private:
         inline static RenderCommandImpl* _pImpl = nullptr;

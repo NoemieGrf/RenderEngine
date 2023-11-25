@@ -5,12 +5,12 @@
 
 namespace Renderer
 {
-    VertexBuffer* VertexBuffer::Create(const float* vertices, unsigned int length)
+    Ptr<VertexBuffer> VertexBuffer::Create(const float* vertices, unsigned int length)
     {
         switch (Application::GetInstance()->GetRenderApi())
         {
             case RendererApi::OpenGL:
-                return new VertexBufferOpenGL(vertices, length);
+                return std::make_shared<VertexBufferOpenGL>(vertices, length);
             case RendererApi::Vulkan:
                 break;
             case RendererApi::D3D11:

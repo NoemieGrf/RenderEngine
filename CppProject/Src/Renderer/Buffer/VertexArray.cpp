@@ -6,12 +6,12 @@
 namespace Renderer
 {
 
-    VertexArray* VertexArray::Create()
+    Ptr<VertexArray> VertexArray::Create()
     {
         switch (Application::GetInstance()->GetRenderApi())
         {
             case RendererApi::OpenGL:
-                return new VertexArrayOpenGL();
+                return std::make_shared<VertexArrayOpenGL>();
             case RendererApi::Vulkan:
                 break;
             case RendererApi::D3D11:

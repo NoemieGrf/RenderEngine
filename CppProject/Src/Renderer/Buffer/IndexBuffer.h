@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Define/Define.h"
+
 namespace Renderer
 {
     class IndexBuffer
@@ -13,6 +15,6 @@ namespace Renderer
         virtual unsigned int GetIndicesCount() const = 0;
 
     public:
-        static IndexBuffer* Create(const unsigned int* indices, unsigned int length);
+        static Ptr<IndexBuffer> Create(const unsigned int* indices, unsigned int length);
     };
 }

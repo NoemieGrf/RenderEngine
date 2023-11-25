@@ -102,7 +102,7 @@ namespace Renderer
         ::SwapBuffers(_pData->_hDC);
     }
 
-    void RenderCommandOpenGL::Submit(VertexArray* pVertArray)
+    void RenderCommandOpenGL::Submit(const Ptr<VertexArray>& pVertArray)
     {
         pVertArray->Bind();
         ::glDrawElements(

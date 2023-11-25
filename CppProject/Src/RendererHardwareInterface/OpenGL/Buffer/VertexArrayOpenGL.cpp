@@ -25,7 +25,7 @@ namespace Renderer
         ::glBindVertexArray(0);
     }
 
-    void VertexArrayOpenGL::AddVertexBuffer(const VertexBuffer* pVertexBuffer)
+    void VertexArrayOpenGL::AddVertexBuffer(const Ptr<const VertexBuffer>& pVertexBuffer)
     {
         if (pVertexBuffer == nullptr)
             return;
@@ -51,7 +51,7 @@ namespace Renderer
         _vertexBufferVec.push_back(pVertexBuffer);
     }
 
-    void VertexArrayOpenGL::SetIndexBuffer(const IndexBuffer* pIndexBuffer)
+    void VertexArrayOpenGL::SetIndexBuffer(const Ptr<const IndexBuffer>& pIndexBuffer)
     {
         if (pIndexBuffer == nullptr)
             return;
@@ -62,12 +62,12 @@ namespace Renderer
         _pCurrentIndexBuffer = pIndexBuffer;
     }
 
-    const std::vector<const VertexBuffer*>& VertexArrayOpenGL::GetVertexBufferVector() const
+    const std::vector<Ptr<const VertexBuffer>>& VertexArrayOpenGL::GetVertexBufferVector() const
     {
         return _vertexBufferVec;
     }
 
-    const IndexBuffer* VertexArrayOpenGL::GetCurrentIndexBuffer() const
+    Ptr<const IndexBuffer> VertexArrayOpenGL::GetCurrentIndexBuffer() const
     {
         return _pCurrentIndexBuffer;
     }
