@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Renderer/Shader/PixelShader.h"
+#include "Renderer/Shader/SpecificShader/VertexShader.h"
 
 namespace Renderer
 {
-    class PixelShaderOpenGL : public PixelShader
+    class VertexShaderOpenGL : public VertexShader
     {
     public:
-        ~PixelShaderOpenGL() override;
+        ~VertexShaderOpenGL() override;
 
     public: // override
         bool Compile() override;

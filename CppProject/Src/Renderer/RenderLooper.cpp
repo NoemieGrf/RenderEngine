@@ -5,9 +5,9 @@
 #include "Renderer/Buffer/VertexArray.h"
 #include "Renderer/Buffer/VertexBuffer.h"
 #include "Renderer/Buffer/IndexBuffer.h"
-#include "Renderer/Shader/ShaderProgram.h"
-#include "Renderer/Shader/VertexShader.h"
-#include "Renderer/Shader/PixelShader.h"
+#include "Renderer/Shader/Shader.h"
+#include "Renderer/Shader/SpecificShader/VertexShader.h"
+#include "Renderer/Shader/SpecificShader/PixelShader.h"
 #include "Renderer/Camera/OrthoCamera.h"
 #include "Renderer/RenderCommand/RenderCommand.h"
 
@@ -62,24 +62,9 @@ void RenderLooper::Loop()
 {
     OrthoCamera camera(-1, 1, -1, 1, -1, 1);
 
-    ShaderProgram* pShader = ShaderProgram::Create();
-
-    {
-        VertexShader* pVertexShader = VertexShader::Create();
-        pVertexShader->LoadFromString(pvsCode);
-        pVertexShader->Compile();
-
-        PixelShader* pPixelShader = PixelShader::Create();
-        pPixelShader->LoadFromString(pfsCode);
-        pPixelShader->Compile();
-
-        pShader->AddVertexShader(pVertexShader);
-        pShader->AddPixelShader(pPixelShader);
-
-        delete pVertexShader;
-        delete pPixelShader;
-    }
-
+    Ptr<Shader> pShader = Shader::Create();
+    pShader->AddVertexShader(pvsCode);
+    pShader->AddPixelShader(pfsCode);
     pShader->Link();
 
     VertexBuffer* pVertexBuffer = VertexBuffer::Create(Vert.data(), Vert.size());
@@ -112,6 +97,5 @@ void RenderLooper::Loop()
     delete pVertexArray;
     delete pIndexBuffer;
     delete pVertexBuffer;
-    delete pShader;
 }
 

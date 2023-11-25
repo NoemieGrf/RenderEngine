@@ -3,7 +3,7 @@
 #include "Util/NonCopyable.h"
 #include "Define/RendererApi.h"
 #include "Renderer/Buffer/VertexArray.h"
-#include "Renderer/Shader/ShaderProgram.h"
+#include "Renderer/Shader/Shader.h"
 #include "eigen/Eigen"
 
 namespace Renderer

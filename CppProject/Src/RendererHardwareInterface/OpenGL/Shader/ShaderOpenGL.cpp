@@ -1,6 +1,6 @@
-#include "ShaderProgrmaOpenGL.h"
-#include "VertexShaderOpenGL.h"
-#include "PixelShaderOpenGL.h"
+#include "ShaderOpenGL.h"
+#include "RendererHardwareInterface/OpenGL/Shader/SpecificShader/VertexShaderOpenGL.h"
+#include "RendererHardwareInterface/OpenGL/Shader/SpecificShader/PixelShaderOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
 
 namespace Renderer
@@ -11,18 +11,18 @@ namespace Renderer
         _shaderProgramId = ::glCreateProgram();
     }
 
-    void ShaderProgramOpenGL::AddVertexShader(VertexShader* pVertexShader)
+    void ShaderProgramOpenGL::AttachVertexShader()
     {
-        auto pVSOpenGL = dynamic_cast<const VertexShaderOpenGL*>(pVertexShader);
+        Ptr<VertexShaderOpenGL> pVSOpenGL = DynamicCast<VertexShaderOpenGL>(_pVertexShader);
         if (pVSOpenGL == nullptr)
             return;
 
         ::glAttachShader(_shaderProgramId, pVSOpenGL->GetShaderId());
     }
 
-    void ShaderProgramOpenGL::AddPixelShader(PixelShader* pPixelShader)
+    void ShaderProgramOpenGL::AttachPixelShader()
     {
-        auto pPSOpenGL = dynamic_cast<const PixelShaderOpenGL*>(pPixelShader);
+        Ptr<PixelShaderOpenGL> pPSOpenGL = DynamicCast<PixelShaderOpenGL>(_pPixelShader);
         if (pPSOpenGL == nullptr)
             return;
 
