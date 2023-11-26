@@ -8,6 +8,11 @@ Application::Application()
 {
     Util::Logger::InitConsoleLogger();
 
+#ifdef BUILD_RELEASE
+    Util::Logger::InitFileLogger("./log.txt");
+    Util::Logger::SetFilterLevel(Util::Logger::Level::Error);
+#endif
+
     _pImpl = new ApplicationWinImp();
 }
 
@@ -59,26 +64,26 @@ void Application::RunLoop()
 
             ::TranslateMessage(&msg);
             ::DispatchMessage(&msg);
-
-            Renderer::RenderCommand::ClearColor(Eigen::Vector4f{0.2f, 0.2f, 0.2f, 1.0f});
-
-            // Render Loop
-            for (auto& looper : _loopLogic)
-                looper->RenderLoop();
-
-            // Editor Loop
-            Editor::Environment::BeforeLoop();
-
-            for (auto& looper : _loopLogic)
-                looper->EditorLoop();
-
-            Editor::Environment::AfterLoop();
-
-            // Swap Buffer
-            Renderer::RenderCommand::SwapBuffer();
-
-            _frameCount++;
         }
+
+        Renderer::RenderCommand::ClearColor(Eigen::Vector4f{0.2f, 0.2f, 0.2f, 1.0f});
+
+        // Render Loop
+        for (auto& looper : _loopLogic)
+            looper->RenderLoop();
+
+        // Editor Loop
+        Editor::Environment::BeforeLoop();
+
+        for (auto& looper : _loopLogic)
+            looper->EditorLoop();
+
+        Editor::Environment::AfterLoop();
+
+        // Swap Buffer
+        Renderer::RenderCommand::SwapBuffer();
+
+        _frameCount++;
 
         if (shouldStop)
             break;

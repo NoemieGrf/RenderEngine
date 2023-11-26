@@ -14,19 +14,19 @@ namespace Renderer
     void Camera::SetPosition(const Eigen::Vector3f& pos)
     {
         _position = pos;
-        SetNeedUpdateProjectionMatrix();
+        SetNeedUpdateViewMatrix();
     }
 
     void Camera::SetRotation(const Eigen::Quaternionf& rot)
     {
         _rotation = rot;
-        SetNeedUpdateProjectionMatrix();
+        SetNeedUpdateViewMatrix();
     }
 
     void Camera::SetFrustum(const Frustum& frustum)
     {
         _frustum = frustum;
-        SetNeedUpdateViewMatrix();
+        SetNeedUpdateProjectionMatrix();
     }
 
     const Eigen::Vector3f& Camera::GetPosition() const

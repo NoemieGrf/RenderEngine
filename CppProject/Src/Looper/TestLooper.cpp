@@ -1,5 +1,7 @@
 #include "TestLooper.h"
 
+#include "Input/Keyboard.h"
+
 #include "Renderer/Buffer/BufferLayout.h"
 #include "Renderer/Buffer/VertexArray.h"
 #include "Renderer/Buffer/VertexBuffer.h"
@@ -90,6 +92,14 @@ TestLooper::TestLooper()
 
 void TestLooper::RenderLoop()
 {
+    // Input
+    if (Input::Keyboard::IsKeyPressed('A'))
+    {
+        auto pos = _orthoCamera.GetPosition();
+        pos.x() += 0.1f;
+        _orthoCamera.SetPosition(pos);
+    }
+
     // Shader Uniform
     _pShader->Bind();
     _pShader->SetUniformMat4("u_vpMatrix", _orthoCamera.GetVPMatrix());

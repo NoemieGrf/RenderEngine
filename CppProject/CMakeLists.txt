@@ -27,7 +27,10 @@ add_executable(${TargetName}
 
 if (CMAKE_BUILD_TYPE STREQUAL Debug)
     target_compile_definitions(${TargetName} PRIVATE ENABLE_CONSOLE_LOG)
-endif ()
+    target_compile_definitions(${TargetName} PRIVATE BUILD_DEBUG)
+elseif (CMAKE_BUILD_TYPE STREQUAL Release)
+    target_compile_definitions(${TargetName} PRIVATE BUILD_RELEASE)
+endif()
 
 set_target_properties(${TargetName} PROPERTIES
         LINK_FLAGS "/SUBSYSTEM:WINDOWS"

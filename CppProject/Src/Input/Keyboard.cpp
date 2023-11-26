@@ -1,5 +1,7 @@
 #include "Keyboard.h"
 #include "Util/Util.hpp"
+#include "Util/Logger/Logger.h"
+#include "Application/Application.h"
 
 namespace Input
 {
@@ -117,6 +119,7 @@ namespace Input
 
     void Keyboard::OnKeyPressed(unsigned char keycode)
     {
+        Util::Logger::LogInfo("{} Pressed, Frame = {}", (char)keycode, Application::GetFrameCount());
         _keyStateSet[keycode] = true;
         _keyBuffer.emplace(Event::Type::Press, keycode);
         Util::TrimQueue(_keyBuffer, QUEUE_SIZE);
@@ -124,6 +127,7 @@ namespace Input
 
     void Keyboard::OnKeyReleased(unsigned char keycode)
     {
+        Util::Logger::LogInfo("{} Released, Frame = {}", (char)keycode, Application::GetFrameCount());
         _keyStateSet[keycode] = false;
         _keyBuffer.emplace(Event::Type::Release, keycode);
         Util::TrimQueue(_keyBuffer, QUEUE_SIZE);
