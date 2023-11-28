@@ -106,11 +106,10 @@ LRESULT ApplicationWinImp::OnMsgWmMouseMove(Application* pApp, HWND hWnd, UINT m
         if (!Input::Mouse::IsInWindow())
         {
             ::SetCapture(_hWnd);
-            Input::Mouse::OnMouseEnter();
+            Input::Mouse::OnMouseEnter(pt.x, pt.y);
         }
     } else
     {
-        // 按住的时候离开窗口，不许离开
         // do not allow mouse leave this window when pressing
         if (wParam & (MK_LBUTTON | MK_RBUTTON | MK_MBUTTON))
         {
@@ -118,7 +117,7 @@ LRESULT ApplicationWinImp::OnMsgWmMouseMove(Application* pApp, HWND hWnd, UINT m
         } else
         {
             ::ReleaseCapture();
-            Input::Mouse::OnMouseLeave();
+            Input::Mouse::OnMouseLeave(pt.x, pt.y);
         }
     }
 
@@ -169,8 +168,10 @@ LRESULT ApplicationWinImp::OnMsgWmRButtonUp(Application* pApp, HWND hWnd, UINT m
 
 LRESULT ApplicationWinImp::OnMsgWmMouseWheel(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    // https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-mousewheel
     POINTS pt = MAKEPOINTS(lParam);
-    Input::Mouse::OnWheelDelta(pt.x, pt.y, GET_WHEEL_DELTA_WPARAM(wParam));
+    int wheelDelta = GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA;
+    Input::Mouse::OnWheelDelta(pt.x, pt.y, wheelDelta);
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 

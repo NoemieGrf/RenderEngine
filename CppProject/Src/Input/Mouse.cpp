@@ -1,51 +1,121 @@
 
-#include <Windows.h>
+#include "assert.h"
 #include "Mouse.h"
 #include "Util/Util.hpp"
 
 namespace Input
 {
-
-#pragma region [Event]
-
-    Mouse::Event::Event()
-            : _type(Type::Invalid), _x(0), _y(0)
+    Mouse::Event::Event(Mouse::EventType t, int x, int y)
+        : eventType(t)
+        , x(x)
+        , y(y)
     {
     }
 
-    Mouse::Event::Event(Type t, int x, int y)
-            : _type(t), _x(x), _y(y)
+    Mouse::ButtonEvent::ButtonEvent(Mouse::EventType t, MouseButton btn, int x, int y, bool down)
+        : Event(t, x, y)
+        , mouseButton(btn)
+        , isDown(down)
     {
     }
 
-    bool Mouse::Event::IsValid() const
+    Mouse::WheelEvent::WheelEvent(Mouse::EventType t, int x, int y, bool up, int delta)
+            : Event(t, x, y)
+            , isUp(up)
+            , wheelDelta(delta)
     {
-        return _type != Type::Invalid;
     }
 
-    Mouse::Event::Type Mouse::Event::GetType() const
+    void Mouse::ProcessEvent()
     {
-        return _type;
+        std::fill(_buttonPressing.begin(), _buttonPressing.end(), false);
+        std::fill(_buttonReleasing.begin(), _buttonReleasing.end(), false);
+        _wheelScrollingUp = false;
+        _wheelScrollingDown = false;
+        _wheelDelta = 0;
+
+        while (!_eventQueue.empty())
+        {
+            const auto& pEvent = _eventQueue.front();
+
+            _x = pEvent->x;
+            _y = pEvent->y;
+
+            switch (pEvent->eventType)
+            {
+                case EventType::Move:
+                {
+                    break;
+                }
+                case EventType::Button:
+                {
+                    Ptr<const ButtonEvent> pButtonEvent = DynamicCast<ButtonEvent>(pEvent);
+                    assert(pButtonEvent != nullptr);
+
+                    bool isDown = pButtonEvent->isDown;
+                    if (isDown)
+                    {
+                        bool isNewPress = !_buttonState[(int)pButtonEvent->mouseButton];
+
+                        _buttonState[(int)pButtonEvent->mouseButton] = true;
+
+                        if (isNewPress)
+                            _buttonPressing[(int)pButtonEvent->mouseButton] = true;
+                    }
+                    else
+                    {
+                        bool isNewRelease = _buttonState[(int)pButtonEvent->mouseButton];
+
+                        _buttonState[(int)pButtonEvent->mouseButton] = false;
+
+                        if (isNewRelease)
+                            _buttonReleasing[(int)pButtonEvent->mouseButton] = true;
+                    }
+                    break;
+                }
+                case EventType::Wheel:
+                {
+                    Ptr<const WheelEvent> pWheelEvent = DynamicCast<WheelEvent>(pEvent);
+                    assert(pWheelEvent != nullptr);
+
+                    if (pWheelEvent->isUp)
+                        _wheelScrollingUp = true;
+                    else
+                        _wheelScrollingDown = true;
+
+                    _wheelDelta += pWheelEvent->wheelDelta;
+
+                    break;
+                }
+                case EventType::Enter:
+                {
+                    _isMouseInWindow = true;
+                    break;
+                }
+                case EventType::Leave:
+                {
+                    _isMouseInWindow = false;
+                    break;
+                }
+            }
+
+            _eventQueue.pop();
+        }
+
     }
 
-    std::pair<int, int> Mouse::Event::GetPosition() const
+    void Mouse::Clear()
     {
-        return {_x, _y};
+        std::fill(_buttonPressing.begin(), _buttonPressing.end(), false);
+        std::fill(_buttonReleasing.begin(), _buttonReleasing.end(), false);
+        std::fill(_buttonState.begin(), _buttonState.end(), false);
+        _wheelScrollingUp = false;
+        _wheelScrollingDown = false;
+        _wheelDelta = 0;
+
+        while (!_eventQueue.empty())
+            _eventQueue.pop();
     }
-
-    int Mouse::Event::GetPositionX() const
-    {
-        return _x;
-    }
-
-    int Mouse::Event::GetPositionY() const
-    {
-        return _y;
-    }
-
-#pragma endregion
-
-#pragma region [Accessor]
 
     std::pair<int, int> Mouse::GetPosition()
     {
@@ -62,19 +132,19 @@ namespace Input
         return _y;
     }
 
-    bool Mouse::IsLeftPressed()
+    bool Mouse::IsButtonDown(MouseButton button)
     {
-        return _leftPressed;
+        return _buttonState[(int)button];
     }
 
-    bool Mouse::IsMiddlePressed()
+    bool Mouse::IsButtonPressing(MouseButton button)
     {
-        return _middlePressed;
+        return _buttonPressing[(int)button];
     }
 
-    bool Mouse::IsRightPressed()
+    bool Mouse::IsButtonReleasing(MouseButton button)
     {
-        return _rightPressed;
+        return _buttonReleasing[(int)button];
     }
 
     bool Mouse::IsInWindow()
@@ -82,145 +152,77 @@ namespace Input
         return _isMouseInWindow;
     }
 
-    Mouse::Event Mouse::RaiseEvent()
-    {
-        if (!_buffer.empty())
-        {
-            auto evt = _buffer.front();
-            _buffer.pop();
-            return evt;
-        }
-        else
-        {
-            return {};
-        }
-    }
-
-    bool Mouse::IsEmpty()
-    {
-        return _buffer.empty();
-    }
-
-    void Mouse::Clear()
-    {
-        while (!_buffer.empty())
-            _buffer.pop();
-    }
-
-#pragma endregion
-
     void Mouse::OnMouseMove(int x, int y)
     {
-        _x = x;
-        _y = y;
+        if (_eventQueue.size() >= EVENT_QUEUE_SIZE)
+            return;
 
-        _buffer.emplace(Event::Type::Move, x, y);
-        Util::TrimQueue(_buffer, QUEUE_SIZE);
+        _eventQueue.emplace(std::make_shared<Event>(EventType::Move, x, y));
     }
 
     void Mouse::OnLeftMousePressed(int x, int y)
     {
-        _x = x;
-        _y = y;
-        _leftPressed = true;
+        if (_eventQueue.size() >= EVENT_QUEUE_SIZE)
+            return;
 
-        _buffer.emplace(Event::Type::LeftPress, x, y);
-        Util::TrimQueue(_buffer, QUEUE_SIZE);
+        _eventQueue.emplace(std::make_shared<ButtonEvent>(EventType::Move, MouseButton::Left, x, y, true));
     }
 
     void Mouse::OnLeftMouseReleased(int x, int y)
     {
-        _x = x;
-        _y = y;
-        _leftPressed = false;
+        if (_eventQueue.size() >= EVENT_QUEUE_SIZE)
+            return;
 
-        _buffer.emplace(Event::Type::LeftRelease, x, y);
-        Util::TrimQueue(_buffer, QUEUE_SIZE);
+        _eventQueue.emplace(std::make_shared<ButtonEvent>(EventType::Move, MouseButton::Left, x, y, false));
     }
 
     void Mouse::OnMiddleMousePressed(int x, int y)
     {
-        _x = x;
-        _y = y;
-        _middlePressed = true;
+        if (_eventQueue.size() >= EVENT_QUEUE_SIZE)
+            return;
 
-        _buffer.emplace(Event::Type::MiddlePress, x, y);
-        Util::TrimQueue(_buffer, QUEUE_SIZE);
+        _eventQueue.emplace(std::make_shared<ButtonEvent>(EventType::Move, MouseButton::Middle, x, y, true));
     }
 
     void Mouse::OnMiddleMouseReleased(int x, int y)
     {
-        _x = x;
-        _y = y;
-        _middlePressed = false;
+        if (_eventQueue.size() >= EVENT_QUEUE_SIZE)
+            return;
 
-        _buffer.emplace(Event::Type::MiddleRelease, x, y);
-        Util::TrimQueue(_buffer, QUEUE_SIZE);
+        _eventQueue.emplace(std::make_shared<ButtonEvent>(EventType::Move, MouseButton::Middle, x, y, false));
     }
 
     void Mouse::OnRightMousePressed(int x, int y)
     {
-        _x = x;
-        _y = y;
-        _rightPressed = true;
+        if (_eventQueue.size() >= EVENT_QUEUE_SIZE)
+            return;
 
-        _buffer.emplace(Event::Type::RightPress, x, y);
-        Util::TrimQueue(_buffer, QUEUE_SIZE);
+        _eventQueue.emplace(std::make_shared<ButtonEvent>(EventType::Move, MouseButton::Right, x, y, true));
     }
 
     void Mouse::OnRightMouseReleased(int x, int y)
     {
-        _x = x;
-        _y = y;
-        _rightPressed = true;
+        if (_eventQueue.size() >= EVENT_QUEUE_SIZE)
+            return;
 
-        _buffer.emplace(Event::Type::RightRelease, x, y);
-        Util::TrimQueue(_buffer, QUEUE_SIZE);
-    }
-
-    void Mouse::OnWheelUp(int x, int y)
-    {
-        _x = x;
-        _y = y;
-
-        _buffer.emplace(Event::Type::WheelUp, x, y);
-        Util::TrimQueue(_buffer, QUEUE_SIZE);
-    }
-
-    void Mouse::OnWheelDown(int x, int y)
-    {
-        _x = x;
-        _y = y;
-
-        _buffer.emplace(Event::Type::WheelDown, x, y);
-        Util::TrimQueue(_buffer, QUEUE_SIZE);
+        _eventQueue.emplace(std::make_shared<ButtonEvent>(EventType::Move, MouseButton::Right, x, y, false));
     }
 
     void Mouse::OnWheelDelta(int x, int y, int wheelDelta)
     {
-        _wheelDelta += wheelDelta;
+        if (_eventQueue.size() >= EVENT_QUEUE_SIZE)
+            return;
 
-        // 根据文档，应该每120产生一个事件
-        while (_wheelDelta >= WHEEL_DELTA)
-        {
-            _wheelDelta -= WHEEL_DELTA;
-            OnWheelUp(x, y);
-        }
-        while (_wheelDelta <= -WHEEL_DELTA)
-        {
-            _wheelDelta += WHEEL_DELTA;
-            OnWheelDown(x, y);
-        }
+        _eventQueue.emplace(std::make_shared<WheelEvent>(EventType::Move, x, y, false, wheelDelta));
     }
 
-    void Mouse::OnMouseEnter()
+    void Mouse::OnMouseEnter(int x, int y)
     {
-        _isMouseInWindow = true;
+        _eventQueue.emplace(std::make_shared<Event>(EventType::Enter, x, y));
     }
 
-    void Mouse::OnMouseLeave()
+    void Mouse::OnMouseLeave(int x, int y)
     {
-        _isMouseInWindow = false;
+        _eventQueue.emplace(std::make_shared<Event>(EventType::Leave, x, y));
     }
-
 }

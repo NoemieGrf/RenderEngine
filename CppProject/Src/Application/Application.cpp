@@ -4,6 +4,7 @@
 #include "Renderer/RenderCommand/RenderCommand.h"
 #include "Editor/Editor.h"
 #include "Input/Keyboard.h"
+#include "Input/Mouse.h"
 
 Application::Application()
 {
@@ -72,6 +73,7 @@ void Application::RunLoop()
             break;
 
         /* Input loop */
+        Input::Mouse::ProcessEvent();
         Input::Keyboard::ProcessEvent();
 
         /* Render loop */

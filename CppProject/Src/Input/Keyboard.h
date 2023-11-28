@@ -35,9 +35,8 @@ namespace Input
         static void ProcessEvent();
         static void Clear();
 
-        static bool IsKeyPressed(KeyCode keycode);
+        static bool IsKeyDown(KeyCode keycode);
         static bool IsKeyPressing(KeyCode keycode);
-        static bool IsKeyReleased(KeyCode keycode);
         static bool IsKeyReleasing(KeyCode keycode);
 
     private:
@@ -49,7 +48,7 @@ namespace Input
 
         inline static std::unordered_set<KeyCode> _pressingKey;
         inline static std::unordered_set<KeyCode> _releasingKey;
-        inline static std::array<bool, KeyCode::Count> _keyStateSet;
+        inline static std::array<bool, (int)KeyCode::Count> _keyState;
         inline static std::queue<Event> _eventQueue;
     };
 }

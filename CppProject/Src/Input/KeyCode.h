@@ -2,7 +2,7 @@
 
 namespace Input
 {
-    enum KeyCode : int
+    enum class KeyCode : int
     {
         None,
 

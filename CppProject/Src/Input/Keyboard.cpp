@@ -17,14 +17,20 @@ namespace Input
 
             if (topEvent.eventType == EventType::KeyDown)
             {
-                _keyStateSet[topEvent.keyCode] = true;
-                if (_pressingKey.find(topEvent.keyCode) == _pressingKey.end())
+                bool isNewPress = !_keyState[(int)topEvent.keyCode];
+
+                _keyState[(int)topEvent.keyCode] = true;
+
+                if (isNewPress)
                     _pressingKey.insert(topEvent.keyCode);
             }
             else if (topEvent.eventType == EventType::KeyUp)
             {
-                _keyStateSet[topEvent.keyCode] = false;
-                if (_releasingKey.find(topEvent.keyCode) == _releasingKey.end())
+                bool isNewRelease = _keyState[(int)topEvent.keyCode];
+
+                _keyState[(int)topEvent.keyCode] = false;
+
+                if (isNewRelease)
                     _releasingKey.insert(topEvent.keyCode);
             }
 
@@ -40,27 +46,22 @@ namespace Input
         while (!_eventQueue.empty())
             _eventQueue.pop();
 
-        std::fill(_keyStateSet.begin(), _keyStateSet.end(), false);
+        std::fill(_keyState.begin(), _keyState.end(), false);
     }
 
-    bool Keyboard::IsKeyPressed(KeyCode keycode)
+    bool Keyboard::IsKeyDown(KeyCode keycode)
     {
-        return false;
+        return _keyState[(int)keycode];
     }
 
     bool Keyboard::IsKeyPressing(KeyCode keycode)
     {
-        return false;
-    }
-
-    bool Keyboard::IsKeyReleased(KeyCode keycode)
-    {
-        return false;
+        return _pressingKey.find(keycode) != _pressingKey.end();
     }
 
     bool Keyboard::IsKeyReleasing(KeyCode keycode)
     {
-        return false;
+        return _releasingKey.find(keycode) != _releasingKey.end();
     }
 
     void Keyboard::OnKeyPressed(KeyCode keycode)
