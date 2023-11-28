@@ -3,6 +3,7 @@
 #include "Util/Logger/Logger.h"
 #include "Renderer/RenderCommand/RenderCommand.h"
 #include "Editor/Editor.h"
+#include "Input/Keyboard.h"
 
 Application::Application()
 {
@@ -52,6 +53,7 @@ void Application::RunLoop()
 {
     while (true)
     {
+        /* Windows message loop */
         MSG msg;
         bool shouldStop = false;
         while (::PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -66,6 +68,13 @@ void Application::RunLoop()
             ::DispatchMessage(&msg);
         }
 
+        if (shouldStop)
+            break;
+
+        /* Input loop */
+        Input::Keyboard::ProcessEvent();
+
+        /* Render loop */
         Renderer::RenderCommand::ClearColor(Eigen::Vector4f{0.2f, 0.2f, 0.2f, 1.0f});
 
         // Render Loop
@@ -84,9 +93,6 @@ void Application::RunLoop()
         Renderer::RenderCommand::SwapBuffer();
 
         _frameCount++;
-
-        if (shouldStop)
-            break;
     }
 }
 

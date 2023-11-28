@@ -93,7 +93,7 @@ TestLooper::TestLooper()
 void TestLooper::RenderLoop()
 {
     // Input
-    if (Input::Keyboard::IsKeyPressed('A'))
+    if (Input::Keyboard::IsKeyPressed(Input::KeyCode::A))
     {
         auto pos = _orthoCamera.GetPosition();
         pos.x() += 0.1f;

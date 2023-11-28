@@ -1,8 +1,11 @@
 #include "ApplicationWinImp.h"
 #include "Application/Application.h"
 #include "Input/Keyboard.h"
+#include "Input/KeyCode.h"
 #include "Input/Mouse.h"
 #include "Editor/Editor.h"
+
+extern Input::KeyCode WinVirtualKeyToKeyCode(WPARAM wParam);
 
 LRESULT ApplicationWinImp::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -26,13 +29,10 @@ LRESULT ApplicationWinImp::HandleMsgDispatch(Application* pApp, HWND hWnd, UINT 
         case WM_KILLFOCUS:
             return OnMsgWmKillFocus(pApp, hWnd, msg, wParam, lParam);
         case WM_KEYDOWN:
-        case WM_SYSKEYDOWN: // system key like 'alt'
-            return OnMsgWmKeyDownAndSysKeyDown(pApp, hWnd, msg, wParam, lParam);
+        case WM_SYSKEYDOWN:
         case WM_KEYUP:
         case WM_SYSKEYUP:
-            return OnMsgWmKeyUpAndSysKeyUp(pApp, hWnd, msg, wParam, lParam);
-        case WM_CHAR:
-            return OnMsgWmChar(pApp, hWnd, msg, wParam, lParam);
+            return OnMsgWmKeyCode(pApp, hWnd, msg, wParam, lParam);
         case WM_MOUSEMOVE:
             return OnMsgWmMouseMove(pApp, hWnd, msg, wParam, lParam);
         case WM_LBUTTONDOWN:
@@ -63,7 +63,7 @@ LRESULT ApplicationWinImp::OnMsgWmClose(Application* pApp, HWND hWnd, UINT msg, 
 LRESULT ApplicationWinImp::OnMsgWmKillFocus(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     // if key down raises other window, then key up will not send here, so here must clear states
-    Input::Keyboard::ClearState();
+    Input::Keyboard::Clear();
 
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
@@ -76,25 +76,22 @@ LRESULT ApplicationWinImp::OnMsgSize(Application* pApp, HWND hWnd, UINT msg, WPA
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT ApplicationWinImp::OnMsgWmKeyDownAndSysKeyDown(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT ApplicationWinImp::OnMsgWmKeyCode(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // if first press down, lParam & 0x40000000 = 1
-    if (!(lParam & 0x40000000) || Input::Keyboard::IsAutoRepeatEnabled())
-        Input::Keyboard::OnKeyPressed(static_cast<unsigned char>(wParam));
+    bool isDown = msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN;
 
-    return DefWindowProc(hWnd, msg, wParam, lParam);
-}
+    Input::KeyCode code;
 
-LRESULT ApplicationWinImp::OnMsgWmKeyUpAndSysKeyUp(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-    Input::Keyboard::OnKeyReleased(static_cast<unsigned char>(wParam));
+    // Special case, keypad enter has no virtual code
+    if ((wParam == VK_RETURN) && (HIWORD(lParam) & KF_EXTENDED))
+        code = Input::KeyCode::KeypadEnter;
+    else
+        code = WinVirtualKeyToKeyCode(wParam);
 
-    return DefWindowProc(hWnd, msg, wParam, lParam);
-}
-
-LRESULT ApplicationWinImp::OnMsgWmChar(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-    Input::Keyboard::OnCharW(static_cast<wchar_t>(wParam));
+    if (isDown)
+        Input::Keyboard::OnKeyPressed(code);
+    else
+        Input::Keyboard::OnKeyReleased(code);
 
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }

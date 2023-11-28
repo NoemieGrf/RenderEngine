@@ -6,143 +6,77 @@
 namespace Input
 {
 
-#pragma region [Event]
-
-    Keyboard::Event::Event()
-            : _type(Type::Invalid), _code(0)
+    void Keyboard::ProcessEvent()
     {
-    }
+        _pressingKey.clear();
+        _releasingKey.clear();
 
-    Keyboard::Event::Event(Type type, unsigned char code)
-            : _type(type), _code(code)
-    {
-    }
-
-    bool Keyboard::Event::IsPressed() const
-    {
-        return _type == Type::Press;
-    }
-
-    bool Keyboard::Event::IsReleased() const
-    {
-        return _type == Type::Release;
-    }
-
-    bool Keyboard::Event::IsValid() const
-    {
-        return _type != Type::Invalid;
-    }
-
-#pragma endregion
-
-#pragma region [Accessor]
-
-    Keyboard::Event Keyboard::ReadKey()
-    {
-        if (!_keyBuffer.empty())
+        while (!_eventQueue.empty())
         {
-            auto keyboardEvent = _keyBuffer.front();
-            _keyBuffer.pop();
-            return keyboardEvent;
-        }
-        else
-        {
-            return {};
-        }
-    }
+            const auto& topEvent = _eventQueue.front();
 
-    bool Keyboard::IsKeyPressed(unsigned char keycode)
-    {
-        return _keyStateSet[keycode];
-    }
+            if (topEvent.eventType == EventType::KeyDown)
+            {
+                _keyStateSet[topEvent.keyCode] = true;
+                if (_pressingKey.find(topEvent.keyCode) == _pressingKey.end())
+                    _pressingKey.insert(topEvent.keyCode);
+            }
+            else if (topEvent.eventType == EventType::KeyUp)
+            {
+                _keyStateSet[topEvent.keyCode] = false;
+                if (_releasingKey.find(topEvent.keyCode) == _releasingKey.end())
+                    _releasingKey.insert(topEvent.keyCode);
+            }
 
-    bool Keyboard::IsKeyEmpty()
-    {
-        return _keyBuffer.empty();
-    }
-
-    void Keyboard::ClearKey()
-    {
-        while (!_keyBuffer.empty())
-        {
-            _keyBuffer.pop();
-        }
-    }
-
-    wchar_t Keyboard::ReadCharW()
-    {
-        if (!_charBuffer.empty())
-        {
-            wchar_t top = _charBuffer.front();
-            _charBuffer.pop();
-            return top;
-        }
-
-        return 0;
-    }
-
-    bool Keyboard::IsCharEmpty()
-    {
-        return _charBuffer.empty();
-    }
-
-    void Keyboard::ClearChar()
-    {
-        while (!_charBuffer.empty())
-        {
-            _charBuffer.pop();
+            _eventQueue.pop();
         }
     }
 
     void Keyboard::Clear()
     {
-        ClearKey();
-        ClearChar();
+        _pressingKey.clear();
+        _releasingKey.clear();
+
+        while (!_eventQueue.empty())
+            _eventQueue.pop();
+
+        std::fill(_keyStateSet.begin(), _keyStateSet.end(), false);
     }
 
-    void Keyboard::EnableAutoRepeat()
+    bool Keyboard::IsKeyPressed(KeyCode keycode)
     {
-        _autoRepeat = true;
+        return false;
     }
 
-    void Keyboard::DisableAutoRepeat()
+    bool Keyboard::IsKeyPressing(KeyCode keycode)
     {
-        _autoRepeat = false;
+        return false;
     }
 
-    bool Keyboard::IsAutoRepeatEnabled()
+    bool Keyboard::IsKeyReleased(KeyCode keycode)
     {
-        return _autoRepeat;
+        return false;
     }
 
-#pragma endregion
-
-    void Keyboard::OnKeyPressed(unsigned char keycode)
+    bool Keyboard::IsKeyReleasing(KeyCode keycode)
     {
-        Util::Logger::LogInfo("{} Pressed, Frame = {}", (char)keycode, Application::GetFrameCount());
-        _keyStateSet[keycode] = true;
-        _keyBuffer.emplace(Event::Type::Press, keycode);
-        Util::TrimQueue(_keyBuffer, QUEUE_SIZE);
+        return false;
     }
 
-    void Keyboard::OnKeyReleased(unsigned char keycode)
+    void Keyboard::OnKeyPressed(KeyCode keycode)
     {
-        Util::Logger::LogInfo("{} Released, Frame = {}", (char)keycode, Application::GetFrameCount());
-        _keyStateSet[keycode] = false;
-        _keyBuffer.emplace(Event::Type::Release, keycode);
-        Util::TrimQueue(_keyBuffer, QUEUE_SIZE);
+        if (_eventQueue.size() >= EVENT_QUEUE_SIZE)
+            return;
+
+        _eventQueue.emplace(EventType::KeyDown, keycode);
     }
 
-    void Keyboard::OnCharW(wchar_t c)
+    void Keyboard::OnKeyReleased(KeyCode keycode)
     {
-        _charBuffer.push(c);
-        Util::TrimQueue(_charBuffer, QUEUE_SIZE);
-    }
+        if (_eventQueue.size() >= EVENT_QUEUE_SIZE)
+            return;
 
-    void Keyboard::ClearState()
-    {
-        _keyStateSet.reset();
+        _eventQueue.emplace(EventType::KeyUp, keycode);
     }
-
 
 }

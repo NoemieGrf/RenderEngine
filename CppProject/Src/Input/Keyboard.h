@@ -1,73 +1,55 @@
 #pragma once
 
 #include <queue>
-#include <bitset>
+#include <array>
+#include <unordered_set>
+
+#include "Util/NonConstructible.h"
+#include "KeyCode.h"
 
 class Application;
 class ApplicationWinImp;
 
 namespace Input
 {
-    class Keyboard
+    class Keyboard : public NonConstructible
     {
     public:
         friend class ::Application;
         friend class ::ApplicationWinImp;
 
-    public:
-        Keyboard() = delete;
-        ~Keyboard() = delete;
-        Keyboard(const Keyboard&) = delete;
-        Keyboard& operator= (const Keyboard&) = delete;
-
-    public:
-        class Event
+    private:
+        enum class EventType
         {
-        public:
-            enum class Type { Invalid, Press, Release };
+            KeyDown,
+            KeyUp
+        };
 
-        private:
-            Type _type;
-            unsigned char _code;
-
-        public:
-            Event();
-            Event(Type type, unsigned char code);
-            bool IsPressed() const;
-            bool IsReleased() const;
-            bool IsValid() const;
+        struct Event
+        {
+            EventType eventType;
+            KeyCode keyCode;
         };
 
     public:
-        static bool IsKeyPressed(unsigned char keycode);
-        static Event ReadKey();
-        static bool IsKeyEmpty();
-        static void ClearKey();
-
-        static wchar_t ReadCharW();
-        static bool IsCharEmpty();
-        static void ClearChar();
-
+        static void ProcessEvent();
         static void Clear();
 
-        static void EnableAutoRepeat();
-        static void DisableAutoRepeat();
-        static bool IsAutoRepeatEnabled();
+        static bool IsKeyPressed(KeyCode keycode);
+        static bool IsKeyPressing(KeyCode keycode);
+        static bool IsKeyReleased(KeyCode keycode);
+        static bool IsKeyReleasing(KeyCode keycode);
 
     private:
-        static void OnKeyPressed(unsigned char keycode);
-        static void OnKeyReleased(unsigned char keycode);
-        static void OnCharW(wchar_t c);
-        static void ClearState();
+        static void OnKeyPressed(KeyCode keycode);
+        static void OnKeyReleased(KeyCode keycode);
 
     private:
-        static constexpr unsigned int NUM_OF_KEYS = 256;
-        static constexpr unsigned int QUEUE_SIZE = 16;
+        static constexpr unsigned int EVENT_QUEUE_SIZE = 64;
 
-    private:
-        inline static bool _autoRepeat = false;
-        inline static std::bitset<NUM_OF_KEYS> _keyStateSet;
-        inline static std::queue<Event> _keyBuffer;
-        inline static std::queue<wchar_t> _charBuffer;
+        inline static std::unordered_set<KeyCode> _pressingKey;
+        inline static std::unordered_set<KeyCode> _releasingKey;
+        inline static std::array<bool, KeyCode::Count> _keyStateSet;
+        inline static std::queue<Event> _eventQueue;
     };
 }

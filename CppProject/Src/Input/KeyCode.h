@@ -30,6 +30,8 @@ namespace Input
 
 #pragma endregion
 
+        Count,
+
     };
 
 }
