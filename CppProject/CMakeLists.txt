@@ -57,3 +57,12 @@ target_link_libraries(${TargetName}
         ${OPENGL_LIBRARIES} # opengl import lib -> Windows Kits\10\Lib\10.0.xxx.0\um\x64\OpenGL32.Lib
         d3d11.lib # d3d
 )
+
+# copy assets folder
+add_custom_command(
+        TARGET ${TargetName} POST_BUILD
+        COMMAND ${CMAKE_COMMAND}
+        -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}/Assets
+        ${CMAKE_CURRENT_BINARY_DIR}/Assets
+)
