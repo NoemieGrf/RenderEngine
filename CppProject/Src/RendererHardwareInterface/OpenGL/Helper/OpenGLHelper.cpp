@@ -33,15 +33,37 @@ namespace Renderer
         ::glCompileShader(shaderId);
 
         GLint flag;
-        GLchar infoLog[512];
         ::glGetShaderiv(shaderId, GL_COMPILE_STATUS, &flag);
         if (flag == GL_FALSE)
         {
-            ::glGetShaderInfoLog(shaderId, 512, nullptr, infoLog);
-            Util::Logger::LogError(std::string("Shader Compile Fail: ") + infoLog);
+            Util::Logger::LogError("Shader Compile Fail: {}", GetShaderInfoLog(shaderId));
             return false;
         }
 
         return true;
+    }
+
+    std::string OpenGLHelper::GetShaderInfoLog(unsigned int shaderId)
+    {
+        CheckInfoBuffer();
+
+        ::glGetShaderInfoLog(shaderId, 512, nullptr, _pInfoLogBuffer);
+
+        return std::string{ _pInfoLogBuffer };
+    }
+
+    std::string OpenGLHelper::GetProgramInfoLog(unsigned int programId)
+    {
+        CheckInfoBuffer();
+
+        ::glGetProgramInfoLog(programId, 512, nullptr, _pInfoLogBuffer);
+
+        return std::string{ _pInfoLogBuffer };
+    }
+
+    void OpenGLHelper::CheckInfoBuffer()
+    {
+        if (_pInfoLogBuffer == nullptr)
+            _pInfoLogBuffer = new char[GL_INFO_BUFFER_SIZE];
     }
 }

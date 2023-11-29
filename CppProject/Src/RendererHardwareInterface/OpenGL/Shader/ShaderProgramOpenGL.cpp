@@ -2,6 +2,7 @@
 #include "RendererHardwareInterface/OpenGL/Shader/SpecificShader/VertexShaderOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/Shader/SpecificShader/PixelShaderOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
+#include "RendererHardwareInterface/OpenGL/Helper/OpenGLHelper.h"
 #include "Util/Logger/Logger.h"
 
 namespace Renderer
@@ -27,10 +28,17 @@ namespace Renderer
 
     bool ShaderProgramOpenGL::Link()
     {
-        glLinkProgram(_shaderProgramId);
+        ::glLinkProgram(_shaderProgramId);
+
         GLint success = false;
-        glGetProgramiv(_shaderProgramId, GL_LINK_STATUS, &success);
-        return success;
+        ::glGetProgramiv(_shaderProgramId, GL_LINK_STATUS, &success);
+        if (success == GL_FALSE)
+        {
+            Util::Logger::LogError("Shader Link Fail: {}", OpenGLHelper::GetProgramInfoLog(_shaderProgramId));
+            return false;
+        }
+
+        return true;
     }
 
     void ShaderProgramOpenGL::Bind()
