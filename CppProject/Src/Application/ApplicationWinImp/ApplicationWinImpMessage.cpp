@@ -9,11 +9,10 @@ extern Input::KeyCode WinVirtualKeyToKeyCode(WPARAM wParam);
 
 LRESULT ApplicationWinImp::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    Application* pApp = Application::GetInstance();
-    return pApp->_pImpl->HandleMsgDispatch(pApp, hWnd, msg, wParam, lParam);
+    return Application::_pImpl->HandleMsgDispatch(hWnd, msg, wParam, lParam);
 }
 
-LRESULT ApplicationWinImp::HandleMsgDispatch(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT ApplicationWinImp::HandleMsgDispatch(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     Editor::Environment::OnWinMsg(reinterpret_cast<int64_t>(hWnd),
                                   static_cast<uint32_t>(msg),
@@ -23,44 +22,44 @@ LRESULT ApplicationWinImp::HandleMsgDispatch(Application* pApp, HWND hWnd, UINT 
     switch (msg)
     {
         case WM_CLOSE:
-            return OnMsgWmClose(pApp, hWnd, msg, wParam, lParam);
+            return OnMsgWmClose(hWnd, msg, wParam, lParam);
         case WM_SIZE:
-            return OnMsgSize(pApp, hWnd, msg, wParam, lParam);
+            return OnMsgSize(hWnd, msg, wParam, lParam);
         case WM_KILLFOCUS:
-            return OnMsgWmKillFocus(pApp, hWnd, msg, wParam, lParam);
+            return OnMsgWmKillFocus(hWnd, msg, wParam, lParam);
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
         case WM_KEYUP:
         case WM_SYSKEYUP:
-            return OnMsgWmKeyCode(pApp, hWnd, msg, wParam, lParam);
+            return OnMsgWmKeyCode(hWnd, msg, wParam, lParam);
         case WM_MOUSEMOVE:
-            return OnMsgWmMouseMove(pApp, hWnd, msg, wParam, lParam);
+            return OnMsgWmMouseMove(hWnd, msg, wParam, lParam);
         case WM_LBUTTONDOWN:
-            return OnMsgWmLButtonDown(pApp, hWnd, msg, wParam, lParam);
+            return OnMsgWmLButtonDown(hWnd, msg, wParam, lParam);
         case WM_LBUTTONUP:
-            return OnMsgWmLButtonUp(pApp, hWnd, msg, wParam, lParam);
+            return OnMsgWmLButtonUp(hWnd, msg, wParam, lParam);
         case WM_MBUTTONDOWN:
-            return OnMsgWmMButtonDown(pApp, hWnd, msg, wParam, lParam);
+            return OnMsgWmMButtonDown(hWnd, msg, wParam, lParam);
         case WM_MBUTTONUP:
-            return OnMsgWmMButtonUp(pApp, hWnd, msg, wParam, lParam);
+            return OnMsgWmMButtonUp(hWnd, msg, wParam, lParam);
         case WM_RBUTTONDOWN:
-            return OnMsgWmRButtonDown(pApp, hWnd, msg, wParam, lParam);
+            return OnMsgWmRButtonDown(hWnd, msg, wParam, lParam);
         case WM_RBUTTONUP:
-            return OnMsgWmRButtonUp(pApp, hWnd, msg, wParam, lParam);
+            return OnMsgWmRButtonUp(hWnd, msg, wParam, lParam);
         case WM_MOUSEWHEEL:
-            return OnMsgWmMouseWheel(pApp, hWnd, msg, wParam, lParam);
+            return OnMsgWmMouseWheel(hWnd, msg, wParam, lParam);
         default:
             return ::DefWindowProc(hWnd, msg, wParam, lParam);
     }
 }
 
-LRESULT ApplicationWinImp::OnMsgWmClose(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT ApplicationWinImp::OnMsgWmClose(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     PostQuitMessage(0);
     return 0;
 }
 
-LRESULT ApplicationWinImp::OnMsgWmKillFocus(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT ApplicationWinImp::OnMsgWmKillFocus(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     // if key down raises other window, then key up will not send here, so here must clear states
     Input::Keyboard::Clear();
@@ -68,15 +67,15 @@ LRESULT ApplicationWinImp::OnMsgWmKillFocus(Application* pApp, HWND hWnd, UINT m
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT ApplicationWinImp::OnMsgSize(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT ApplicationWinImp::OnMsgSize(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    pApp->_width = LOWORD(lParam);
-    pApp->_height = HIWORD(lParam);
+    Application::_width = LOWORD(lParam);
+    Application::_height = HIWORD(lParam);
 
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT ApplicationWinImp::OnMsgWmKeyCode(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT ApplicationWinImp::OnMsgWmKeyCode(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     bool isDown = msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN;
 
@@ -96,11 +95,11 @@ LRESULT ApplicationWinImp::OnMsgWmKeyCode(Application* pApp, HWND hWnd, UINT msg
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT ApplicationWinImp::OnMsgWmMouseMove(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT ApplicationWinImp::OnMsgWmMouseMove(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     POINTS pt = MAKEPOINTS(lParam);
 
-    if (pt.x >= 0 && pt.x < pApp->_width && pt.y > 0 && pt.y < pApp->_height)
+    if (pt.x >= 0 && pt.x < Application::_width && pt.y > 0 && pt.y < Application::_height)
     {
         Input::Mouse::OnMouseMove(pt.x, pt.y);
         if (!Input::Mouse::IsInWindow())
@@ -124,49 +123,49 @@ LRESULT ApplicationWinImp::OnMsgWmMouseMove(Application* pApp, HWND hWnd, UINT m
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT ApplicationWinImp::OnMsgWmLButtonDown(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT ApplicationWinImp::OnMsgWmLButtonDown(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     POINTS pt = MAKEPOINTS(lParam);
     Input::Mouse::OnLeftMousePressed(pt.x, pt.y);
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT ApplicationWinImp::OnMsgWmLButtonUp(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT ApplicationWinImp::OnMsgWmLButtonUp(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     POINTS pt = MAKEPOINTS(lParam);
     Input::Mouse::OnLeftMouseReleased(pt.x, pt.y);
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT ApplicationWinImp::OnMsgWmMButtonDown(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT ApplicationWinImp::OnMsgWmMButtonDown(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     POINTS pt = MAKEPOINTS(lParam);
     Input::Mouse::OnMiddleMousePressed(pt.x, pt.y);
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT ApplicationWinImp::OnMsgWmMButtonUp(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT ApplicationWinImp::OnMsgWmMButtonUp(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     POINTS pt = MAKEPOINTS(lParam);
     Input::Mouse::OnMiddleMouseReleased(pt.x, pt.y);
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT ApplicationWinImp::OnMsgWmRButtonDown(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT ApplicationWinImp::OnMsgWmRButtonDown(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     POINTS pt = MAKEPOINTS(lParam);
     Input::Mouse::OnRightMousePressed(pt.x, pt.y);
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT ApplicationWinImp::OnMsgWmRButtonUp(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT ApplicationWinImp::OnMsgWmRButtonUp(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     POINTS pt = MAKEPOINTS(lParam);
     Input::Mouse::OnRightMouseReleased(pt.x, pt.y);
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT ApplicationWinImp::OnMsgWmMouseWheel(Application* pApp, HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT ApplicationWinImp::OnMsgWmMouseWheel(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     // https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-mousewheel
     POINTS pt = MAKEPOINTS(lParam);

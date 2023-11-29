@@ -10,7 +10,7 @@ namespace Editor
 
     void Environment::Init()
     {
-        RendererApi api = Application::GetInstance()->GetRenderApi();
+        RendererApi api = Application::GetRenderApi();
 
         _pBackend = EditorBackend::Create(api);
 
@@ -25,7 +25,7 @@ namespace Editor
         _pBackend->SetUp();
 
         // Get Dpi Scale
-        auto hWnd = Application::GetInstance()->GetWindowHandle();
+        auto hWnd = Application::GetWindowHandle();
         float dpiScale = ImGui_ImplWin32_GetDpiScaleForHwnd(hWnd);
         ImGui::GetStyle().ScaleAllSizes(dpiScale);
 

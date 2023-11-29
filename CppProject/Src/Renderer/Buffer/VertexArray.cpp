@@ -8,7 +8,7 @@ namespace Renderer
 
     Ptr<VertexArray> VertexArray::Create()
     {
-        switch (Application::GetInstance()->GetRenderApi())
+        switch (Application::GetRenderApi())
         {
             case RendererApi::OpenGL:
                 return std::make_shared<VertexArrayOpenGL>();

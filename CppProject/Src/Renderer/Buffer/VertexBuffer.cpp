@@ -7,7 +7,7 @@ namespace Renderer
 {
     Ptr<VertexBuffer> VertexBuffer::Create(const float* vertices, unsigned int length)
     {
-        switch (Application::GetInstance()->GetRenderApi())
+        switch (Application::GetRenderApi())
         {
             case RendererApi::OpenGL:
                 return std::make_shared<VertexBufferOpenGL>(vertices, length);

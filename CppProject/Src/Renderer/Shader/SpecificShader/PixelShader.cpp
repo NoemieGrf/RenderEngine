@@ -8,7 +8,7 @@ namespace Renderer
 
     Ptr<PixelShader> PixelShader::Create()
     {
-        switch (Application::GetInstance()->GetRenderApi())
+        switch (Application::GetRenderApi())
         {
             case RendererApi::OpenGL:
                 return std::make_shared<PixelShaderOpenGL>();

@@ -23,8 +23,7 @@ namespace Renderer
 
     bool RenderCommandOpenGL::SetUp()
     {
-        auto pApplication = Application::GetInstance();
-        HWND hWnd = reinterpret_cast<HWND>(pApplication->GetWindowHandle());
+        HWND hWnd = reinterpret_cast<HWND>(Application::GetWindowHandle());
 
         // init openGL pixel format
         PIXELFORMATDESCRIPTOR pfd =
@@ -83,7 +82,7 @@ namespace Renderer
         }
 
         ::glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        ::glViewport(0, 0, pApplication->GetWindowHeight(), pApplication->GetWindowWidth());
+        ::glViewport(0, 0, Application::GetWindowHeight(), Application::GetWindowWidth());
 
         return true;
     }
@@ -93,7 +92,7 @@ namespace Renderer
         ::wglMakeCurrent(nullptr, nullptr);
         ::wglDeleteContext(_pData->_hRC);
 
-        HWND hWnd = reinterpret_cast<HWND>(Application::GetInstance()->GetWindowHandle());
+        HWND hWnd = reinterpret_cast<HWND>(Application::GetWindowHandle());
         ::ReleaseDC(hWnd, _pData->_hDC);
     }
 

@@ -6,7 +6,7 @@ namespace Renderer
 {
     void Renderer::RenderCommand::Init()
     {
-        auto api = Application::GetInstance()->GetRenderApi();
+        auto api = Application::GetRenderApi();
         switch (api)
         {
             case RendererApi::OpenGL:

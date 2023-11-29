@@ -7,8 +7,13 @@
 #include "Input/Mouse.h"
 #include "Time/Time.h"
 
-Application::Application()
+void Application::InitWindow(RendererApi api, int windowWidth, int windowHeight)
 {
+    _api = api;
+
+    _width = windowWidth;
+    _height = windowHeight;
+
     Util::Logger::InitConsoleLogger();
 
 #ifdef BUILD_RELEASE
@@ -17,11 +22,15 @@ Application::Application()
 #endif
 
     _pImpl = new ApplicationWinImp();
+    _pImpl->RegisterAndCreateWindow(_width, _height, WINDOW_NAME);
+    _pImpl->ShowWindow();
 
+    Renderer::RenderCommand::Init();
+    Editor::Environment::Init();
     Time::Init();
 }
 
-Application::~Application()
+void Application::DestroyWindow()
 {
     for (auto pLooper : _loopLogic)
         delete pLooper;
@@ -29,28 +38,9 @@ Application::~Application()
     Editor::Environment::Destroy();
     Renderer::RenderCommand::Destroy();
 
-    DestroyWindow();
+    _pImpl->DestroyWindow();
 
     delete _pImpl;
-}
-
-void Application::InitWindow(RendererApi api, int windowWidth, int windowHeight)
-{
-    _api = api;
-
-    _width = windowWidth;
-    _height = windowHeight;
-
-    _pImpl->RegisterAndCreateWindow(_width, _height, WINDOW_NAME);
-    _pImpl->ShowWindow();
-
-    Renderer::RenderCommand::Init();
-    Editor::Environment::Init();
-}
-
-void Application::DestroyWindow()
-{
-    _pImpl->DestroyWindow();
 }
 
 void Application::RunLoop()
@@ -121,48 +111,29 @@ void Application::WaitForTargetFrame()
 
 }
 
-#pragma region [Getter]
-
-int Application::GetWindowHeight() const
+int Application::GetWindowHeight()
 {
     return _width;
 }
 
-int Application::GetWindowWidth() const
+int Application::GetWindowWidth()
 {
     return _height;
 }
 
-RendererApi Application::GetRenderApi() const
+RendererApi Application::GetRenderApi()
 {
     return _api;
 }
 
-void* Application::GetWindowHandle() const
+void* Application::GetWindowHandle()
 {
     return reinterpret_cast<void*>(_pImpl->GetWindowHandle());
-}
-
-#pragma endregion
-
-#pragma region [Static Instance]
-
-void Application::CreateInstance()
-{
-    if (_instance == nullptr)
-        _instance = new Application();
-}
-
-Application* Application::GetInstance()
-{
-    return _instance;
 }
 
 uint64_t Application::GetFrameCount()
 {
     return _frameCount;
 }
-
-#pragma endregion
 
 

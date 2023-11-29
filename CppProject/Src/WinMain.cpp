@@ -5,11 +5,9 @@
 
 int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PWSTR lpCmdLine, int nCmdShow)
 {
-    Application::CreateInstance();
-    Application::GetInstance()->InitWindow(RendererApi::OpenGL, 900, 600);
-    Application::GetInstance()->AddLooper<TestLooper>();
-
-    Application::GetInstance()->RunLoop();
-
+    Application::InitWindow(RendererApi::OpenGL, 900, 600);
+    Application::AddLooper<TestLooper>();
+    Application::RunLoop();
+    Application::DestroyWindow();
     return 0;
 }
