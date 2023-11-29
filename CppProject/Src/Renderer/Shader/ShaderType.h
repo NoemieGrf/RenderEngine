@@ -10,8 +10,9 @@ namespace Renderer
 {
 	enum class ShaderType: int
 	{
-		VertexShader,
-		PixelShader
+		Vertex,
+		Pixel,
+		Count
 	};
 	
 	class ShaderTypeHelper

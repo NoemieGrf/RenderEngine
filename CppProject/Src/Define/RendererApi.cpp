@@ -17,7 +17,8 @@ std::string RendererApiHelper::RendererApiToString(RendererApi data)
 			return "D3D11";
 		case RendererApi::D3D12: 
 			return "D3D12";
-		
+		default: 
+			return {};
 	}
 	
 }

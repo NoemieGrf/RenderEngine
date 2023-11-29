@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ShaderType.h"
 #include <concepts>
 
 namespace Renderer
@@ -12,15 +13,7 @@ namespace Renderer
     public:
         virtual bool Compile() = 0;
         virtual void LoadFromString(const char* data) = 0;
-    };
+        virtual ShaderType GetShaderType() = 0;
 
-    template<ShaderType t>
-    class TypeShader: public Shader
-    {
-    public:
-        ShaderType GetType()
-        {
-            return t;
-        }
     };
 }

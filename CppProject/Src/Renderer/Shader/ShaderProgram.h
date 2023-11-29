@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <eigen/Eigen>
 
 #include "Define/Define.h"
@@ -12,48 +13,47 @@ namespace Renderer
     class ShaderProgram
     {
     public:
+        ShaderProgram();
         virtual ~ShaderProgram() = default;
 
     public:
         template<ShaderType T>
-        bool AddShader(const std::string& path);
+        Ptr<Shader> AddShader(const std::string& path);
 
         template<ShaderType T>
-        Ptr<TypeShader<T>> GetShader();
+        Ptr<Shader> GetShader();
 
         virtual bool Link() = 0;
         virtual void Bind() = 0;
         virtual void SetUniformMat4(const std::string& name, const Eigen::Matrix4f& mat) = 0;
 
     protected:
-        virtual void AttachShader(ShaderType t) = 0;
+        virtual void AttachShader(const Ptr<Shader>& pShader) = 0;
 
     protected:
-        umap<ShaderType, Ptr<Shader>> _shaderMap;
+        std::array<Ptr<Shader>, (int)ShaderType::Count> _shaderArray;
 
     public:
         static Ptr<ShaderProgram> Create();
     };
 
     template<ShaderType T>
-    bool ShaderProgram::AddShader(const std::string& path)
+    Ptr<Shader> ShaderProgram::AddShader(const std::string& path)
     {
         auto pShader = ShaderPool<T>::GetShader(path);
         if (pShader == nullptr)
-            return false;
+            return nullptr;
 
-        _shaderMap[T] = pShader;
-        AttachShader(T);
+        _shaderArray[(int)T] = pShader;
+        AttachShader(pShader);
+
+        return pShader;
     }
 
     template<ShaderType T>
-    Ptr<TypeShader<T>> ShaderProgram::GetShader()
+    Ptr<Shader> ShaderProgram::GetShader()
     {
-        auto itr = _shaderMap.find(T);
-        if (itr == _shaderMap.end())
-            return nullptr;
-
-        return DynamicCast<TypeShader<T>>(itr->second);
+        return _shaderArray[(int)T];
     }
 
 }

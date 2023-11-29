@@ -68,8 +68,8 @@ TestLooper::TestLooper()
     _orthoCamera.SetPosition(Eigen::Vector3f(0, 0, 0));
     _orthoCamera.SetRotation(Eigen::Quaternionf::Identity());
 
-    _pShader->AddVertexShader(pvsCode);
-    _pShader->AddPixelShader(pfsCode);
+    _pShader->AddShader<ShaderType::Vertex>("Assets/Shader/BaseVertexShader.vert");
+    _pShader->AddShader<ShaderType::Pixel>("Assets/Shader/BasePixelShader.frag");
     _pShader->Link();
 
     Ptr<VertexBuffer> pVertexBuffer = VertexBuffer::Create(Vert.data(), Vert.size());

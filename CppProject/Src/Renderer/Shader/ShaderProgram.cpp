@@ -5,6 +5,11 @@
 
 namespace Renderer
 {
+    ShaderProgram::ShaderProgram()
+    {
+        std::fill(_shaderArray.begin(), _shaderArray.end(), nullptr);
+    }
+
     Ptr<ShaderProgram> ShaderProgram::Create()
     {
         switch (Application::GetInstance()->GetRenderApi())

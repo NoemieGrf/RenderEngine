@@ -10,7 +10,7 @@ namespace Renderer
         ShaderProgramOpenGL();
 
     public:
-        void AttachShader(ShaderType t) override;
+        void AttachShader(const Ptr<Shader>& pShader) override;
         bool Link() override;
         void Bind() override;
         void SetUniformMat4(const std::string& name, const Eigen::Matrix4f& mat) override;

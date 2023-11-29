@@ -6,10 +6,11 @@
 
 namespace Renderer
 {
-    class VertexShader: public TypeShader<ShaderType::VertexShader>
+    class VertexShader: public Shader
     {
     public:
         ~VertexShader() override = default;
+        ShaderType GetShaderType() override;
 
     public:
         static Ptr<VertexShader> Create();

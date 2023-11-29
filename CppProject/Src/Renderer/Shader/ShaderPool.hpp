@@ -3,25 +3,26 @@
 #include "Define/Define.h"
 #include "Util/Logger/Logger.h"
 #include "Util/NonConstructible.h"
+#include "Util/NonCopyable.h"
 #include "Shader.h"
 #include "ShaderProgram.h"
 #include "ShaderType.h"
+#include "SpecificShader/VertexShader.h"
+#include "SpecificShader/PixelShader.h"
 
 #include <fstream>
 
 namespace Renderer
 {
-    template <ShaderType T>
+    template<ShaderType shaderType>
     class ShaderPool: public NonConstructible
     {
-        using SpecificShader = TypeShader<T>;
-
     public:
-        static Ptr<SpecificShader> GetShader(const std::string& path)
+        static Ptr<Shader> GetShader(const std::string& path)
         {
             auto findResult = _shaderPool.find(path);
             if (findResult != _shaderPool.end())
-                return *findResult;
+                return findResult->second;
 
             std::ifstream fs(path, std::ios::in, std::ios::binary);
             if (!fs.is_open())
@@ -37,8 +38,16 @@ namespace Renderer
 
                 fs.close();
 
-                Ptr<SpecificShader> pShader = SpecificShader::Create();
-                _shaderPool[path] = pShader;
+                Ptr<Shader> pShader;
+                if constexpr (shaderType == ShaderType::Vertex)
+                    pShader = VertexShader::Create();
+                else if constexpr (shaderType == ShaderType::Pixel)
+                    pShader = PixelShader::Create();
+                else
+                    pShader = nullptr;
+
+                if (pShader != nullptr)
+                    _shaderPool[path] = pShader;
 
                 return pShader;
             }
@@ -57,6 +66,6 @@ namespace Renderer
         }
 
     private:
-        inline static umap<std::string, Ptr<SpecificShader>> _shaderPool;
+        inline static umap<std::string, Ptr<Shader>> _shaderPool;
     };
 }

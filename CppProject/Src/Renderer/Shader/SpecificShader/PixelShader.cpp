@@ -22,4 +22,9 @@ namespace Renderer
 
         return nullptr;
     }
+
+    ShaderType PixelShader::GetShaderType()
+    {
+        return ShaderType::Pixel;
+    }
 }

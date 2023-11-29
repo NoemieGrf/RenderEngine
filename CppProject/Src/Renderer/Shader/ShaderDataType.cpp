@@ -35,7 +35,8 @@ namespace Renderer
 				return "Int3";
 			case ShaderDataType::Int4: 
 				return "Int4";
-			
+			default: 
+				return {};
 		}
 		
 	}

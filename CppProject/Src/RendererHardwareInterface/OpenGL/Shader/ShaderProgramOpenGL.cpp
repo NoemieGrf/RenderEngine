@@ -8,24 +8,17 @@ namespace Renderer
 {
 
     ShaderProgramOpenGL::ShaderProgramOpenGL()
+        : ShaderProgram()
     {
         _shaderProgramId = ::glCreateProgram();
     }
 
-    void ShaderProgramOpenGL::AttachShader(ShaderType t)
+    void ShaderProgramOpenGL::AttachShader(const Ptr<Shader>& pShader)
     {
-        auto p = GetShader<t>();
-        auto itr = _shaderMap.find(t);
-        if (itr == _shaderMap.end())
-        {
-            Util::Logger::LogWarn("Do not have {}, but trying to attach.", ShaderTypeHelper::ShaderTypeToString(t));
-            return;
-        }
-
-        Ptr<IOpenGLShaderId> pOpenGLShader = DynamicCast<IOpenGLShaderId>(itr->second);
+        Ptr<IOpenGLShaderId> pOpenGLShader = DynamicCast<IOpenGLShaderId>(pShader);
         if (pOpenGLShader == nullptr)
         {
-            Util::Logger::LogWarn("Shader convert fail `{}` when attaching.", ShaderTypeHelper::ShaderTypeToString(t));
+            Util::Logger::LogWarn("Shader convert fail `{}` when attaching.", ShaderTypeHelper::ShaderTypeToString(pShader->GetShaderType()));
             return;
         }
 

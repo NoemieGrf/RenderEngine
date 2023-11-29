@@ -22,4 +22,9 @@ namespace Renderer
 
         return nullptr;
     }
+
+    ShaderType VertexShader::GetShaderType()
+    {
+        return ShaderType::Vertex;
+    }
 }

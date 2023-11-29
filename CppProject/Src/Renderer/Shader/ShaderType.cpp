@@ -11,11 +11,12 @@ namespace Renderer
 	{
 		switch (data)
 		{
-			case ShaderType::VertexShader: 
-				return "VertexShader";
-			case ShaderType::PixelShader: 
-				return "PixelShader";
-			
+			case ShaderType::Vertex: 
+				return "Vertex";
+			case ShaderType::Pixel: 
+				return "Pixel";
+			default: 
+				return {};
 		}
 		
 	}
@@ -24,14 +25,14 @@ namespace Renderer
 	{
 		static std::unordered_map<std::string, ShaderType> map = 
 		{
-			{ "VertexShader", ShaderType::VertexShader },
-			{ "PixelShader", ShaderType::PixelShader },
+			{ "Vertex", ShaderType::Vertex },
+			{ "Pixel", ShaderType::Pixel },
 		};
 		
 		if (map.contains(data))
 			return map[data];
 		
-		return ShaderType::VertexShader;
+		return ShaderType::Vertex;
 	}
 	
 }
