@@ -5,6 +5,7 @@
 #include "Editor/Editor.h"
 #include "Input/Keyboard.h"
 #include "Input/Mouse.h"
+#include "Time/Time.h"
 
 Application::Application()
 {
@@ -16,6 +17,8 @@ Application::Application()
 #endif
 
     _pImpl = new ApplicationWinImp();
+
+    Time::Init();
 }
 
 Application::~Application()
@@ -72,30 +75,50 @@ void Application::RunLoop()
         if (shouldStop)
             break;
 
-        /* Input loop */
-        Input::Mouse::ProcessEvent();
-        Input::Keyboard::ProcessEvent();
+        UpdateTime();
+        UpdateInput();
+        UpdateRender();
 
-        /* Render loop */
-        Renderer::RenderCommand::ClearColor(Eigen::Vector4f{0.2f, 0.2f, 0.2f, 1.0f});
-
-        // Render Loop
-        for (auto& looper : _loopLogic)
-            looper->RenderLoop();
-
-        // Editor Loop
-        Editor::Environment::BeforeLoop();
-
-        for (auto& looper : _loopLogic)
-            looper->EditorLoop();
-
-        Editor::Environment::AfterLoop();
-
-        // Swap Buffer
-        Renderer::RenderCommand::SwapBuffer();
+        WaitForTargetFrame();
 
         _frameCount++;
     }
+}
+
+void Application::UpdateTime()
+{
+    Time::Update();
+}
+
+void Application::UpdateInput()
+{
+    Input::Mouse::ProcessEvent();
+    Input::Keyboard::ProcessEvent();
+}
+
+void Application::UpdateRender()
+{
+    Renderer::RenderCommand::ClearColor(Eigen::Vector4f{0.2f, 0.2f, 0.2f, 1.0f});
+
+    // Render Loop
+    for (auto& looper : _loopLogic)
+        looper->RenderLoop();
+
+    // Editor Loop
+    Editor::Environment::BeforeLoop();
+
+    for (auto& looper : _loopLogic)
+        looper->EditorLoop();
+
+    Editor::Environment::AfterLoop();
+
+    // Swap Buffer
+    Renderer::RenderCommand::SwapBuffer();
+}
+
+void Application::WaitForTargetFrame()
+{
+
 }
 
 #pragma region [Getter]

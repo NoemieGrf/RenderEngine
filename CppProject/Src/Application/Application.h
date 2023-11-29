@@ -40,6 +40,12 @@ private:
     Application();
 
 private:
+    void UpdateTime();
+    void UpdateInput();
+    void UpdateRender();
+    void WaitForTargetFrame();
+
+private:
     /* imp */
     ApplicationWinImp* _pImpl = nullptr;
 
