@@ -205,8 +205,13 @@ class Processor:
         cg.left_bracket().indent_increase().new_line()
 
         for enum_value in self.enum_config.value_array:
+            if enum_value == 'Count':
+                continue
             cg.append('case ' + self.enum_config.enum_name + '::' + enum_value + ': ').indent_increase().new_line()
             cg.append('return \"' + enum_value + '\"').semicolon().indent_decrease().new_line()
+
+        cg.append('default: ').indent_increase().new_line()
+        cg.append('return {}').semicolon().indent_decrease()
 
         cg.indent_decrease().new_line()
         cg.right_bracket().new_line()
@@ -225,6 +230,8 @@ class Processor:
         cg.left_bracket().indent_increase()
 
         for enum_value in self.enum_config.value_array:
+            if enum_value == 'Count':
+                continue
             cg.new_line()
             cg.left_bracket().append(' \"' + enum_value + '\", ' + self.enum_config.enum_name + '::' + enum_value + ' ')
             cg.right_bracket().append(',')

@@ -28,6 +28,18 @@
 			]
 		},
 		{
+			"EnumName": "ShaderType",
+			"Type": "int",
+			"Namespace": "Renderer",
+			"FilePath": "../CppProject/Src/Renderer/Shader/",
+			"Value": [
+				"Vertex",
+				"Pixel",
+				"Count"
+			],
+			"StringConverter": true
+		},
+		{
 			"EnumName": "ShaderDataType",
 			"Type": "int",
 			"Namespace": "Renderer",
