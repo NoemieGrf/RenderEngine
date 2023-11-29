@@ -1,17 +1,15 @@
 #pragma once
 
 #include "Define/Define.h"
+#include "Renderer/Shader/ShaderType.h"
+#include "Renderer/Shader/Shader.h"
 
 namespace Renderer
 {
-    class PixelShader
+    class PixelShader: public TypeShader<ShaderType::PixelShader>
     {
     public:
-        virtual ~PixelShader() = default;
-
-    public:
-        virtual bool Compile() = 0;
-        virtual void LoadFromString(const char* data) = 0;
+        ~PixelShader() override = default;
 
     public:
         static Ptr<PixelShader> Create();

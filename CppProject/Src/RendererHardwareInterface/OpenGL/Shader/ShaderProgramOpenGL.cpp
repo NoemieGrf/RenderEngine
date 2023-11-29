@@ -1,7 +1,8 @@
-#include "ShaderOpenGL.h"
+#include "ShaderProgramOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/Shader/SpecificShader/VertexShaderOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/Shader/SpecificShader/PixelShaderOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
+#include "Util/Logger/Logger.h"
 
 namespace Renderer
 {
@@ -11,22 +12,24 @@ namespace Renderer
         _shaderProgramId = ::glCreateProgram();
     }
 
-    void ShaderProgramOpenGL::AttachVertexShader()
+    void ShaderProgramOpenGL::AttachShader(ShaderType t)
     {
-        Ptr<VertexShaderOpenGL> pVSOpenGL = DynamicCast<VertexShaderOpenGL>(_pVertexShader);
-        if (pVSOpenGL == nullptr)
+        auto p = GetShader<t>();
+        auto itr = _shaderMap.find(t);
+        if (itr == _shaderMap.end())
+        {
+            Util::Logger::LogWarn("Do not have {}, but trying to attach.", ShaderTypeHelper::ShaderTypeToString(t));
             return;
+        }
 
-        ::glAttachShader(_shaderProgramId, pVSOpenGL->GetShaderId());
-    }
-
-    void ShaderProgramOpenGL::AttachPixelShader()
-    {
-        Ptr<PixelShaderOpenGL> pPSOpenGL = DynamicCast<PixelShaderOpenGL>(_pPixelShader);
-        if (pPSOpenGL == nullptr)
+        Ptr<IOpenGLShaderId> pOpenGLShader = DynamicCast<IOpenGLShaderId>(itr->second);
+        if (pOpenGLShader == nullptr)
+        {
+            Util::Logger::LogWarn("Shader convert fail `{}` when attaching.", ShaderTypeHelper::ShaderTypeToString(t));
             return;
+        }
 
-        ::glAttachShader(_shaderProgramId, pPSOpenGL->GetShaderId());
+        ::glAttachShader(_shaderProgramId, pOpenGLShader->GetShaderId());
     }
 
     bool ShaderProgramOpenGL::Link()

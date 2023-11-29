@@ -6,7 +6,8 @@
 #include "Renderer/Buffer/VertexArray.h"
 #include "Renderer/Buffer/VertexBuffer.h"
 #include "Renderer/Buffer/IndexBuffer.h"
-#include "Renderer/Shader/Shader.h"
+#include "Renderer/Shader/ShaderPool.hpp"
+#include "Renderer/Shader/ShaderProgram.h"
 
 #include "Renderer/RenderCommand/RenderCommand.h"
 
@@ -61,7 +62,7 @@ static constexpr std::array<unsigned int, 3> Indeices = { 0, 1, 2 };
 
 TestLooper::TestLooper()
     : _orthoCamera(-1, 1, -1, 1, -1, 1)
-    , _pShader(Shader::Create())
+    , _pShader(ShaderProgram::Create())
     , _pVertexArray(VertexArray::Create())
 {
     _orthoCamera.SetPosition(Eigen::Vector3f(0, 0, 0));

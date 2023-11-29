@@ -1,17 +1,16 @@
 #pragma once
 
-#include "Renderer/Shader/Shader.h"
+#include "Renderer/Shader/ShaderProgram.h"
 
 namespace Renderer
 {
-    class ShaderProgramOpenGL: public Shader
+    class ShaderProgramOpenGL: public ShaderProgram
     {
     public:
         ShaderProgramOpenGL();
 
     public:
-        void AttachVertexShader() override;
-        void AttachPixelShader() override;
+        void AttachShader(ShaderType t) override;
         bool Link() override;
         void Bind() override;
         void SetUniformMat4(const std::string& name, const Eigen::Matrix4f& mat) override;

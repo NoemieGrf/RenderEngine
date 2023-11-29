@@ -1,7 +1,6 @@
 
-#include "assert.h"
+#include "cassert"
 #include "Mouse.h"
-#include "Util/Util.hpp"
 
 namespace Input
 {

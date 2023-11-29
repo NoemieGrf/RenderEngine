@@ -1,10 +1,6 @@
 #pragma once
 
-#include <eigen/Eigen>
-
-#include "Define/Define.h"
-#include "Renderer/Shader/SpecificShader/VertexShader.h"
-#include "Renderer/Shader/SpecificShader/PixelShader.h"
+#include <concepts>
 
 namespace Renderer
 {
@@ -14,21 +10,17 @@ namespace Renderer
         virtual ~Shader() = default;
 
     public:
-        void AddVertexShader(const char* vertexShaderSource);
-        void AddPixelShader(const char* pixelShaderSource);
-        virtual bool Link() = 0;
-        virtual void Bind() = 0;
-        virtual void SetUniformMat4(const std::string& name, const Eigen::Matrix4f& mat) = 0;
+        virtual bool Compile() = 0;
+        virtual void LoadFromString(const char* data) = 0;
+    };
 
-    protected:
-        virtual void AttachVertexShader() = 0;
-        virtual void AttachPixelShader() = 0;
-
-    protected:
-        Ptr<VertexShader> _pVertexShader = nullptr;
-        Ptr<PixelShader> _pPixelShader = nullptr;
-
+    template<ShaderType t>
+    class TypeShader: public Shader
+    {
     public:
-        static Ptr<Shader> Create();
+        ShaderType GetType()
+        {
+            return t;
+        }
     };
 }

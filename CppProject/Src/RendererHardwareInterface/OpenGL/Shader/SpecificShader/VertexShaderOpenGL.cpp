@@ -19,9 +19,4 @@ namespace Renderer
     {
         return OpenGLHelper::CompileShader(_shaderId);
     }
-
-    unsigned int VertexShaderOpenGL::GetShaderId() const
-    {
-        return _shaderId;
-    }
 }

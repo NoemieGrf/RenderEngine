@@ -1,17 +1,15 @@
 #pragma once
 
 #include "Define/Define.h"
+#include "Renderer/Shader/ShaderType.h"
+#include "Renderer/Shader/Shader.h"
 
 namespace Renderer
 {
-    class VertexShader
+    class VertexShader: public TypeShader<ShaderType::VertexShader>
     {
     public:
-        virtual ~VertexShader() = default;
-
-    public:
-        virtual bool Compile() = 0;
-        virtual void LoadFromString(const char* data) = 0;
+        ~VertexShader() override = default;
 
     public:
         static Ptr<VertexShader> Create();

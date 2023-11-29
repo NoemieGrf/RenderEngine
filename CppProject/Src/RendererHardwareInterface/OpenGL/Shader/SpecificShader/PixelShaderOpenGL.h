@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Renderer/Shader/SpecificShader/PixelShader.h"
+#include "RendererHardwareInterface/OpenGL/Shader/IOpenGLShaderId.h"
 
 namespace Renderer
 {
-    class PixelShaderOpenGL : public PixelShader
+    class PixelShaderOpenGL : public PixelShader, public IOpenGLShaderId
     {
     public:
         ~PixelShaderOpenGL() override;
@@ -12,11 +13,5 @@ namespace Renderer
     public: // override
         bool Compile() override;
         void LoadFromString(const char* data) override;
-
-    public:
-        unsigned int GetShaderId() const;
-
-    private:
-        unsigned int _shaderId = 0;
     };
 }

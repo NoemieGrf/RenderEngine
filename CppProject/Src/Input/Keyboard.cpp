@@ -1,5 +1,4 @@
 #include "Keyboard.h"
-#include "Util/Util.hpp"
 #include "Util/Logger/Logger.h"
 #include "Application/Application.h"
 

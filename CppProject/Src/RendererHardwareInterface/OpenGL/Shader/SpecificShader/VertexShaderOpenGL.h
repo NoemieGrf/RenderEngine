@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Renderer/Shader/SpecificShader/VertexShader.h"
+#include "RendererHardwareInterface/OpenGL/Shader/IOpenGLShaderId.h"
 
 namespace Renderer
 {
-    class VertexShaderOpenGL : public VertexShader
+    class VertexShaderOpenGL : public VertexShader, public IOpenGLShaderId
     {
     public:
         ~VertexShaderOpenGL() override;
@@ -12,11 +13,5 @@ namespace Renderer
     public: // override
         bool Compile() override;
         void LoadFromString(const char* data) override;
-
-    public:
-        unsigned int GetShaderId() const;
-
-    private:
-        unsigned int _shaderId = 0;
     };
 }
