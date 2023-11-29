@@ -108,7 +108,21 @@ void Application::UpdateRender()
 
 void Application::WaitForTargetFrame()
 {
+    double thisFrameElapsed = Time::GetFrameTimerElapsed() / 1000;
+    double thisFrameAtLeastElapsed = 1000 / (double)_targetFrame;
+    if (thisFrameElapsed > thisFrameAtLeastElapsed)
+        return;
 
+    // windows should not use sleep to wait
+    double waitTime = thisFrameAtLeastElapsed - thisFrameElapsed;
+    Util::Timer waitTimer;
+    waitTimer.SetNow();
+    while (true)
+    {
+        double elapsed = (double)waitTimer.GetInterval() / 1000;
+        if (elapsed > waitTime)
+            break;
+    }
 }
 
 int Application::GetWindowHeight()
@@ -134,6 +148,19 @@ void* Application::GetWindowHandle()
 uint64_t Application::GetFrameCount()
 {
     return _frameCount;
+}
+
+void Application::SetTargetFrame(uint32_t targetFrame)
+{
+    if (targetFrame < 30)
+        targetFrame = 30;
+
+    _targetFrame = targetFrame;
+}
+
+uint32_t Application::GetTargetFrame()
+{
+    return _targetFrame;
 }
 
 

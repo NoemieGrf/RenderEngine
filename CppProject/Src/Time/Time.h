@@ -10,9 +10,11 @@ public:
     static void Update();
     static double DeltaTime();
     static double TimeSinceBegin();
+    static double GetFrameTimerElapsed();
 
 private:
-    static inline Util::Timer _timer = Util::Timer();
+    static inline Util::Timer _globalTimer = Util::Timer();
+    static inline Util::Timer _frameTimer = Util::Timer();
     static inline double _deltaTime = 0;
     static inline double _timeSinceBegin = 0;
 };
