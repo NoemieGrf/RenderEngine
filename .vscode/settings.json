@@ -1,0 +1,10 @@
+{
+    "cmake.sourceDirectory": "D:/Github/RenderEngine/CppProject",
+    "clangd.checkUpdates": true,
+    "clangd.arguments": [
+        "--log=verbose",
+        "-pretty",
+        "--background-index",
+        "--compile-commands-dir=${workspaceFolder}/build/"
+    ]
+}
