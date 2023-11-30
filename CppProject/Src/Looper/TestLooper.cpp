@@ -49,16 +49,18 @@ static constexpr const char* pfsCode = R"(
             }
 )";
 
-static constexpr std::array<float, 3 * (3 + 4)> Vert =  {
-        // left
+static constexpr std::array<float, 4 * (3 + 4)> Vert =  {
+        // left bottom
         -0.5f, -0.5f, 0.0f, 0.2f, 0.5f, 1.7f, 1.0f,
-        // right
+        // right bottom
         0.5f, -0.5f, 0.0f, 0.1f, 0.6f, 0.3f, 1.0f,
-        // top
-        0.0f, 0.5f, 0.0f, 0.8f, 0.2f, 0.1f, 1.0f
+        // right top
+        0.5f, 0.5f, 0.0f, 0.8f, 0.2f, 0.1f, 1.0f,
+        // left top
+        -0.5f, 0.5f, 0.0f, 0.8f, 0.2f, 0.1f, 1.0f,
 };
 
-static constexpr std::array<unsigned int, 3> Indeices = { 0, 1, 2 };
+static constexpr std::array<unsigned int, 6> Indeices = { 0, 1, 2, 1, 2,3 };
 
 TestLooper::TestLooper()
     : _orthoCamera(-1, 1, -1, 1, -1, 1)

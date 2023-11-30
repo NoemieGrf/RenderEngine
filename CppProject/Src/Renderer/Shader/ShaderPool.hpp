@@ -24,7 +24,7 @@ namespace Renderer
             if (findResult != _shaderPool.end())
                 return findResult->second;
 
-            std::ifstream fs(path, std::ios::in, std::ios::binary);
+            std::ifstream fs(path, std::ios::in | std::ios::binary);
             if (!fs.is_open())
             {
                 std::string content;
