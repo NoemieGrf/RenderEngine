@@ -23,7 +23,7 @@ namespace Renderer
         template<ShaderType T>
         Ptr<Shader> GetShader();
 
-        virtual bool Link() = 0;
+        virtual bool Compile() = 0;
         virtual void Bind() = 0;
         virtual void SetUniformMat4(const std::string& name, const Eigen::Matrix4f& mat) = 0;
 

@@ -26,8 +26,14 @@ namespace Renderer
         ::glAttachShader(_shaderProgramId, pOpenGLShader->GetShaderId());
     }
 
-    bool ShaderProgramOpenGL::Link()
+    bool ShaderProgramOpenGL::Compile()
     {
+        for (const auto& pShader: _shaderArray)
+        {
+            if (pShader != nullptr)
+                pShader->Compile();
+        }
+
         ::glLinkProgram(_shaderProgramId);
 
         GLint success = false;

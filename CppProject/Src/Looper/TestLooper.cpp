@@ -60,7 +60,7 @@ static constexpr std::array<float, 4 * (3 + 4)> Vert =  {
         -0.5f, 0.5f, 0.0f, 0.8f, 0.2f, 0.1f, 1.0f,
 };
 
-static constexpr std::array<unsigned int, 6> Indeices = { 0, 1, 2, 1, 2,3 };
+static constexpr std::array<unsigned int, 6> Indeices = { 0, 1, 2, 0, 2,3 };
 
 TestLooper::TestLooper()
     : _orthoCamera(-1, 1, -1, 1, -1, 1)
@@ -72,7 +72,7 @@ TestLooper::TestLooper()
 
     _pShader->AddShader<ShaderType::Vertex>("Assets/Shader/BaseVertexShader.vert");
     _pShader->AddShader<ShaderType::Pixel>("Assets/Shader/BasePixelShader.frag");
-    _pShader->Link();
+    _pShader->Compile();
 
     Ptr<VertexBuffer> pVertexBuffer = VertexBuffer::Create(Vert.data(), Vert.size());
 

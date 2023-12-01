@@ -25,7 +25,7 @@ namespace Renderer
                 return findResult->second;
 
             std::ifstream fs(path, std::ios::in | std::ios::binary);
-            if (!fs.is_open())
+            if (fs.is_open())
             {
                 std::string content;
 
@@ -47,7 +47,10 @@ namespace Renderer
                     pShader = nullptr;
 
                 if (pShader != nullptr)
+                {
+                    pShader->LoadFromString(content.c_str());
                     _shaderPool[path] = pShader;
+                }
 
                 return pShader;
             }

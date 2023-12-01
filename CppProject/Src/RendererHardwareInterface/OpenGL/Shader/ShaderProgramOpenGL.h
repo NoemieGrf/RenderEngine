@@ -11,7 +11,7 @@ namespace Renderer
 
     public:
         void AttachShader(const Ptr<Shader>& pShader) override;
-        bool Link() override;
+        bool Compile() override;
         void Bind() override;
         void SetUniformMat4(const std::string& name, const Eigen::Matrix4f& mat) override;
 

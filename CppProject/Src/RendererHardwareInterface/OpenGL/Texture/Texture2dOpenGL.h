@@ -8,7 +8,7 @@ namespace Renderer
     {
     public:
         Texture2dOpenGL();
-        ~Texture2dOpenGL();
+        ~Texture2dOpenGL() override;
         void Bind() override;
         void PushData(const Ptr<const Image>& pImage) override;
 
