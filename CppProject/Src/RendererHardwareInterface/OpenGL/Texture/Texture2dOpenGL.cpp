@@ -5,7 +5,7 @@ namespace Renderer
 {
     Texture2dOpenGL::Texture2dOpenGL()
     {
-        ::glGenTextures(1, &_texturedId);
+        ::glCreateTextures(GL_TEXTURE_2D, 1, &_texturedId);
     }
 
     Texture2dOpenGL::~Texture2dOpenGL()
