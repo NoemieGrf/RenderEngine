@@ -37,13 +37,14 @@ namespace Renderer
         auto vertexBufferLayout = pVertexBuffer->GetLayout();
         for (const auto& element : vertexBufferLayout.GetLayout())
         {
+            auto dataCount = ShaderDataTypeHelper::GetShaderDataCount(element.dataType);
+            GLenum glEnum = OpenGLHelper::GetShaderDataTypeGlEnum(element.dataType);
+            bool normalized = element.normalized ? GL_TRUE : GL_FALSE;
+            auto stride = vertexBufferLayout.GetStride();
+            auto offset = element.offset;
+
             glEnableVertexAttribArray(index);
-            glVertexAttribPointer(index,
-                                  ShaderDataTypeHelper::GetShaderDataCount(element.dataType),
-                                  OpenGLHelper::GetShaderDataTypeGlEnum(element.dataType),
-                                  element.normalized ? GL_TRUE : GL_FALSE,
-                                  vertexBufferLayout.GetStride(),
-                                  reinterpret_cast<const void*>(element.offset));
+            glVertexAttribPointer(index, dataCount, glEnum, normalized, stride, reinterpret_cast<const void*>(offset));
 
             index++;
         }

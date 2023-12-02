@@ -37,6 +37,9 @@ namespace Renderer
         }
 
         auto size = pImage->GetSize();
+
+        ::glActiveTexture(GL_TEXTURE0);
+        Bind(0);
         ::glTextureStorage2D(_texturedId, 1, storeChannel, size.width, size.height);
 
         ::glTextureParameteri(_texturedId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

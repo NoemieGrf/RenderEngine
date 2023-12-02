@@ -6,7 +6,6 @@
 #include "Renderer/Buffer/VertexArray.h"
 #include "Renderer/Buffer/VertexBuffer.h"
 #include "Renderer/Buffer/IndexBuffer.h"
-#include "Renderer/Shader/ShaderPool.hpp"
 #include "Renderer/Shader/ShaderProgram.h"
 #include "Renderer/Assets/Image.h"
 #include "Renderer/RenderCommand/RenderCommand.h"
@@ -78,13 +77,13 @@ void TestLooper::RenderLoop()
         _orthoCamera.SetPosition(pos);
     }
 
-    // Texture Uniform
+    // Texture
     _pTexture->Bind(0);
 
     // Shader Uniform
     _pShader->Bind();
-    _pShader->SetUniformInt("u_tex", 0);
-    _pShader->SetUniformMat4("u_vpMatrix", _orthoCamera.GetVPMatrix());
+    _pShader->SetUniformInt("u_Tex", 0);
+    _pShader->SetUniformMat4("u_VPMatrix", _orthoCamera.GetVPMatrix());
 
     // Draw Call
     Renderer::RenderCommand::Submit(_pVertexArray);
