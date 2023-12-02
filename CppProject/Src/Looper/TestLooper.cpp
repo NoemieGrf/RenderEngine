@@ -63,7 +63,7 @@ TestLooper::TestLooper()
     _pVertexArray->SetIndexBuffer(pIndexBuffer);
 
     // Texture
-    Ptr<Image> pImage = std::make_shared<Image>("Assets/Texture/wall.jpg");
+    Ptr<Image> pImage = std::make_shared<Image>("Assets/Texture/face.png");
     _pTexture->PushData(pImage);
 }
 

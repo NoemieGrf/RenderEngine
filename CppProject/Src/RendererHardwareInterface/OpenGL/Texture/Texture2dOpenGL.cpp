@@ -32,14 +32,12 @@ namespace Renderer
                 break;
             case 4:
                 storeChannel = GL_RGBA8;
-                storeChannel = GL_RGBA;
+                submitChannel = GL_RGBA;
                 break;
         }
 
         auto size = pImage->GetSize();
 
-        ::glActiveTexture(GL_TEXTURE0);
-        Bind(0);
         ::glTextureStorage2D(_texturedId, 1, storeChannel, size.width, size.height);
 
         ::glTextureParameteri(_texturedId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
