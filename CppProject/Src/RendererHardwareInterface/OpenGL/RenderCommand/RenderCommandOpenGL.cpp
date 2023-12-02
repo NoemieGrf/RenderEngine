@@ -84,6 +84,9 @@ namespace Renderer
         ::glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         ::glViewport(0, 0, Application::GetWindowHeight(), Application::GetWindowWidth());
 
+        ::glEnable(GL_BLEND);
+        ::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         return true;
     }
 
