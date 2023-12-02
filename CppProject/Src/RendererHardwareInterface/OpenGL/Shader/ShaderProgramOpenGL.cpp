@@ -52,10 +52,41 @@ namespace Renderer
         ::glUseProgram(_shaderProgramId);
     }
 
+    void ShaderProgramOpenGL::SetUniformInt(const std::string& name, int value)
+    {
+        GLuint location = ::glGetUniformLocation(_shaderProgramId, name.c_str());
+        assert(location != GL_INVALID_VALUE && location != GL_INVALID_OPERATION);
+
+        ::glUniform1i(location, value);
+    }
+
+    void ShaderProgramOpenGL::SetUniformUnsignedInt(const std::string& name, unsigned int value)
+    {
+        GLuint location = ::glGetUniformLocation(_shaderProgramId, name.c_str());
+        assert(location != GL_INVALID_VALUE && location != GL_INVALID_OPERATION);
+
+        ::glUniform1ui(location, value);
+    }
+
+    void ShaderProgramOpenGL::SetUniformFloat(const std::string& name, float value)
+    {
+        GLuint location = ::glGetUniformLocation(_shaderProgramId, name.c_str());
+        assert(location != GL_INVALID_VALUE && location != GL_INVALID_OPERATION);
+
+        ::glUniform1f(location, value);
+    }
+
+    void ShaderProgramOpenGL::SetUniformMat3(const std::string& name, const Eigen::Matrix3f& mat)
+    {
+        GLuint location = ::glGetUniformLocation(_shaderProgramId, name.c_str());
+        assert(location != GL_INVALID_VALUE && location != GL_INVALID_OPERATION);
+
+        ::glUniformMatrix3fv(location, 1, GL_FALSE, mat.data());
+    }
+
     void ShaderProgramOpenGL::SetUniformMat4(const std::string& name, const Eigen::Matrix4f& mat)
     {
         GLuint location = ::glGetUniformLocation(_shaderProgramId, name.c_str());
-
         assert(location != GL_INVALID_VALUE && location != GL_INVALID_OPERATION);
 
         ::glUniformMatrix4fv(location, 1, GL_FALSE, mat.data());

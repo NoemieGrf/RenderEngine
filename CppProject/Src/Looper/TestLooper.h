@@ -4,6 +4,7 @@
 #include "Renderer/Camera/OrthoCamera.h"
 #include "Renderer/Shader/ShaderProgram.h"
 #include "Renderer/Buffer/VertexArray.h"
+#include "Renderer/Texture/Texture2d.h"
 
 class TestLooper : public AppLooper
 {
@@ -19,6 +20,7 @@ private:
     Renderer::OrthoCamera _orthoCamera;
     Ptr<Renderer::ShaderProgram> _pShader;
     Ptr<Renderer::VertexArray> _pVertexArray;
+    Ptr<Renderer::Texture2d> _pTexture;
 };
 
 

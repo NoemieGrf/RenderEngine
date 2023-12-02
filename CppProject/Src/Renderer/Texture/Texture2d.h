@@ -11,7 +11,7 @@ namespace Renderer
         virtual ~Texture2d() = default;
 
     public:
-        virtual void Bind() = 0;
+        virtual void Bind(unsigned int slot) = 0;
         virtual void PushData(const Ptr<const Image>& pImage) = 0;
 
     public:

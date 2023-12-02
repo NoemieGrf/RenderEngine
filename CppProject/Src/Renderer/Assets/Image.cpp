@@ -7,10 +7,7 @@ namespace Renderer
 {
     Image::Image(const std::string& path)
     {
-        int width;
-        int height;
-        int channels;
-        auto pData = stbi_load(path.c_str(), &width, &height, &channels, 0);
+        auto pData = stbi_load(path.c_str(), &_width, &_height, &_channels, 0);
         _pData = reinterpret_cast<std::byte*>(pData);
 
         assert(_pData != nullptr);
