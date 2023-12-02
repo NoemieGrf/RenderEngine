@@ -7,6 +7,7 @@ namespace Renderer
 {
     Image::Image(const std::string& path)
     {
+        stbi_set_flip_vertically_on_load(true);
         auto pData = stbi_load(path.c_str(), &_width, &_height, &_channels, 0);
         _pData = reinterpret_cast<std::byte*>(pData);
 
