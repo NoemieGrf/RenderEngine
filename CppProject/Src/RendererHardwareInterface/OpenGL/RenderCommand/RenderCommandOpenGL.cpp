@@ -81,9 +81,16 @@ namespace Renderer
             return false;
         }
 
-        ::glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        // version
+        Util::Logger::LogInfo("OpenGL Version: {}", (const char*)::glGetString(GL_VERSION));
+        Util::Logger::LogInfo("OpenGL Vendor: {}", (const char*)::glGetString(GL_VENDOR));
+        Util::Logger::LogInfo("OpenGL Renderer: {}", (const char*)::glGetString(GL_RENDERER));
+        Util::Logger::LogInfo("OpenGL Shader Version: {}", (const char*)::glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+        // set viewport
         ::glViewport(0, 0, Application::GetWindowHeight(), Application::GetWindowWidth());
 
+        // enable opengl blend
         ::glEnable(GL_BLEND);
         ::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
