@@ -36,6 +36,7 @@ TestLooper::TestLooper()
     , _pShader(ShaderProgram::Create())
     , _pVertexArray(VertexArray::Create())
     , _pTexture(Texture2d::Create())
+    , _pTexture2(Texture2d::Create())
 {
     _orthoCamera.SetPosition(Eigen::Vector3f(0, 0, 0));
     _orthoCamera.SetRotation(Eigen::Quaternionf::Identity());
@@ -63,8 +64,15 @@ TestLooper::TestLooper()
     _pVertexArray->SetIndexBuffer(pIndexBuffer);
 
     // Texture
-    Ptr<Image> pImage = std::make_shared<Image>("Assets/Texture/face.png");
-    _pTexture->PushData(pImage);
+    {
+        Ptr<Image> pImage = std::make_shared<Image>("Assets/Texture/face.png");
+        _pTexture->PushData(pImage);
+    }
+
+    {
+        Ptr<Image> pImage = std::make_shared<Image>("Assets/Texture/wall.jpg");
+        _pTexture2->PushData(pImage);
+    }
 }
 
 void TestLooper::RenderLoop()
@@ -79,10 +87,12 @@ void TestLooper::RenderLoop()
 
     // Texture
     _pTexture->Bind(0);
+    _pTexture2->Bind(1);
 
     // Shader Uniform
     _pShader->Bind();
     _pShader->SetUniformInt("u_Tex", 0);
+    _pShader->SetUniformInt("u_Tex2", 1);
     _pShader->SetUniformMat4("u_VPMatrix", _orthoCamera.GetVPMatrix());
 
     // Draw Call

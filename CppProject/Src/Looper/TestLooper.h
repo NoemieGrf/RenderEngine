@@ -21,6 +21,7 @@ private:
     Ptr<Renderer::ShaderProgram> _pShader;
     Ptr<Renderer::VertexArray> _pVertexArray;
     Ptr<Renderer::Texture2d> _pTexture;
+    Ptr<Renderer::Texture2d> _pTexture2;
 };
 
 
