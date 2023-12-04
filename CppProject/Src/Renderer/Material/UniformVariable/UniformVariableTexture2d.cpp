@@ -25,7 +25,7 @@ namespace Renderer
     void UniformVariableTexture2d::SetUniform(Ptr<ShaderProgram>& pShader)
     {
         assert(_pTexture != nullptr);
-        pShader->SetUniformUnsignedInt(_name, _slot);
+        pShader->SetUniformInt(_name, _slot);
     }
 
 }
