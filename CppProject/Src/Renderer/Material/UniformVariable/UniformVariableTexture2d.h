@@ -16,6 +16,7 @@ namespace Renderer
         void SetUniform(Ptr<ShaderProgram>& pShader) override;
 
     private:
+        int _slot;
         std::string _name;
         Ptr<Texture2d> _pTexture;
     };

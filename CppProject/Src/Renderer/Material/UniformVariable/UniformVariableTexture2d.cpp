@@ -6,10 +6,10 @@ namespace Renderer
     UniformVariableTexture2d::UniformVariableTexture2d(const std::string& name, const std::string& texPath, int texSlot)
         : _name(name)
         , _pTexture(Texture2d::Create())
+        , _slot(texSlot)
     {
         Ptr<Image> pImage = std::make_shared<Image>(texPath);
         _pTexture->PushData(pImage);
-        _pTexture->SetSlot(texSlot);
     }
 
     UniformVariableType UniformVariableTexture2d::GetType()
@@ -17,15 +17,15 @@ namespace Renderer
         return UniformVariableType::Texture2D;
     }
 
+    void UniformVariableTexture2d::Bind()
+    {
+        _pTexture->Bind(_slot);
+    }
+
     void UniformVariableTexture2d::SetUniform(Ptr<ShaderProgram>& pShader)
     {
         assert(_pTexture != nullptr);
-        pShader->SetUniformUnsignedInt(_name, _pTexture->GetSlot());
-    }
-
-    void UniformVariableTexture2d::Bind()
-    {
-        _pTexture->Bind();
+        pShader->SetUniformUnsignedInt(_name, _slot);
     }
 
 }

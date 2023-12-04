@@ -22,14 +22,4 @@ namespace Renderer
 
         return nullptr;
     }
-
-    void Texture2d::SetSlot(unsigned int newSlot)
-    {
-        _slot = newSlot;
-    }
-
-    unsigned int Texture2d::GetSlot() const
-    {
-        return _slot;
-    }
 }
