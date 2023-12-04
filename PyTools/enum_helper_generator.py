@@ -40,7 +40,7 @@ class Processor:
 
             self.enum_to_string_function_config = FunctionConfig(
                 enum_to_string_func_name,
-                'std::optional<std::string>',
+                'std::string',
                 enum_to_string_input,
                 self.helper_class_name
             )
@@ -213,7 +213,7 @@ class Processor:
             cg.append('return \"' + enum_value + '\"').semicolon().indent_decrease().new_line()
 
         cg.append('default: ').indent_increase().new_line()
-        cg.append('return std::nullopt').semicolon().indent_decrease()
+        cg.append('return "Unknown"').semicolon().indent_decrease()
 
         cg.indent_decrease().new_line()
         cg.right_bracket().new_line()

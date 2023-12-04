@@ -101,10 +101,10 @@
 			]
 		},
 		{
-			"EnumName": "UniformVarType",
+			"EnumName": "UniformVariableType",
 			"Type": "int",
 			"Namespace": "Renderer",
-			"FilePath": "../CppProject/Src/Renderer/Material/",
+			"FilePath": "../CppProject/Src/Renderer/Material/UniformVariable/",
 			"Value": [
 				"Int",
 				"Float",
