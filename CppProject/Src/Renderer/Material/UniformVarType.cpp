@@ -7,7 +7,7 @@
 namespace Renderer
 {
 	
-	std::string UniformVarTypeHelper::UniformVarTypeToString(UniformVarType data)
+	std::optional<std::string> UniformVarTypeHelper::UniformVarTypeToString(UniformVarType data)
 	{
 		switch (data)
 		{
@@ -22,12 +22,12 @@ namespace Renderer
 			case UniformVarType::Texture2D: 
 				return "Texture2D";
 			default: 
-				return {};
+				return std::nullopt;
 		}
 		
 	}
 	
-	UniformVarType UniformVarTypeHelper::StringToUniformVarType(const std::string& data)
+	std::optional<UniformVarType> UniformVarTypeHelper::StringToUniformVarType(const std::string& data)
 	{
 		static std::unordered_map<std::string, UniformVarType> map = 
 		{
@@ -41,7 +41,7 @@ namespace Renderer
 		if (map.contains(data))
 			return map[data];
 		
-		return UniformVarType::Int;
+		return std::nullopt;
 	}
 	
 }

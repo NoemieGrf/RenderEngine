@@ -5,7 +5,7 @@
 #include "RendererApi.h"
 #include <unordered_map>
 
-std::string RendererApiHelper::RendererApiToString(RendererApi data)
+std::optional<std::string> RendererApiHelper::RendererApiToString(RendererApi data)
 {
 	switch (data)
 	{
@@ -18,12 +18,12 @@ std::string RendererApiHelper::RendererApiToString(RendererApi data)
 		case RendererApi::D3D12: 
 			return "D3D12";
 		default: 
-			return {};
+			return std::nullopt;
 	}
 	
 }
 
-RendererApi RendererApiHelper::StringToRendererApi(const std::string& data)
+std::optional<RendererApi> RendererApiHelper::StringToRendererApi(const std::string& data)
 {
 	static std::unordered_map<std::string, RendererApi> map = 
 	{
@@ -36,6 +36,6 @@ RendererApi RendererApiHelper::StringToRendererApi(const std::string& data)
 	if (map.contains(data))
 		return map[data];
 	
-	return RendererApi::OpenGL;
+	return std::nullopt;
 }
 

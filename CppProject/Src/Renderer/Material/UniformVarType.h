@@ -5,6 +5,7 @@
 #pragma once
 
 #include <string>
+#include <optional>
 
 namespace Renderer
 {
@@ -23,8 +24,8 @@ namespace Renderer
 		UniformVarTypeHelper() = delete;
 		
 	public:
-		static std::string UniformVarTypeToString(UniformVarType data);
-		static UniformVarType StringToUniformVarType(const std::string& data);
+		static std::optional<std::string> UniformVarTypeToString(UniformVarType data);
+		static std::optional<UniformVarType> StringToUniformVarType(const std::string& data);
 		
 	};
 

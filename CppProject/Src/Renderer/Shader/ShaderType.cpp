@@ -7,7 +7,7 @@
 namespace Renderer
 {
 	
-	std::string ShaderTypeHelper::ShaderTypeToString(ShaderType data)
+	std::optional<std::string> ShaderTypeHelper::ShaderTypeToString(ShaderType data)
 	{
 		switch (data)
 		{
@@ -16,12 +16,12 @@ namespace Renderer
 			case ShaderType::Pixel: 
 				return "Pixel";
 			default: 
-				return {};
+				return std::nullopt;
 		}
 		
 	}
 	
-	ShaderType ShaderTypeHelper::StringToShaderType(const std::string& data)
+	std::optional<ShaderType> ShaderTypeHelper::StringToShaderType(const std::string& data)
 	{
 		static std::unordered_map<std::string, ShaderType> map = 
 		{
@@ -32,7 +32,7 @@ namespace Renderer
 		if (map.contains(data))
 			return map[data];
 		
-		return ShaderType::Vertex;
+		return std::nullopt;
 	}
 	
 }

@@ -5,6 +5,7 @@
 #pragma once
 
 #include <string>
+#include <optional>
 
 namespace Renderer
 {
@@ -21,8 +22,8 @@ namespace Renderer
 		ShaderTypeHelper() = delete;
 		
 	public:
-		static std::string ShaderTypeToString(ShaderType data);
-		static ShaderType StringToShaderType(const std::string& data);
+		static std::optional<std::string> ShaderTypeToString(ShaderType data);
+		static std::optional<ShaderType> StringToShaderType(const std::string& data);
 		
 	};
 

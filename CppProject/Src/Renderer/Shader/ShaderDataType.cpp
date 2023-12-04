@@ -7,7 +7,7 @@
 namespace Renderer
 {
 	
-	std::string ShaderDataTypeHelper::ShaderDataTypeToString(ShaderDataType data)
+	std::optional<std::string> ShaderDataTypeHelper::ShaderDataTypeToString(ShaderDataType data)
 	{
 		switch (data)
 		{
@@ -36,12 +36,12 @@ namespace Renderer
 			case ShaderDataType::Int4: 
 				return "Int4";
 			default: 
-				return {};
+				return std::nullopt;
 		}
 		
 	}
 	
-	ShaderDataType ShaderDataTypeHelper::StringToShaderDataType(const std::string& data)
+	std::optional<ShaderDataType> ShaderDataTypeHelper::StringToShaderDataType(const std::string& data)
 	{
 		static std::unordered_map<std::string, ShaderDataType> map = 
 		{
@@ -62,7 +62,7 @@ namespace Renderer
 		if (map.contains(data))
 			return map[data];
 		
-		return ShaderDataType::None;
+		return std::nullopt;
 	}
 	
 	unsigned int ShaderDataTypeHelper::GetShaderDataTypeSize(ShaderDataType data)

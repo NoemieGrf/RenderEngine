@@ -5,6 +5,7 @@
 #pragma once
 
 #include <string>
+#include <optional>
 
 enum class RendererApi: int
 {
@@ -20,8 +21,8 @@ public:
 	RendererApiHelper() = delete;
 	
 public:
-	static std::string RendererApiToString(RendererApi data);
-	static RendererApi StringToRendererApi(const std::string& data);
+	static std::optional<std::string> RendererApiToString(RendererApi data);
+	static std::optional<RendererApi> StringToRendererApi(const std::string& data);
 	
 };
 

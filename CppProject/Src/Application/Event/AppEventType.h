@@ -5,6 +5,7 @@
 #pragma once
 
 #include <string>
+#include <optional>
 
 enum class AppEventType: int
 {
