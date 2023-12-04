@@ -13,9 +13,9 @@ namespace Renderer
         ::glDeleteTextures(1, &_texturedId);
     }
 
-    void Texture2dOpenGL::Bind(unsigned int slot)
+    void Texture2dOpenGL::Bind()
     {
-        ::glBindTextureUnit(slot, _texturedId);
+        ::glBindTextureUnit(_slot, _texturedId);
     }
 
     void Texture2dOpenGL::PushData(const Ptr<const Image>& pImage)

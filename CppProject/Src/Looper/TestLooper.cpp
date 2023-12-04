@@ -70,8 +70,8 @@ void TestLooper::RenderLoop()
     }
 
     // Texture
-    _pTriangleTexture->Bind(0);
-    _pTriangleTexture2->Bind(1);
+    //_pTriangleTexture->Bind(0);
+    //_pTriangleTexture2->Bind(1);
 
     // Shader Uniform
     _pTriangleShader->Bind();

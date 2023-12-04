@@ -5,7 +5,7 @@
 #include "RendererApi.h"
 #include <unordered_map>
 
-std::optional<std::string> RendererApiHelper::RendererApiToString(RendererApi data)
+std::string RendererApiHelper::RendererApiToString(RendererApi data)
 {
 	switch (data)
 	{
@@ -18,7 +18,7 @@ std::optional<std::string> RendererApiHelper::RendererApiToString(RendererApi da
 		case RendererApi::D3D12: 
 			return "D3D12";
 		default: 
-			return std::nullopt;
+			return "Unknown";
 	}
 	
 }

@@ -22,7 +22,7 @@ namespace Renderer
 		ShaderTypeHelper() = delete;
 		
 	public:
-		static std::optional<std::string> ShaderTypeToString(ShaderType data);
+		static std::string ShaderTypeToString(ShaderType data);
 		static std::optional<ShaderType> StringToShaderType(const std::string& data);
 		
 	};

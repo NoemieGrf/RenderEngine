@@ -7,7 +7,7 @@
 namespace Renderer
 {
 	
-	std::optional<std::string> ShaderTypeHelper::ShaderTypeToString(ShaderType data)
+	std::string ShaderTypeHelper::ShaderTypeToString(ShaderType data)
 	{
 		switch (data)
 		{
@@ -16,7 +16,7 @@ namespace Renderer
 			case ShaderType::Pixel: 
 				return "Pixel";
 			default: 
-				return std::nullopt;
+				return "Unknown";
 		}
 		
 	}

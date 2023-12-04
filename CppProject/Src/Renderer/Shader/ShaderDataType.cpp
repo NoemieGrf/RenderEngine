@@ -7,7 +7,7 @@
 namespace Renderer
 {
 	
-	std::optional<std::string> ShaderDataTypeHelper::ShaderDataTypeToString(ShaderDataType data)
+	std::string ShaderDataTypeHelper::ShaderDataTypeToString(ShaderDataType data)
 	{
 		switch (data)
 		{
@@ -36,7 +36,7 @@ namespace Renderer
 			case ShaderDataType::Int4: 
 				return "Int4";
 			default: 
-				return std::nullopt;
+				return "Unknown";
 		}
 		
 	}

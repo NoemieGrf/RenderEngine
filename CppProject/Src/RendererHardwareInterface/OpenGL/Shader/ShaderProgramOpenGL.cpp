@@ -19,7 +19,7 @@ namespace Renderer
         Ptr<IOpenGLShaderId> pOpenGLShader = DynamicCast<IOpenGLShaderId>(pShader);
         if (pOpenGLShader == nullptr)
         {
-            Util::Logger::LogWarn("Shader convert fail `{}` when attaching.", ShaderTypeHelper::ShaderTypeToString(pShader->GetShaderType()).value());
+            Util::Logger::LogWarn("Shader convert fail `{}` when attaching.", ShaderTypeHelper::ShaderTypeToString(pShader->GetShaderType()));
             return;
         }
 
