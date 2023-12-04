@@ -1,0 +1,22 @@
+{
+	"VertexShader":
+	{
+		"Path": "Assets/BaseVertexShader.vert"
+	},
+	"PixelShader":
+	{
+		"Path": "Assets/BasePixelShader.frag",
+		"Uniform": [
+			{
+				"Name": "u_Tex",
+				"Type": "Texture2D",
+				"Path": "Assets/Texture/face.png"
+			},
+			{
+				"Name": "u_Tex2",
+				"Type": "Texture2D",
+				"Path": "Assets/Texture/wall.jpg"
+			}
+		]
+	}
+}
