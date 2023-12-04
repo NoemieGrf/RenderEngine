@@ -99,6 +99,20 @@
 					]
 				}
 			]
+		},
+		{
+			"EnumName": "UniformVarType",
+			"Type": "int",
+			"Namespace": "Renderer",
+			"FilePath": "../CppProject/Src/Renderer/Material/",
+			"Value": [
+				"Int",
+				"Float",
+				"Mat3",
+				"Mat4",
+				"Texture2D"
+			],
+			"StringConverter": true
 		}
 	]
 }
