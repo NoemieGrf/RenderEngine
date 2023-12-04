@@ -17,17 +17,11 @@ using namespace Renderer;
 
 TestLooper::TestLooper()
     : _orthoCamera(-1, 1, -1, 1, -1, 1)
-    , _pTriangleShader(ShaderProgram::Create())
     , _pTriangleVertexArray(VertexArray::Create())
-    , _pTriangleTexture(Texture2d::Create())
-    , _pTriangleTexture2(Texture2d::Create())
+    , _pTriangleMaterial(std::make_shared<Material>("Assets/Material/TriangleMat.json"))
 {
     _orthoCamera.SetPosition(Eigen::Vector3f(0, 0, 0));
     _orthoCamera.SetRotation(Eigen::Quaternionf::Identity());
-
-    _pTriangleShader->AddShader<ShaderType::Vertex>("Assets/Shader/BaseVertexShader.vert");
-    _pTriangleShader->AddShader<ShaderType::Pixel>("Assets/Shader/BasePixelShader.frag");
-    _pTriangleShader->Compile();
 
     Ptr<VertexBuffer> pVertexBuffer = VertexBuffer::Create(TriangleVert.data(), TriangleVert.size());
 
@@ -46,17 +40,6 @@ TestLooper::TestLooper()
     // Vertex Array
     _pTriangleVertexArray->AddVertexBuffer(pVertexBuffer);
     _pTriangleVertexArray->SetIndexBuffer(pIndexBuffer);
-
-    // Texture
-    {
-        Ptr<Image> pImage = std::make_shared<Image>("Assets/Texture/face.png");
-        _pTriangleTexture->PushData(pImage);
-    }
-
-    {
-        Ptr<Image> pImage = std::make_shared<Image>("Assets/Texture/wall.jpg");
-        _pTriangleTexture2->PushData(pImage);
-    }
 }
 
 void TestLooper::RenderLoop()
@@ -69,18 +52,11 @@ void TestLooper::RenderLoop()
         _orthoCamera.SetPosition(pos);
     }
 
-    // Texture
-    //_pTriangleTexture->Bind(0);
-    //_pTriangleTexture2->Bind(1);
-
-    // Shader Uniform
-    _pTriangleShader->Bind();
-    _pTriangleShader->SetUniformInt("u_Tex", 0);
-    _pTriangleShader->SetUniformInt("u_Tex2", 1);
-    _pTriangleShader->SetUniformMat4("u_VPMatrix", _orthoCamera.GetVPMatrix());
+    // General uniform
+    _pTriangleMaterial->GetShader()->SetUniformMat4("u_VPMatrix", _orthoCamera.GetVPMatrix());
 
     // Draw Call
-    Renderer::RenderCommand::Submit(_pTriangleVertexArray);
+    Renderer::RenderCommand::Submit(_pTriangleVertexArray, _pTriangleMaterial);
 }
 
 void TestLooper::EditorLoop()

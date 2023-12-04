@@ -11,8 +11,9 @@ namespace Renderer
         UniformVariableTexture2d(const std::string& name, const std::string& texPath, int texSlot);
 
     public:
+        void Bind() override;
         UniformVariableType GetType() override;
-        void SetUniform(const Ptr<ShaderProgram>& pShader) override;
+        void SetUniform(Ptr<ShaderProgram>& pShader) override;
 
     private:
         std::string _name;

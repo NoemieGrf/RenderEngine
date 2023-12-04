@@ -17,10 +17,15 @@ namespace Renderer
         return UniformVariableType::Texture2D;
     }
 
-    void UniformVariableTexture2d::SetUniform(const Ptr<ShaderProgram>& pShader)
+    void UniformVariableTexture2d::SetUniform(Ptr<ShaderProgram>& pShader)
     {
         assert(_pTexture != nullptr);
         pShader->SetUniformUnsignedInt(_name, _pTexture->GetSlot());
+    }
+
+    void UniformVariableTexture2d::Bind()
+    {
+        _pTexture->Bind();
     }
 
 }

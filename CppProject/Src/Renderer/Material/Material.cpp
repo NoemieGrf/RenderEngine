@@ -56,5 +56,30 @@ namespace Renderer
                 }
             }
         }
+
+        _pShader->Compile();
+    }
+
+    void Material::Bind()
+    {
+        _pShader->Bind();
+        for (const auto& pUni: _uniVars)
+            pUni->Bind();
+    }
+
+    void Material::SetUniform()
+    {
+        for (const auto& pUni: _uniVars)
+            pUni->SetUniform(_pShader);
+    }
+
+    Ptr<ShaderProgram> Material::GetShader() const
+    {
+        return _pShader;
+    }
+
+    const std::vector<Ptr<UniformVariable>>& Material::GetUniformVariables() const
+    {
+        return _uniVars;
     }
 }

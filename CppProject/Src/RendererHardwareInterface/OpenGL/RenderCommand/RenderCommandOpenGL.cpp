@@ -114,9 +114,11 @@ namespace Renderer
         ::SwapBuffers(_pData->_hDC);
     }
 
-    void RenderCommandOpenGL::Submit(const Ptr<VertexArray>& pVertArray)
+    void RenderCommandOpenGL::Submit(const Ptr<VertexArray>& pVertArray, const Ptr<Material>& pMaterial)
     {
         pVertArray->Bind();
+        pMaterial->Bind();
+        pMaterial->SetUniform();
         ::glDrawElements(
                 GL_TRIANGLES,
                 pVertArray->GetCurrentIndexBuffer()->GetIndicesCount(),

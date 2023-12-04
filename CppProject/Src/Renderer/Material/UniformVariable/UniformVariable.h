@@ -10,8 +10,9 @@ namespace Renderer
     class UniformVariable
     {
     public:
+        virtual void Bind() = 0;
         virtual UniformVariableType GetType() = 0;
-        virtual void SetUniform(const Ptr<ShaderProgram>& pShader) = 0;
+        virtual void SetUniform(Ptr<ShaderProgram>& pShader) = 0;
     };
 
 }
