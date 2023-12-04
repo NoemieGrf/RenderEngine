@@ -1,4 +1,5 @@
 #include "TestLooper.h"
+#include "TestLooperData.h"
 
 #include "Input/Keyboard.h"
 
@@ -14,38 +15,21 @@
 
 using namespace Renderer;
 
-static constexpr std::array<float, 4 * (3 + 4 + 2)> Vert =  {
-        /* left bottom */  -0.5f, -0.5f, 0.0f,
-        /* Color */ 0.2f, 0.5f, 1.7f, 1.0f,
-        /* UV */ 0.0f, 0.0f,
-        /* right bottom */  0.5f, -0.5f, 0.0f,
-        /* Color */ 0.1f, 0.6f, 0.3f, 1.0f,
-        /* UV */ 1.0f, 0.0f,
-        /* right top */     0.5f, 0.5f, 0.0f,
-        /* Color */ 0.8f, 0.2f, 0.1f, 1.0f,
-        /* UV */ 1.0f, 1.0f,
-        /* left top */     -0.5f, 0.5f, 0.0f,
-        /* Color */ 0.8f, 0.2f, 0.1f, 1.0f,
-        /* UV */ 0.0f, 1.0f
-};
-
-static constexpr std::array<unsigned int, 6> Indeices = { 0, 1, 2, 0, 2,3 };
-
 TestLooper::TestLooper()
     : _orthoCamera(-1, 1, -1, 1, -1, 1)
-    , _pShader(ShaderProgram::Create())
-    , _pVertexArray(VertexArray::Create())
-    , _pTexture(Texture2d::Create())
-    , _pTexture2(Texture2d::Create())
+    , _pTriangleShader(ShaderProgram::Create())
+    , _pTriangleVertexArray(VertexArray::Create())
+    , _pTriangleTexture(Texture2d::Create())
+    , _pTriangleTexture2(Texture2d::Create())
 {
     _orthoCamera.SetPosition(Eigen::Vector3f(0, 0, 0));
     _orthoCamera.SetRotation(Eigen::Quaternionf::Identity());
 
-    _pShader->AddShader<ShaderType::Vertex>("Assets/Shader/BaseVertexShader.vert");
-    _pShader->AddShader<ShaderType::Pixel>("Assets/Shader/BasePixelShader.frag");
-    _pShader->Compile();
+    _pTriangleShader->AddShader<ShaderType::Vertex>("Assets/Shader/BaseVertexShader.vert");
+    _pTriangleShader->AddShader<ShaderType::Pixel>("Assets/Shader/BasePixelShader.frag");
+    _pTriangleShader->Compile();
 
-    Ptr<VertexBuffer> pVertexBuffer = VertexBuffer::Create(Vert.data(), Vert.size());
+    Ptr<VertexBuffer> pVertexBuffer = VertexBuffer::Create(TriangleVert.data(), TriangleVert.size());
 
     // Layout
     BufferLayout layout = {
@@ -57,21 +41,21 @@ TestLooper::TestLooper()
     pVertexBuffer->SetLayout(std::move(layout));
 
     // Index Buffer
-    Ptr<IndexBuffer> pIndexBuffer = IndexBuffer::Create(Indeices.data(), Indeices.size());
+    Ptr<IndexBuffer> pIndexBuffer = IndexBuffer::Create(TriangleIndices.data(), TriangleIndices.size());
 
     // Vertex Array
-    _pVertexArray->AddVertexBuffer(pVertexBuffer);
-    _pVertexArray->SetIndexBuffer(pIndexBuffer);
+    _pTriangleVertexArray->AddVertexBuffer(pVertexBuffer);
+    _pTriangleVertexArray->SetIndexBuffer(pIndexBuffer);
 
     // Texture
     {
         Ptr<Image> pImage = std::make_shared<Image>("Assets/Texture/face.png");
-        _pTexture->PushData(pImage);
+        _pTriangleTexture->PushData(pImage);
     }
 
     {
         Ptr<Image> pImage = std::make_shared<Image>("Assets/Texture/wall.jpg");
-        _pTexture2->PushData(pImage);
+        _pTriangleTexture2->PushData(pImage);
     }
 }
 
@@ -86,17 +70,17 @@ void TestLooper::RenderLoop()
     }
 
     // Texture
-    _pTexture->Bind(0);
-    _pTexture2->Bind(1);
+    _pTriangleTexture->Bind(0);
+    _pTriangleTexture2->Bind(1);
 
     // Shader Uniform
-    _pShader->Bind();
-    _pShader->SetUniformInt("u_Tex", 0);
-    _pShader->SetUniformInt("u_Tex2", 1);
-    _pShader->SetUniformMat4("u_VPMatrix", _orthoCamera.GetVPMatrix());
+    _pTriangleShader->Bind();
+    _pTriangleShader->SetUniformInt("u_Tex", 0);
+    _pTriangleShader->SetUniformInt("u_Tex2", 1);
+    _pTriangleShader->SetUniformMat4("u_VPMatrix", _orthoCamera.GetVPMatrix());
 
     // Draw Call
-    Renderer::RenderCommand::Submit(_pVertexArray);
+    Renderer::RenderCommand::Submit(_pTriangleVertexArray);
 }
 
 void TestLooper::EditorLoop()

@@ -18,10 +18,12 @@ public:
 
 private:
     Renderer::OrthoCamera _orthoCamera;
-    Ptr<Renderer::ShaderProgram> _pShader;
-    Ptr<Renderer::VertexArray> _pVertexArray;
-    Ptr<Renderer::Texture2d> _pTexture;
-    Ptr<Renderer::Texture2d> _pTexture2;
+
+    /* Triangle */
+    Ptr<Renderer::ShaderProgram> _pTriangleShader;
+    Ptr<Renderer::VertexArray> _pTriangleVertexArray;
+    Ptr<Renderer::Texture2d> _pTriangleTexture;
+    Ptr<Renderer::Texture2d> _pTriangleTexture2;
 };
 
 
