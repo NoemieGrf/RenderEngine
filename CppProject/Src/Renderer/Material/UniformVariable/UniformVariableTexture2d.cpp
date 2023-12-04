@@ -7,7 +7,7 @@ namespace Renderer
         : _name(name)
         , _pTexture(Texture2d::Create())
     {
-        Ptr<Image> pImage = std::make_shared<Image>("Assets/Texture/face.png");
+        Ptr<Image> pImage = std::make_shared<Image>(texPath);
         _pTexture->PushData(pImage);
         _pTexture->SetSlot(texSlot);
     }
