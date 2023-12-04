@@ -40,7 +40,7 @@ class Processor:
 
             self.enum_to_string_function_config = FunctionConfig(
                 enum_to_string_func_name,
-                'std::string',
+                'std::optional<std::string>',
                 enum_to_string_input,
                 self.helper_class_name
             )
@@ -51,7 +51,7 @@ class Processor:
 
             self.string_to_enum_function_config = FunctionConfig(
                 string_to_enum_func_name,
-                self.enum_config.enum_name,
+                'std::optional<{}>'.format(self.enum_config.enum_name),
                 string_to_enum_input,
                 self.helper_class_name
             )
@@ -84,7 +84,9 @@ class Processor:
         cg.gen_pragma_once().new_line().new_line()
 
         # include string
-        cg.gen_include('<string>').new_line().new_line()
+        cg.gen_include('<string>').new_line()
+        cg.gen_include('<optional>').new_line()
+        cg.new_line()
 
         # namespace begin
         if self.namespace is not None:
@@ -211,7 +213,7 @@ class Processor:
             cg.append('return \"' + enum_value + '\"').semicolon().indent_decrease().new_line()
 
         cg.append('default: ').indent_increase().new_line()
-        cg.append('return {}').semicolon().indent_decrease()
+        cg.append('return std::nullopt').semicolon().indent_decrease()
 
         cg.indent_decrease().new_line()
         cg.right_bracket().new_line()
@@ -243,7 +245,7 @@ class Processor:
         cg.append('return map[data];').indent_decrease().new_line()
 
         cg.new_line()
-        cg.append('return ' + self.enum_config.enum_name + '::' + self.enum_config.value_array[0]).semicolon()
+        cg.append('return std::nullopt').semicolon()
 
         cg.indent_decrease().new_line()
         cg.right_bracket().new_line()
