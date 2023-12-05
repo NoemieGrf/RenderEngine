@@ -2,17 +2,25 @@
 
 #include "Define/Define.h"
 #include "Renderer/Pipeline/RendererPipelineType.h"
-
-namespace Renderer
-{
-    class RendererPipeline;
-}
+#include "Renderer/Pipeline/RendererPipeline.h"
+#include "SceneObject.h"
+#include "Component/CompCamera.h"
 
 class Scene
 {
 public:
     void SetRendererPipeline(Renderer::RendererPipelineType type);
+    void AddObject(const Ptr<SceneObject>& pObj);
+    void Render();
+
+    void SetMainCamera(Ptr<SceneObject>& pObj);
+    const Ptr<SceneObject>& GetMainCamera() const;
+
+    const std::vector<Ptr<SceneObject>>& GetAllObjects() const;
 
 private:
+    std::vector<Ptr<SceneObject>> _sceneObjects;
+    Ptr<SceneObject> _pMainCamera = nullptr;
+
     Ptr<Renderer::RendererPipeline> _pRendererPipeline = nullptr;
 };

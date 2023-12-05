@@ -1,17 +1,17 @@
 #pragma once
 
 #include <array>
-#include "Scene/IRendererObject.h"
 
-class Quad : public IRendererObject
-{
-public:
-    Quad();
+static constexpr std::array<float, 4 * (3 + 2)> Vert =  {
+        /* left bottom */  -0.5f, -0.5f, 0.0f, /* UV */ 0.0f, 0.0f,
+        /* right bottom */  0.5f, -0.5f, 0.0f, /* UV */ 1.0f, 0.0f,
+        /* right top */     0.5f,  0.5f, 0.0f, /* UV */ 1.0f, 1.0f,
+        /* left top */     -0.5f,  0.5f, 0.0f, /* UV */ 0.0f, 1.0f
+};
 
-public:
-    const Ptr<Renderer::InputAssemble>& GetInputAssemble() const override;
+static constexpr std::array<unsigned int, 6> Indices = {0, 1, 2, 0, 2, 3 };
 
-private:
-    Ptr<Renderer::InputAssemble> _pInputAssemble;
-
+static Renderer::InputLayout VertLayout = {
+        Renderer::InputLayoutElement {Renderer::ShaderDataType::Float3, "a_Position"},
+        Renderer::InputLayoutElement {Renderer::ShaderDataType::Float2, "a_TexCoord"},
 };

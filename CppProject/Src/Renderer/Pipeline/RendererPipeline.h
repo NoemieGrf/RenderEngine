@@ -3,6 +3,8 @@
 #include "Pass/RendererPass.h"
 #include "RendererPipelineType.h"
 
+class Scene;
+
 namespace Renderer
 {
     class RendererPipeline

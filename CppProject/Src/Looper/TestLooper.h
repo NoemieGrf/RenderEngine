@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Application/AppLooper.h"
-#include "Renderer/Camera/OrthoCamera.h"
 #include "Renderer/Shader/ShaderProgram.h"
 #include "Renderer/Buffer/InputAssemble.h"
 #include "Renderer/Material/Material.h"
-#include "Scene/RendererObject.hpp"
+#include "Scene/Component/CompRenderer.h"
 #include "Scene/Primitive/Quad.h"
+#include "Scene/Scene.h"
 
 class TestLooper : public AppLooper
 {
@@ -19,9 +19,7 @@ public:
     void EditorLoop() override;
 
 private:
-    Renderer::OrthoCamera _orthoCamera;
-    RendererObject<Quad> _quad;
-    Ptr<Renderer::Material> _pQuadMat;
+    Scene _scene;
 };
 
 

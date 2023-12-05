@@ -125,6 +125,16 @@
 				"ForwardPlus"
 			],
 			"StringConverter": true
+		},
+		{
+			"EnumName": "ComponentType",
+			"Type": "int",
+			"FilePath": "../CppProject/Src/Scene/Component/",
+			"Value": [
+				"Camera",
+				"Renderer"
+			],
+			"StringConverter": true
 		}
 	]
 }

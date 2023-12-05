@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Define/Define.h"
-#include "Scene/Scene.h"
+
+class Scene;
 
 namespace Renderer
 {
