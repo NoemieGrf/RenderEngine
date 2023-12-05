@@ -113,6 +113,18 @@
 				"Texture2D"
 			],
 			"StringConverter": true
+		},
+		{
+			"EnumName": "RendererPipelineType",
+			"Type": "int",
+			"Namespace": "Renderer",
+			"FilePath": "../CppProject/Src/Renderer/Pipeline/",
+			"Value": [
+				"Forward",
+				"Deferred",
+				"ForwardPlus"
+			],
+			"StringConverter": true
 		}
 	]
 }
