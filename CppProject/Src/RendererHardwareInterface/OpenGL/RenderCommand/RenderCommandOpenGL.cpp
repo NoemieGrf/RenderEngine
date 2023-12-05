@@ -2,9 +2,15 @@
 #include "Application/Application.h"
 #include "Define/WindowsPlatform.h"
 #include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
+#include "Util/Logger/Logger.h"
 
 namespace Renderer
 {
+    static void DebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+    {
+        Util::Logger::LogError("Source {}, type {}, id {}, severity {}, length {}, {}", source, type, id, severity, length, message);
+    }
+
     void RenderCommandOpenGL::ClearColor(const Eigen::Vector4f& color)
     {
         glClearColor(color.x(), color.y(), color.z(), color.w());
@@ -80,6 +86,9 @@ namespace Renderer
             ::wglDeleteContext(_pData->_hRC);
             return false;
         }
+
+        // set gl error callback
+        ::glDebugMessageCallback(&DebugMessageCallback, nullptr);
 
         // version
         Util::Logger::LogInfo("OpenGL Version: {}", (const char*)::glGetString(GL_VERSION));

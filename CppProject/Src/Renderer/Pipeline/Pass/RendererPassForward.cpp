@@ -24,6 +24,7 @@ namespace Renderer
             auto pMat = pRenderer->GetMaterial();
 
             // General uniform
+            pMat->GetShader(RendererPassType::Forward)->Bind();
             pMat->GetShader(RendererPassType::Forward)->SetUniformMat4("u_VPMatrix", pMainCamera->GetVPMatrix());
 
             // Draw Call
