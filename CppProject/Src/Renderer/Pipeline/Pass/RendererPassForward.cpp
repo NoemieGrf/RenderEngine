@@ -6,7 +6,6 @@
 
 namespace Renderer
 {
-
     void RendererPassForward::Init()
     {
 
@@ -25,10 +24,10 @@ namespace Renderer
             auto pMat = pRenderer->GetMaterial();
 
             // General uniform
-            pMat->GetShader()->SetUniformMat4("u_VPMatrix", pMainCamera->GetVPMatrix());
+            pMat->GetShader(GetPassType())->SetUniformMat4("u_VPMatrix", pMainCamera->GetVPMatrix());
 
             // Draw Call
-            Renderer::RenderCommand::Submit(pAssemble, pMat);
+            Renderer::RenderCommand::Submit<RendererPassType::Forward>(pAssemble, pMat);
         }
     }
 }

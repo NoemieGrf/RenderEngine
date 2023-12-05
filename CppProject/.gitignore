@@ -10,7 +10,6 @@ CTestTestfile.cmake
 
 # Build directories
 *build*/
-output/
 
 # Prerequisites
 *.d
