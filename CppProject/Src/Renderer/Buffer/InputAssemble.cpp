@@ -33,9 +33,19 @@ namespace Renderer
         _pVertexBuffer = pVertexBuffer;
     }
 
+    void InputAssemble::SetVertexBuffer(const float* vertices, unsigned int length)
+    {
+        _pVertexBuffer = VertexBuffer::Create(vertices, length);
+    }
+
     void InputAssemble::SetIndexBuffer(Ptr<IndexBuffer>& pIndexBuffer)
     {
         _pIndexBuffer = pIndexBuffer;
+    }
+
+    void InputAssemble::SetIndexBuffer(const unsigned int* indices, unsigned int length)
+    {
+        _pIndexBuffer = IndexBuffer::Create(indices, length);
     }
 
     const InputLayout& InputAssemble::GetInputLayout() const

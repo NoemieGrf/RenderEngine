@@ -18,9 +18,12 @@ static Renderer::InputLayout VertLayout = {
 Quad::Quad()
 {
     _pInputAssemble = Renderer::InputAssemble::Create();
+    _pInputAssemble->SetInputLayout(VertLayout);
+    _pInputAssemble->SetVertexBuffer(Vert.data(), Vert.size());
+    _pInputAssemble->SetIndexBuffer(Indices.data(), Indices.size());
 }
 
-Ptr<Renderer::InputAssemble> Quad::GetInputAssemble() const
+const Ptr<Renderer::InputAssemble>& Quad::GetInputAssemble() const
 {
     return _pInputAssemble;
 }

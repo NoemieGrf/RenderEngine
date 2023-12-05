@@ -8,7 +8,6 @@
 #include "Renderer/Buffer/VertexBuffer.h"
 #include "Renderer/Buffer/IndexBuffer.h"
 #include "Renderer/Shader/ShaderProgram.h"
-#include "Renderer/Assets/Image.h"
 #include "Renderer/RenderCommand/RenderCommand.h"
 
 #include "imgui.h"
@@ -21,36 +20,7 @@ TestLooper::TestLooper()
     _orthoCamera.SetPosition(Eigen::Vector3f(0, 0, 0));
     _orthoCamera.SetRotation(Eigen::Quaternionf::Identity());
 
-    PrepareTriangle();
-    PrepareBox();
-}
-
-void TestLooper::PrepareTriangle()
-{
-    _pTriangleInputAssemble = InputAssemble::Create();
-
-    // Layout
-    _pTriangleInputAssemble->SetInputLayout({
-        InputLayoutElement {ShaderDataType::Float3, "a_Position"},
-        InputLayoutElement {ShaderDataType::Float4, "a_Color"},
-        InputLayoutElement {ShaderDataType::Float2, "a_TexCoord"},
-        });
-
-    // Vertex Array
-    Ptr<VertexBuffer> pVertexBuffer = VertexBuffer::Create(TriangleVert.data(), TriangleVert.size());
-    _pTriangleInputAssemble->SetVertexBuffer(pVertexBuffer);
-
-    // Index Buffer
-    Ptr<IndexBuffer> pIndexBuffer = IndexBuffer::Create(TriangleIndices.data(), TriangleIndices.size());
-    _pTriangleInputAssemble->SetIndexBuffer(pIndexBuffer);
-
-    // Mat
-    _pTriangleMaterial = std::make_shared<Material>("Assets/Material/TriangleMat.json");
-}
-
-void TestLooper::PrepareBox()
-{
-    // todo
+    _pQuadMat = std::make_shared<Material>("Assets/Material/TriangleMat.json");
 }
 
 void TestLooper::RenderLoop()
@@ -64,10 +34,10 @@ void TestLooper::RenderLoop()
     }
 
     // General uniform
-    _pTriangleMaterial->GetShader()->SetUniformMat4("u_VPMatrix", _orthoCamera.GetVPMatrix());
+    _pQuadMat->GetShader()->SetUniformMat4("u_VPMatrix", _orthoCamera.GetVPMatrix());
 
     // Draw Call
-    Renderer::RenderCommand::Submit(_pTriangleInputAssemble, _pTriangleMaterial);
+    Renderer::RenderCommand::Submit(_quad.GetInputAssemble(), _pQuadMat);
 }
 
 void TestLooper::EditorLoop()

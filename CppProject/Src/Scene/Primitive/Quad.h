@@ -1,15 +1,15 @@
 #pragma once
 
 #include <array>
-#include "Renderer/Buffer/InputAssemble.h"
+#include "Scene/IRendererObject.h"
 
-class Quad
+class Quad : public IRendererObject
 {
 public:
     Quad();
 
 public:
-    Ptr<Renderer::InputAssemble> GetInputAssemble() const;
+    const Ptr<Renderer::InputAssemble>& GetInputAssemble() const override;
 
 private:
     Ptr<Renderer::InputAssemble> _pInputAssemble;

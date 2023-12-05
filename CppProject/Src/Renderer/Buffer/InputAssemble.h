@@ -19,7 +19,9 @@ namespace Renderer
 
         void SetInputLayout(const InputLayout& layout);
         void SetVertexBuffer(Ptr<VertexBuffer>& pVertexBuffer);
+        void SetVertexBuffer(const float* vertices, unsigned int length);
         void SetIndexBuffer(Ptr<IndexBuffer>& pIndexBuffer);
+        void SetIndexBuffer(const unsigned int* indices, unsigned int length);
         const InputLayout& GetInputLayout() const;
         const Ptr<VertexBuffer>& GetVertexBuffer() const;
         const Ptr<IndexBuffer>& GetIndexBuffer() const;
