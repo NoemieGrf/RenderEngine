@@ -1,8 +1,12 @@
 #pragma once
 
 #include "Define/Define.h"
-#include "Renderer/Pipeline/RendererPipeline.h"
 #include "Renderer/Pipeline/RendererPipelineType.h"
+
+namespace Renderer
+{
+    class RendererPipeline;
+}
 
 class Scene
 {

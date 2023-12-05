@@ -18,29 +18,16 @@ namespace Renderer
     void InputAssembleOpenGL::Bind()
     {
         ::glBindVertexArray(_vertexArrayId);
-    }
-
-    void InputAssembleOpenGL::UnBind()
-    {
-        ::glBindVertexArray(0);
-    }
-
-    void InputAssembleOpenGL::AddVertexBuffer(const Ptr<const VertexBuffer>& pVertexBuffer)
-    {
-        if (pVertexBuffer == nullptr)
-            return;
-
-        ::glBindVertexArray(_vertexArrayId);
-        pVertexBuffer->Bind();
+        _pVertexBuffer->Bind();
+        _pIndexBuffer->Bind();
 
         unsigned int index = 0;
-        auto vertexBufferLayout = pVertexBuffer->GetLayout();
-        for (const auto& element : vertexBufferLayout.GetLayout())
+        for (const auto& element : _inputLayout.GetLayout())
         {
             auto dataCount = ShaderDataTypeHelper::GetShaderDataCount(element.dataType);
             GLenum glEnum = OpenGLHelper::GetShaderDataTypeGlEnum(element.dataType);
             bool normalized = element.normalized ? GL_TRUE : GL_FALSE;
-            auto stride = vertexBufferLayout.GetStride();
+            auto stride = _inputLayout.GetStride();
             auto offset = element.offset;
 
             glEnableVertexAttribArray(index);
@@ -48,28 +35,10 @@ namespace Renderer
 
             index++;
         }
-
-        _vertexBufferVec.push_back(pVertexBuffer);
     }
 
-    void InputAssembleOpenGL::SetIndexBuffer(const Ptr<const IndexBuffer>& pIndexBuffer)
+    void InputAssembleOpenGL::UnBind()
     {
-        if (pIndexBuffer == nullptr)
-            return;
-
-        ::glBindVertexArray(_vertexArrayId);
-        pIndexBuffer->Bind();
-
-        _pCurrentIndexBuffer = pIndexBuffer;
-    }
-
-    const std::vector<Ptr<const VertexBuffer>>& InputAssembleOpenGL::GetVertexBufferVector() const
-    {
-        return _vertexBufferVec;
-    }
-
-    Ptr<const IndexBuffer> InputAssembleOpenGL::GetCurrentIndexBuffer() const
-    {
-        return _pCurrentIndexBuffer;
+        ::glBindVertexArray(0);
     }
 }

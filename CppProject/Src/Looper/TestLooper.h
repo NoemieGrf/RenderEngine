@@ -24,7 +24,7 @@ private:
     Renderer::OrthoCamera _orthoCamera;
 
     /* Triangle */
-    Ptr<Renderer::InputAssemble> _pTriangleVertexArray;
+    Ptr<Renderer::InputAssemble> _pTriangleInputAssemble;
     Ptr<Renderer::Material> _pTriangleMaterial;
 
     /* Box */

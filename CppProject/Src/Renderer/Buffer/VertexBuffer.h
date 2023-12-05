@@ -13,9 +13,6 @@ namespace Renderer
     public:
         virtual void Bind() const = 0;
         virtual void UnBind() const = 0;
-        virtual void SetLayout(const InputLayout& layout) = 0;
-        virtual void SetLayout(InputLayout&& layout) = 0;
-        virtual const InputLayout& GetLayout() const = 0;
 
     public:
         static Ptr<VertexBuffer> Create(const float* vertices, unsigned int length);

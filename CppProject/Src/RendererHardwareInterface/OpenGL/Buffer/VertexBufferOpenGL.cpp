@@ -25,19 +25,4 @@ namespace Renderer
     {
         ::glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
-
-    void VertexBufferOpenGL::SetLayout(const InputLayout& layout)
-    {
-        _bufferLayout = layout;
-    }
-
-    void VertexBufferOpenGL::SetLayout(InputLayout&& layout)
-    {
-        _bufferLayout = std::move(layout);
-    }
-
-    const InputLayout &VertexBufferOpenGL::GetLayout() const
-    {
-        return _bufferLayout;
-    }
 }

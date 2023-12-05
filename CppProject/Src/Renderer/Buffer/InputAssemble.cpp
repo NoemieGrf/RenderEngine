@@ -22,4 +22,34 @@ namespace Renderer
 
         return nullptr;
     }
+
+    void InputAssemble::SetInputLayout(const InputLayout& layout)
+    {
+        _inputLayout = layout;
+    }
+
+    void InputAssemble::SetVertexBuffer(Ptr<VertexBuffer>& pVertexBuffer)
+    {
+        _pVertexBuffer = pVertexBuffer;
+    }
+
+    void InputAssemble::SetIndexBuffer(Ptr<IndexBuffer>& pIndexBuffer)
+    {
+        _pIndexBuffer = pIndexBuffer;
+    }
+
+    const InputLayout& InputAssemble::GetInputLayout() const
+    {
+        return _inputLayout;
+    }
+
+    const Ptr<VertexBuffer>& InputAssemble::GetVertexBuffer() const
+    {
+        return _pVertexBuffer;
+    }
+
+    const Ptr<IndexBuffer>& InputAssemble::GetIndexBuffer() const
+    {
+        return _pIndexBuffer;
+    }
 }

@@ -9,9 +9,9 @@ public:
     Quad();
 
 public:
-    Ptr<Renderer::InputAssemble> GetVertexBuffer() const;
+    Ptr<Renderer::InputAssemble> GetInputAssemble() const;
 
 private:
-    Ptr<Renderer::InputAssemble> _pVertexBuffer;
+    Ptr<Renderer::InputAssemble> _pInputAssemble;
 
 };

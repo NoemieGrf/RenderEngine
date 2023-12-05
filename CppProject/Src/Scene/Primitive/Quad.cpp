@@ -9,7 +9,7 @@ static constexpr std::array<float, 4 * (3 + 2)> Vert =  {
 
 static constexpr std::array<unsigned int, 6> Indices = {0, 1, 2, 0, 2, 3 };
 
-static Renderer::VertexLayout VertLayout = {
+static Renderer::InputLayout VertLayout = {
         Renderer::InputLayoutElement {Renderer::ShaderDataType::Float3, "a_Position"},
         Renderer::InputLayoutElement {Renderer::ShaderDataType::Float2, "a_TexCoord"},
 };
@@ -17,11 +17,10 @@ static Renderer::VertexLayout VertLayout = {
 
 Quad::Quad()
 {
-    _pVertexBuffer = Renderer::VertexBuffer::Create(Vert.data(), Vert.size());
-    _pVertexBuffer->SetLayout(VertLayout);
+    _pInputAssemble = Renderer::InputAssemble::Create();
 }
 
-Ptr<Renderer::VertexBuffer> Quad::GetVertexBuffer() const
+Ptr<Renderer::InputAssemble> Quad::GetInputAssemble() const
 {
-    return Ptr<Renderer::VertexBuffer>();
+    return _pInputAssemble;
 }

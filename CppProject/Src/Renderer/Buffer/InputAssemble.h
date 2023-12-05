@@ -16,10 +16,18 @@ namespace Renderer
     public:
         virtual void Bind() = 0;
         virtual void UnBind() = 0;
-        virtual void AddVertexBuffer(const Ptr<const VertexBuffer>& pVertexBuffer) = 0;
-        virtual void SetIndexBuffer(const Ptr<const IndexBuffer>& pIndexBuffer) = 0;
-        virtual const std::vector<Ptr<const VertexBuffer>>& GetVertexBufferVector() const = 0;
-        virtual Ptr<const IndexBuffer> GetCurrentIndexBuffer() const = 0;
+
+        void SetInputLayout(const InputLayout& layout);
+        void SetVertexBuffer(Ptr<VertexBuffer>& pVertexBuffer);
+        void SetIndexBuffer(Ptr<IndexBuffer>& pIndexBuffer);
+        const InputLayout& GetInputLayout() const;
+        const Ptr<VertexBuffer>& GetVertexBuffer() const;
+        const Ptr<IndexBuffer>& GetIndexBuffer() const;
+
+    protected:
+        InputLayout _inputLayout;
+        Ptr<VertexBuffer> _pVertexBuffer;
+        Ptr<IndexBuffer> _pIndexBuffer;
 
     public:
         static Ptr<InputAssemble> Create();
