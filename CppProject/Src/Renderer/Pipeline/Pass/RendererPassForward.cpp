@@ -14,7 +14,7 @@ namespace Renderer
     void RendererPassForward::Renderer(const Scene* pScene)
     {
         auto pMainCamera = pScene->GetMainCamera()->GetComponent<CompCamera>()->GetCamera();
-        for (auto pObj: pScene->GetAllObjects())
+        for (const auto& pObj: pScene->GetAllObjects())
         {
             auto pRenderer = pObj->GetComponent<CompRenderer>();
             if (pRenderer == nullptr)
@@ -24,7 +24,7 @@ namespace Renderer
             auto pMat = pRenderer->GetMaterial();
 
             // General uniform
-            pMat->GetShader(GetPassType())->SetUniformMat4("u_VPMatrix", pMainCamera->GetVPMatrix());
+            pMat->GetShader(RendererPassType::Forward)->SetUniformMat4("u_VPMatrix", pMainCamera->GetVPMatrix());
 
             // Draw Call
             Renderer::RenderCommand::Submit<RendererPassType::Forward>(pAssemble, pMat);

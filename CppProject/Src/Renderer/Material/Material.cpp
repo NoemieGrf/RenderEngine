@@ -34,19 +34,19 @@ namespace Renderer
 
             // vertex
             std::string vertexShaderTypeName = ShaderTypeHelper::ShaderTypeToString(ShaderType::Vertex);
-            if (json.contains(vertexShaderTypeName))
+            if (passShaderConfig.contains(vertexShaderTypeName))
             {
-                auto vertexNode = json[vertexShaderTypeName];
+                auto vertexNode = passShaderConfig[vertexShaderTypeName];
                 const std::string& shaderPath = vertexNode["Path"];
                 pShader->AddShader<ShaderType::Vertex>(shaderPath);
             }
 
             // pixel
             std::string pixelShaderTypeName = ShaderTypeHelper::ShaderTypeToString(ShaderType::Pixel);
-            if (json.contains(pixelShaderTypeName))
+            if (passShaderConfig.contains(pixelShaderTypeName))
             {
                 // attach shader
-                auto pixelNode = json[pixelShaderTypeName];
+                auto pixelNode = passShaderConfig[pixelShaderTypeName];
                 const std::string shaderPath = pixelNode["Path"];
                 pShader->AddShader<ShaderType::Pixel>(shaderPath);
 
