@@ -9,7 +9,6 @@
 namespace Renderer
 {
     Material::Material(const std::string& materialPath)
-        : _pShader(ShaderProgram::Create())
     {
         std::ifstream fileStream(materialPath);
         if (!fileStream.is_open())
@@ -22,64 +21,92 @@ namespace Renderer
         fileStream >> json;
         fileStream.close();
 
-        // vertex
-        std::string vertexShaderTypeName = ShaderTypeHelper::ShaderTypeToString(ShaderType::Vertex);
-        if (json.contains(vertexShaderTypeName))
+        for (const auto& [passName, passShaderConfig]: json.items())
         {
-            auto vertexNode = json[vertexShaderTypeName];
-            const std::string& shaderPath = vertexNode["Path"];
-            _pShader->AddShader<ShaderType::Vertex>(shaderPath);
-        }
-
-        // pixel
-        std::string pixelShaderTypeName = ShaderTypeHelper::ShaderTypeToString(ShaderType::Pixel);
-        if (json.contains(pixelShaderTypeName))
-        {
-            // attach shader
-            auto pixelNode = json[pixelShaderTypeName];
-            const std::string shaderPath = pixelNode["Path"];
-            _pShader->AddShader<ShaderType::Pixel>(shaderPath);
-
-            // uniform
-            if (pixelNode.contains("Uniform") && pixelNode["Uniform"].is_array())
+            auto pass = RendererPassTypeHelper::StringToRendererPassType(passName);
+            if (!pass.has_value())
             {
-                for (const auto& uniformVarConfig: pixelNode["Uniform"])
+                Util::Logger::LogError("Material pass error, {}, {}", materialPath, passName);
+                continue;
+            }
+
+            auto pShader = ShaderProgram::Create();
+
+            // vertex
+            std::string vertexShaderTypeName = ShaderTypeHelper::ShaderTypeToString(ShaderType::Vertex);
+            if (json.contains(vertexShaderTypeName))
+            {
+                auto vertexNode = json[vertexShaderTypeName];
+                const std::string& shaderPath = vertexNode["Path"];
+                pShader->AddShader<ShaderType::Vertex>(shaderPath);
+            }
+
+            // pixel
+            std::string pixelShaderTypeName = ShaderTypeHelper::ShaderTypeToString(ShaderType::Pixel);
+            if (json.contains(pixelShaderTypeName))
+            {
+                // attach shader
+                auto pixelNode = json[pixelShaderTypeName];
+                const std::string shaderPath = pixelNode["Path"];
+                pShader->AddShader<ShaderType::Pixel>(shaderPath);
+
+                // uniform
+                if (pixelNode.contains("Uniform") && pixelNode["Uniform"].is_array())
                 {
-                    if (uniformVarConfig["Type"] == UniformVariableTypeHelper::UniformVariableTypeToString(UniformVariableType::Texture2D))
+                    for (const auto& uniformVarConfig: pixelNode["Uniform"])
                     {
-                        const std::string& name = uniformVarConfig["Name"];
-                        const std::string& texPath = uniformVarConfig["Path"];
-                        int slot = uniformVarConfig["Slot"];
-                        Ptr<UniformVariable> pUniVar = std::make_shared<UniformVariableTexture2d>(name, texPath, slot);
-                        _uniVars.push_back(pUniVar);
+                        if (uniformVarConfig["Type"] == UniformVariableTypeHelper::UniformVariableTypeToString(UniformVariableType::Texture2D))
+                        {
+                            const std::string& name = uniformVarConfig["Name"];
+                            const std::string& texPath = uniformVarConfig["Path"];
+                            int slot = uniformVarConfig["Slot"];
+                            Ptr<UniformVariable> pUniVar = std::make_shared<UniformVariableTexture2d>(name, texPath, slot);
+                            _passUniVars[pass.value()].push_back(pUniVar);
+                        }
                     }
                 }
             }
+
+            pShader->Compile();
+            _passShaderMap[pass.value()] = pShader;
         }
-
-        _pShader->Compile();
     }
 
-    void Material::Bind()
+    void Material::Bind(RendererPassType pass)
     {
-        _pShader->Bind();
-        for (const auto& pUni: _uniVars)
-            pUni->Bind();
+        if (_passShaderMap.contains(pass))
+            _passShaderMap[pass]->Bind();
+
+        if (_passUniVars.contains(pass))
+        {
+            for (const auto& pUni: _passUniVars[pass])
+                pUni->Bind();
+        }
     }
 
-    void Material::SetUniform()
+    void Material::SetUniform(RendererPassType pass)
     {
-        for (const auto& pUni: _uniVars)
-            pUni->SetUniform(_pShader);
+        if (!_passShaderMap.contains(pass) || !_passUniVars.contains(pass))
+            return;
+
+        auto& pPassShader = _passShaderMap[pass];
+        for (const auto& pUni: _passUniVars[pass])
+            pUni->SetUniform(pPassShader);
     }
 
-    Ptr<ShaderProgram> Material::GetShader() const
+    Ptr<ShaderProgram> Material::GetShader(RendererPassType pass) const
     {
-        return _pShader;
+        if (_passShaderMap.contains(pass))
+            return _passShaderMap.at(pass);
+
+        return nullptr;
     }
 
-    const std::vector<Ptr<UniformVariable>>& Material::GetUniformVariables() const
+    const std::vector<Ptr<UniformVariable>>* Material::GetUniformVariables(RendererPassType pass) const
     {
-        return _uniVars;
+        if (_passUniVars.contains(pass))
+            return &_passUniVars.at(pass);
+
+        return nullptr;
     }
 }

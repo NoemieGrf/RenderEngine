@@ -20,6 +20,6 @@ namespace Renderer
         virtual void Destroy() = 0;
         virtual void SwapBuffer() = 0;
         virtual void ClearColor(const Eigen::Vector4f& color) = 0;
-        virtual void Submit(const Ptr<InputAssemble>& pVertArray, const Ptr<Material>& pMaterial) = 0;
+        virtual void Submit(RendererPassType pass, const Ptr<InputAssemble>& pVertArray, const Ptr<Material>& pMaterial) = 0;
     };
 }

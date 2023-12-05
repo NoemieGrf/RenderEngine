@@ -127,6 +127,17 @@
 			"StringConverter": true
 		},
 		{
+			"EnumName": "RendererPassType",
+			"Type": "int",
+			"Namespace": "Renderer",
+			"FilePath": "../CppProject/Src/Renderer/Pipeline/Pass/",
+			"Value": [
+				"Forward",
+				"Shadow"
+			],
+			"StringConverter": true
+		},
+		{
 			"EnumName": "ComponentType",
 			"Type": "int",
 			"FilePath": "../CppProject/Src/Scene/Component/",

@@ -114,11 +114,11 @@ namespace Renderer
         ::SwapBuffers(_pData->_hDC);
     }
 
-    void RenderCommandOpenGL::Submit(const Ptr<InputAssemble>& pInputAssemble, const Ptr<Material>& pMaterial)
+    void RenderCommandOpenGL::Submit(RendererPassType pass, const Ptr<InputAssemble>& pInputAssemble, const Ptr<Material>& pMaterial)
     {
         pInputAssemble->Bind();
-        pMaterial->Bind();
-        pMaterial->SetUniform();
+        pMaterial->Bind(pass);
+        pMaterial->SetUniform(pass);
         ::glDrawElements(
                 GL_TRIANGLES,
                 pInputAssemble->GetIndexBuffer()->GetIndicesCount(),
