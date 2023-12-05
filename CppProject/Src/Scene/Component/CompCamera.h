@@ -11,6 +11,8 @@ public:
 
 public:
     Camera* GetCamera() const;
+    void OnPositionSet() override;
+    void OnRotationSet() override;
 
 private:
     UniPtr<Camera> _pCamera;

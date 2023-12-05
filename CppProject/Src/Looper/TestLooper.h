@@ -5,7 +5,6 @@
 #include "Renderer/Buffer/InputAssemble.h"
 #include "Renderer/Material/Material.h"
 #include "Scene/Component/CompRenderer.h"
-#include "Scene/Primitive/Quad.h"
 #include "Scene/Scene.h"
 
 class TestLooper : public AppLooper

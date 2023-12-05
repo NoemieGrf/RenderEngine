@@ -14,6 +14,11 @@ public:
     SceneObject* GetSceneObject();
     const SceneObject* GetSceneObject() const;
 
+public:
+    virtual void OnPositionSet();
+    virtual void OnRotationSet();
+    virtual void OnScaleSet();
+
 protected:
     SceneObject* _pObject = nullptr;
 };

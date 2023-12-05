@@ -1,8 +1,6 @@
 #include "TestLooper.h"
 #include "Input/Keyboard.h"
 #include "Renderer/Buffer/IndexBuffer.h"
-#include "Renderer/Shader/ShaderProgram.h"
-#include "Renderer/RenderCommand/RenderCommand.h"
 #include "Scene/Primitive/PrimitiveObject.h"
 #include "Scene/Component/CompCamera.h"
 #include "imgui.h"
@@ -25,17 +23,13 @@ void TestLooper::RenderLoop()
     // Input
     if (Input::Keyboard::IsKeyDown(Input::KeyCode::A))
     {
-        auto cam = _scene.GetMainCamera();
-        auto pos = _orthoCamera.GetPosition();
+        auto pCamObj = _scene.GetMainCamera();
+        auto pos = pCamObj->GetPosition();
         pos.x() += 0.1f;
-        _orthoCamera.SetPosition(pos);
+        pCamObj->SetPosition(pos);
     }
 
-    // General uniform
-    _pQuadMat->GetShader()->SetUniformMat4("u_VPMatrix", _orthoCamera.GetVPMatrix());
-
-    // Draw Call
-    Renderer::RenderCommand::Submit(_quad.GetInputAssemble(), _pQuadMat);
+    _scene.Render();
 }
 
 void TestLooper::EditorLoop()

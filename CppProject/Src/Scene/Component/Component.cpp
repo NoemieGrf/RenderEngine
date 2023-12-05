@@ -14,3 +14,15 @@ const SceneObject* Component::GetSceneObject() const
 {
     return _pObject;
 }
+
+void Component::OnPositionSet()
+{
+}
+
+void Component::OnRotationSet()
+{
+}
+
+void Component::OnScaleSet()
+{
+}

@@ -9,16 +9,24 @@
 class SceneObject
 {
 public:
-    Eigen::Vector3f& GetPosition();
-    Eigen::Quaternionf& GetRotation();
-    Eigen::Vector3f& GetScale();
+    const Eigen::Vector3f& GetPosition() const;
+    const Eigen::Quaternionf& GetRotation() const;
+    const Eigen::Vector3f& GetScale() const;
+
+    void SetPosition(const Eigen::Vector3f& position);
+    void SetRotation(const Eigen::Quaternionf& rotation);
+    void SetScale(const Eigen::Vector3f& scale);
 
     template<class T, class... Types>
     void AddComponent(Types&&... Args)
     {
         ComponentType t = T::GetType();
-        _componentMap[t] = DynamicCast<Component>(std::make_shared<T>(std::forward<Types&&>(Args)...));
-        _componentMap[t]->SetSceneObject(this);
+        Ptr<Component> pComp = DynamicCast<Component>(std::make_shared<T>(std::forward<Types&&>(Args)...));
+        pComp->SetSceneObject(this);
+        pComp->OnPositionSet();
+        pComp->OnRotationSet();
+        pComp->OnScaleSet();
+        _componentMap[t] = pComp;
     }
 
     template<class T>
