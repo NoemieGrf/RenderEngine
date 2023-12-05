@@ -1,11 +1,11 @@
 {
 	"Vertex":
 	{
-		"Path": "Assets/Shader/BaseVertexShader.vert"
+		"Path": "Assets/Shader/ForwardDefaultVertex.vert"
 	},
 	"Pixel":
 	{
-		"Path": "Assets/Shader/BasePixelShader.frag",
+		"Path": "Assets/Shader/TextureMix.frag",
 		"Uniform": [
 			{
 				"Name": "u_Tex",

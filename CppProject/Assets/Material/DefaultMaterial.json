@@ -2,25 +2,11 @@
 	"Forward": {
 		"Vertex":
 		{
-			"Path": "Assets/Shader/BaseVertexShader.vert"
+			"Path": "Assets/Shader/ForwardDefaultVertex.vert"
 		},
 		"Pixel":
 		{
-			"Path": "Assets/Shader/BasePixelShader.frag",
-			"Uniform": [
-				{
-					"Name": "u_Tex",
-					"Type": "Texture2D",
-					"Slot": 0,
-					"Path": "Assets/Texture/face.png"
-				},
-				{
-					"Name": "u_Tex2",
-					"Type": "Texture2D",
-					"Slot": 1,
-					"Path": "Assets/Texture/wall.jpg"
-				}
-			]
+			"Path": "Assets/Shader/ForwardDefaultPixel.frag"
 		}
 	}
 }

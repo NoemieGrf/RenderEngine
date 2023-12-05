@@ -16,3 +16,8 @@ const Ptr<Renderer::Material>& CompRenderer::GetMaterial() const
 {
     return _pMaterial;
 }
+
+void CompRenderer::ChangeMaterial(const Ptr<Renderer::Material>& pNewMat)
+{
+    _pMaterial = pNewMat;
+}

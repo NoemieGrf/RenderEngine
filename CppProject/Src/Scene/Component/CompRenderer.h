@@ -12,6 +12,7 @@ public:
 
 public:
     const Ptr<Renderer::InputAssemble>& GetInputAssemble() const;
+    void ChangeMaterial(const Ptr<Renderer::Material>& pNewMat);
     const Ptr<Renderer::Material>& GetMaterial() const;
 
 protected:

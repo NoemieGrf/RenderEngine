@@ -3,6 +3,7 @@
 #include "Renderer/Buffer/IndexBuffer.h"
 #include "Scene/Primitive/PrimitiveObject.h"
 #include "Scene/Component/CompCamera.h"
+#include "Scene/Component/CompRenderer.h"
 #include "imgui.h"
 
 using namespace Renderer;
@@ -10,7 +11,10 @@ using namespace Renderer;
 TestLooper::TestLooper()
 {
     _scene.SetRendererPipeline(RendererPipelineType::Forward);
-    _scene.AddObject(PrimitiveObject::CreateQuad());
+
+    auto pQuadObj = PrimitiveObject::CreateQuad();
+    pQuadObj->GetComponent<CompRenderer>()->ChangeMaterial(std::make_shared<Material>("Assets/Material/TextureMixtureMat.json"));
+    _scene.AddObject(pQuadObj);
 
     auto pCamObj = std::make_shared<SceneObject>();
     pCamObj->AddComponent<CompCamera>(-1, 1, -1, 1, -1, 1);
