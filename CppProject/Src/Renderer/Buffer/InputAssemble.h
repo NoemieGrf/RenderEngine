@@ -8,10 +8,10 @@
 
 namespace Renderer
 {
-    class VertexArray
+    class InputAssemble
     {
     public:
-        virtual ~VertexArray() = default;
+        virtual ~InputAssemble() = default;
 
     public:
         virtual void Bind() = 0;
@@ -22,6 +22,6 @@ namespace Renderer
         virtual Ptr<const IndexBuffer> GetCurrentIndexBuffer() const = 0;
 
     public:
-        static Ptr<VertexArray> Create();
+        static Ptr<InputAssemble> Create();
     };
 }

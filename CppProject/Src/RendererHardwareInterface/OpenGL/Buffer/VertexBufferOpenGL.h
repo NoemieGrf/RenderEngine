@@ -13,12 +13,12 @@ namespace Renderer
     public:
         void Bind() const override;
         void UnBind() const override;
-        void SetLayout(const BufferLayout& layout) override;
-        void SetLayout(BufferLayout&& layout) override;
-        const BufferLayout& GetLayout() const override;
+        void SetLayout(const InputLayout& layout) override;
+        void SetLayout(InputLayout&& layout) override;
+        const InputLayout& GetLayout() const override;
 
     private:
         unsigned int _renderId = 0;
-        BufferLayout _bufferLayout;
+        InputLayout _bufferLayout;
     };
 }

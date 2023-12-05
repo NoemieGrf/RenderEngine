@@ -1,17 +1,17 @@
-#include "VertexArray.h"
+#include "InputAssemble.h"
 
 #include "Application/Application.h"
-#include "RendererHardwareInterface/OpenGL/Buffer/VertexArrayOpenGL.h"
+#include "RendererHardwareInterface/OpenGL/Buffer/InputAssembleOpenGL.h"
 
 namespace Renderer
 {
 
-    Ptr<VertexArray> VertexArray::Create()
+    Ptr<InputAssemble> InputAssemble::Create()
     {
         switch (Application::GetRenderApi())
         {
             case RendererApi::OpenGL:
-                return std::make_shared<VertexArrayOpenGL>();
+                return std::make_shared<InputAssembleOpenGL>();
             case RendererApi::Vulkan:
                 break;
             case RendererApi::D3D11:

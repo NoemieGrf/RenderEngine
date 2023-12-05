@@ -3,7 +3,7 @@
 #include "Define/Define.h"
 #include "Util/NonCopyable.h"
 #include "Define/RendererApi.h"
-#include "Renderer/Buffer/VertexArray.h"
+#include "Renderer/Buffer/InputAssemble.h"
 #include "Renderer/Shader/ShaderProgram.h"
 #include "Renderer/Material/Material.h"
 #include "eigen/Eigen"
@@ -20,6 +20,6 @@ namespace Renderer
         virtual void Destroy() = 0;
         virtual void SwapBuffer() = 0;
         virtual void ClearColor(const Eigen::Vector4f& color) = 0;
-        virtual void Submit(const Ptr<VertexArray>& pVertArray, const Ptr<Material>& pMaterial) = 0;
+        virtual void Submit(const Ptr<InputAssemble>& pVertArray, const Ptr<Material>& pMaterial) = 0;
     };
 }

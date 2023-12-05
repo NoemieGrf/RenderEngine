@@ -3,7 +3,7 @@
 #include "Application/AppLooper.h"
 #include "Renderer/Camera/OrthoCamera.h"
 #include "Renderer/Shader/ShaderProgram.h"
-#include "Renderer/Buffer/VertexArray.h"
+#include "Renderer/Buffer/InputAssemble.h"
 #include "Renderer/Material/Material.h"
 
 class TestLooper : public AppLooper
@@ -24,11 +24,11 @@ private:
     Renderer::OrthoCamera _orthoCamera;
 
     /* Triangle */
-    Ptr<Renderer::VertexArray> _pTriangleVertexArray;
+    Ptr<Renderer::InputAssemble> _pTriangleVertexArray;
     Ptr<Renderer::Material> _pTriangleMaterial;
 
     /* Box */
-    std::vector<Ptr<Renderer::VertexArray>> _boxVertexArrayVec;
+    std::vector<Ptr<Renderer::InputAssemble>> _boxVertexArrayVec;
     Ptr<Renderer::Material> _BoxMaterial;
 };
 

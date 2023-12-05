@@ -114,7 +114,7 @@ namespace Renderer
         ::SwapBuffers(_pData->_hDC);
     }
 
-    void RenderCommandOpenGL::Submit(const Ptr<VertexArray>& pVertArray, const Ptr<Material>& pMaterial)
+    void RenderCommandOpenGL::Submit(const Ptr<InputAssemble>& pVertArray, const Ptr<Material>& pMaterial)
     {
         pVertArray->Bind();
         pMaterial->Bind();

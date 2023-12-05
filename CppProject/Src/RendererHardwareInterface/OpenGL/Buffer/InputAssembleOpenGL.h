@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Renderer/Buffer/VertexArray.h"
+#include "Renderer/Buffer/InputAssemble.h"
 
 namespace Renderer
 {
-    class VertexArrayOpenGL : public VertexArray
+    class InputAssembleOpenGL : public InputAssemble
     {
     public:
-        VertexArrayOpenGL();
-        ~VertexArrayOpenGL() override;
+        InputAssembleOpenGL();
+        ~InputAssembleOpenGL() override;
 
     public:
         void Bind() override;

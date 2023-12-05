@@ -3,8 +3,8 @@
 
 #include "Input/Keyboard.h"
 
-#include "Renderer/Buffer/BufferLayout.h"
-#include "Renderer/Buffer/VertexArray.h"
+#include "Renderer/Buffer/InputLayout.h"
+#include "Renderer/Buffer/InputAssemble.h"
 #include "Renderer/Buffer/VertexBuffer.h"
 #include "Renderer/Buffer/IndexBuffer.h"
 #include "Renderer/Shader/ShaderProgram.h"
@@ -27,14 +27,14 @@ TestLooper::TestLooper()
 
 void TestLooper::PrepareTriangle()
 {
-    _pTriangleVertexArray = VertexArray::Create();
+    _pTriangleVertexArray = InputAssemble::Create();
     Ptr<VertexBuffer> pVertexBuffer = VertexBuffer::Create(TriangleVert.data(), TriangleVert.size());
 
     // Layout
-    BufferLayout layout = {
-            BufferElement {ShaderDataType::Float3, "a_Position"},
-            BufferElement {ShaderDataType::Float4, "a_Color"},
-            BufferElement {ShaderDataType::Float2, "a_TexCoord"},
+    InputLayout layout = {
+            InputLayoutElement {ShaderDataType::Float3, "a_Position"},
+            InputLayoutElement {ShaderDataType::Float4, "a_Color"},
+            InputLayoutElement {ShaderDataType::Float2, "a_TexCoord"},
     };
 
     pVertexBuffer->SetLayout(std::move(layout));
