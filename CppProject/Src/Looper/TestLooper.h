@@ -17,11 +17,19 @@ public:
     void EditorLoop() override;
 
 private:
+    void PrepareTriangle();
+    void PrepareBox();
+
+private:
     Renderer::OrthoCamera _orthoCamera;
 
     /* Triangle */
     Ptr<Renderer::VertexArray> _pTriangleVertexArray;
     Ptr<Renderer::Material> _pTriangleMaterial;
+
+    /* Box */
+    std::vector<Ptr<Renderer::VertexArray>> _boxVertexArrayVec;
+    Ptr<Renderer::Material> _BoxMaterial;
 };
 
 

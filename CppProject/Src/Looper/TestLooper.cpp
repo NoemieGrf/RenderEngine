@@ -17,12 +17,17 @@ using namespace Renderer;
 
 TestLooper::TestLooper()
     : _orthoCamera(-1, 1, -1, 1, -1, 1)
-    , _pTriangleVertexArray(VertexArray::Create())
-    , _pTriangleMaterial(std::make_shared<Material>("Assets/Material/TriangleMat.json"))
 {
     _orthoCamera.SetPosition(Eigen::Vector3f(0, 0, 0));
     _orthoCamera.SetRotation(Eigen::Quaternionf::Identity());
 
+    PrepareTriangle();
+    PrepareBox();
+}
+
+void TestLooper::PrepareTriangle()
+{
+    _pTriangleVertexArray = VertexArray::Create();
     Ptr<VertexBuffer> pVertexBuffer = VertexBuffer::Create(TriangleVert.data(), TriangleVert.size());
 
     // Layout
@@ -40,6 +45,13 @@ TestLooper::TestLooper()
     // Vertex Array
     _pTriangleVertexArray->AddVertexBuffer(pVertexBuffer);
     _pTriangleVertexArray->SetIndexBuffer(pIndexBuffer);
+
+    _pTriangleMaterial = std::make_shared<Material>("Assets/Material/TriangleMat.json");
+}
+
+void TestLooper::PrepareBox()
+{
+    // todo
 }
 
 void TestLooper::RenderLoop()
