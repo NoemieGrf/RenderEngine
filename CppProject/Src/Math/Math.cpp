@@ -38,52 +38,6 @@ namespace Math
         return result;
     }
 
-    Eigen::Matrix4f MakeOrthoProjectionMatrix(float left, float right, float bottom, float top, float near, float far)
-    {
-        assert(right > left);
-        assert(top > bottom);
-        assert(far > near);
-
-        Eigen::Matrix4f result = Eigen::Matrix4f::Identity();
-
-        // Translation
-        result.col(3) = Eigen::Vector4f {
-                -(right + left) / (right - left),
-                -(top + bottom) / (top - bottom),
-                -(far + near) / (far - near),
-                1
-        };
-
-        // Scale
-        result(0, 0) = 2 / (right - left);
-        result(1, 1) = 2 / (top - bottom);
-        result(2, 2) = 2 / (far - near);
-
-        return result;
-    }
-
-    Eigen::Matrix4f MakePerspectiveProjectionMatrix(float left, float right, float bottom, float top, float near, float far)
-    {
-        assert(right > left);
-        assert(top > bottom);
-        assert(far > near);
-
-        Eigen::Matrix4f result = Eigen::Matrix4f::Identity();
-
-        result(0, 0) = 2 * near / (right - left);
-        result(1, 1) = 2 * near / (top - bottom);
-        result(2, 2) = - (far + near)/ (far - near);
-        result(2, 3) = 0;
-
-        result(0, 2) = (right + left) / (right - left);
-        result(1, 2) = (top + bottom) / (top - bottom);
-        result(2, 2) = -1;
-
-        result(2, 3) = - 2 * near * far / (far - near);
-
-        return result;
-    }
-
     Eigen::Matrix4f MakeViewMatrix(const Eigen::Vector3f& pos, const Eigen::Quaternionf& rot)
     {
         // TODO Opt cal result
@@ -96,5 +50,31 @@ namespace Math
         Eigen::Matrix4f rotationMatrix = QuaternionToRotationMatrix(rot);
 
         return rotationMatrix * translationMatrix;
+    }
+
+    Eigen::Matrix4f MakeOrthoProjectionMatrix(float nearPlaneHalfX, float nearPlaneHalfY, float nearPlaneZ, float farPlaneZ)
+    {
+        Eigen::Matrix4f result = Eigen::Matrix4f::Identity();
+
+        result(0, 0) = 1 / nearPlaneHalfX;
+        result(1, 1) = 1 / nearPlaneHalfY;
+        result(2, 2) = 1 / (farPlaneZ - nearPlaneZ);
+        result(2, 3) = - (farPlaneZ + nearPlaneZ) / (farPlaneZ - nearPlaneZ);
+
+        return result;
+    }
+
+    Eigen::Matrix4f MakePerspectiveProjectionMatrix(float nearPlaneHalfX, float nearPlaneHalfY, float nearPlaneZ, float farPlaneZ)
+    {
+        Eigen::Matrix4f result = Eigen::Matrix4f::Identity();
+
+        result(0, 0) = nearPlaneZ / nearPlaneHalfX;
+        result(1, 1) = nearPlaneZ / nearPlaneHalfY;
+        result(2, 3) = - (farPlaneZ + nearPlaneZ) / (farPlaneZ - nearPlaneZ);
+        result(3, 3) = 0;
+        result(3, 2) = -1;
+        result(2, 3) = -2 * farPlaneZ * nearPlaneZ / (farPlaneZ - nearPlaneZ);
+
+        return result;
     }
 }

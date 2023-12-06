@@ -6,13 +6,22 @@
 class CompCamera: public ComponentWithType<ComponentType::Camera>
 {
 public:
-    CompCamera(float left, float right, float bottom, float top, float near, float far);
+    CompCamera(const Eigen::Vector2f& nearPlaneRightTop, float nearPlaneZ, float farPlaneZ, bool isPerspective = true);
+    CompCamera(float fovAngle, float aspect, float nearPlaneZ, float farPlaneZ, bool isPerspective = true);
 
 public:
-    Camera* GetCamera() const;
+    Camera& GetCamera();
+    const Camera& GetCamera() const;
     void OnPositionSet() override;
     void OnRotationSet() override;
+    const Eigen::Matrix4f& GetViewMatrix();
+    const Eigen::Matrix4f& GetProjectionMatrix();
 
 private:
-    UniPtr<Camera> _pCamera;
+    // camera
+    Camera _camera;
+
+    // view matrix
+    bool _needUpdateViewMatrix;
+    Eigen::Matrix4f _viewMatrix;
 };

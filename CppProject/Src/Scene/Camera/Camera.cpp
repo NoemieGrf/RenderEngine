@@ -1,117 +1,102 @@
+#include <numbers>
+#include <cmath>
 #include "Camera.h"
 #include "Math/Math.h"
 
 Camera::Camera(const Eigen::Vector2f& nearPlaneRightTop, float nearPlaneZ, float farPlaneZ, bool isPerspective)
-    : _frustum(nearPlaneRightTop, nearPlaneZ, farPlaneZ)
-    , _isPerspective(isPerspective)
+    : _isPerspective(isPerspective)
     , _needUpdateProjectionMatrix(true)
-    , _needUpdateViewMatrix(true)
-    , _needUpdateCachedVPMatrix(true)
 {
+    Adjust(nearPlaneRightTop, nearPlaneZ, farPlaneZ);
 }
 
 Camera::Camera(float fovAngle, float aspect, float nearPlaneZ, float farPlaneZ, bool isPerspective)
-    : _frustum(fovAngle, aspect, nearPlaneZ, farPlaneZ)
-    , _isPerspective(isPerspective)
+    : _isPerspective(isPerspective)
     , _needUpdateProjectionMatrix(true)
-    , _needUpdateViewMatrix(true)
-    , _needUpdateCachedVPMatrix(true)
 {
+    Adjust(fovAngle, aspect, nearPlaneZ, farPlaneZ);
 }
 
-void Camera::SetPosition(const Eigen::Vector3f& pos)
+float Camera::GetNearPlaneHalfX() const
 {
-    _position = pos;
-    SetNeedUpdateViewMatrix();
+    return _nearPlaneHalfX;
 }
 
-void Camera::SetRotation(const Eigen::Quaternionf& rot)
+float Camera::GetNearPlaneHalfY() const
 {
-    _rotation = rot;
-    SetNeedUpdateViewMatrix();
+    return _nearPlaneHalfY;
 }
 
-const Eigen::Vector3f& Camera::GetPosition() const
+float Camera::GetNearPlaneZ() const
 {
-    return _position;
+    return _nearPlaneZ;
 }
 
-const Eigen::Quaternionf& Camera::GetRotation() const
+float Camera::GetFarPlaneZ() const
 {
-    return _rotation;
+    return _farPlaneZ;
 }
 
-const Math::CameraFrustum& Camera::GetFrustum() const
+float Camera::GetFieldOfViewAngle() const
 {
-    return _frustum;
+    return _fovRadian * 180 / std::numbers::pi;
 }
 
-Math::CameraFrustum& Camera::GetFrustum()
+float Camera::GetFieldOfViewRadian() const
 {
-    return _frustum;
+    return _fovRadian;
+}
+
+float Camera::GetAspectRatio() const
+{
+    return _aspect;
+}
+
+void Camera::Adjust(const Eigen::Vector2f& nearPlaneRightTop, float nearPlaneZ, float farPlaneZ)
+{
+    assert(nearPlaneRightTop.x() > 0);
+    assert(nearPlaneRightTop.y() > 0);
+    assert(farPlaneZ < nearPlaneZ && nearPlaneZ < 0); // look at -z, right handed coordinates
+
+    _nearPlaneHalfX = nearPlaneRightTop.x();
+    _nearPlaneHalfY = nearPlaneRightTop.y();
+    _nearPlaneZ = nearPlaneZ;
+    _farPlaneZ = farPlaneZ;
+
+    _aspect = (float)_nearPlaneHalfY / _nearPlaneHalfX;
+    _fovRadian = 2 * std::atan((double)_nearPlaneHalfX / (-nearPlaneZ));
+
+    _needUpdateProjectionMatrix = true;
+}
+
+void Camera::Adjust(float fovAngle, float aspect, float nearPlaneZ, float farPlaneZ)
+{
+    assert(aspect > 0);
+    assert(fovAngle > 0 && fovAngle < 180);
+    assert(farPlaneZ < nearPlaneZ && nearPlaneZ < 0); // look at -z, right handed coordinates
+
+    _fovRadian = (fovAngle * std::numbers::pi / 180) / 2;
+    _aspect = aspect;
+    _nearPlaneZ = nearPlaneZ;
+    _farPlaneZ = farPlaneZ;
+
+    _nearPlaneHalfX = (-nearPlaneZ) * std::tan(_fovRadian);
+    _nearPlaneHalfY = _aspect * _nearPlaneHalfX;
+
+    _needUpdateProjectionMatrix = true;
 }
 
 const Eigen::Matrix4f& Camera::GetProjectionMatrix()
 {
-    UpdateProjectionMatrix();
+    if (_needUpdateProjectionMatrix)
+    {
+        _needUpdateProjectionMatrix = false;
+
+        if (_isPerspective)
+            _projectionMatrix = Math::MakePerspectiveProjectionMatrix(_nearPlaneHalfX, _nearPlaneHalfY, _nearPlaneZ, _farPlaneZ);
+        else
+            _projectionMatrix = Math::MakeOrthoProjectionMatrix(_nearPlaneHalfX, _nearPlaneHalfY, _nearPlaneZ, _farPlaneZ);
+    }
+
     return _projectionMatrix;
-}
-
-const Eigen::Matrix4f& Camera::GetViewMatrix()
-{
-    UpdateViewMatrix();
-    return _viewMatrix;
-}
-
-const Eigen::Matrix4f& Camera::GetVPMatrix()
-{
-    UpdateViewProjectionMatrix();
-    return _cachedViewProjectionMatrix;
-}
-
-void Camera::UpdateViewProjectionMatrix()
-{
-    if (!_needUpdateCachedVPMatrix)
-        return;
-
-    _needUpdateCachedVPMatrix = false;
-
-    UpdateProjectionMatrix();
-    UpdateViewMatrix();
-
-    _cachedViewProjectionMatrix = _projectionMatrix * _viewMatrix;
-}
-
-void Camera::UpdateViewMatrix()
-{
-    if (!_needUpdateViewMatrix)
-        return;
-
-    _needUpdateViewMatrix = false;
-    _viewMatrix = Math::MakeViewMatrix(_position, _rotation);
-}
-
-void Camera::UpdateProjectionMatrix()
-{
-    if (!_needUpdateProjectionMatrix)
-        return;
-
-    _needUpdateProjectionMatrix = false;
-
-    if (_isPerspective)
-        _projectionMatrix = _frustum.GetPerspectiveProjectionMatrix();
-    else
-        _projectionMatrix = _frustum.GetOrthoProjectionMatrix();
-}
-
-void Camera::SetNeedUpdateProjectionMatrix()
-{
-    _needUpdateProjectionMatrix = true;
-    _needUpdateCachedVPMatrix = true;
-}
-
-void Camera::SetNeedUpdateViewMatrix()
-{
-    _needUpdateViewMatrix = true;
-    _needUpdateCachedVPMatrix = true;
 }
