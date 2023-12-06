@@ -2,7 +2,14 @@
 
 namespace Math
 {
-    Eigen::Matrix4f QuaternionToRotationMatrix(const Eigen::Quaternionf& rot)
+    Eigen::Matrix4f Translate(const Eigen::Vector3f& pos)
+    {
+        Eigen::Matrix4f result = Eigen::Matrix4f::Identity();
+        result.col(3) = Eigen::Vector4f{pos.x(), pos.y(), pos.z(), 1};
+        return result;
+    }
+
+    Eigen::Matrix4f Rotate(const Eigen::Quaternionf& rot)
     {
         float x = rot.x();
         float y = rot.y();
@@ -38,6 +45,20 @@ namespace Math
         return result;
     }
 
+    Eigen::Matrix4f Scale(const Eigen::Vector3f& scale)
+    {
+        Eigen::Matrix4f result = Eigen::Matrix4f::Identity();
+        result(0, 0) = scale.x();
+        result(1, 1) = scale.y();
+        result(2, 2) = scale.z();
+        return result;
+    }
+
+    Eigen::Matrix4f MakeModelMatrix(const Eigen::Vector3f& pos, const Eigen::Quaternionf& rot, const Eigen::Vector3f& scale)
+    {
+        return Scale(scale) * Rotate(rot) * Translate(pos);
+    }
+
     Eigen::Matrix4f MakeViewMatrix(const Eigen::Vector3f& pos, const Eigen::Quaternionf& rot)
     {
         // TODO Opt cal result
@@ -47,7 +68,7 @@ namespace Math
                 0, 0, 1, -pos.z(),
                 0, 0, 0, 1;
 
-        Eigen::Matrix4f rotationMatrix = QuaternionToRotationMatrix(rot);
+        Eigen::Matrix4f rotationMatrix = Rotate(rot);
 
         return rotationMatrix * translationMatrix;
     }
