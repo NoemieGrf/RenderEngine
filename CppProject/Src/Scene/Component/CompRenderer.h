@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Component.h"
-#include "IComponentType.h"
 #include "Renderer/Buffer/InputAssemble.h"
 #include "Renderer/Material/Material.h"
 
-class CompRenderer: public Component, public IComponentType<ComponentType::Renderer>
+class CompRenderer: public ComponentWithType<ComponentType::Renderer>
 {
 public:
     CompRenderer(const Ptr<Renderer::InputAssemble>& pInputAssemble, const Ptr<Renderer::Material>& pMaterial);

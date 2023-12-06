@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Define/Define.h"
+#include "ComponentType.h"
 
 class SceneObject;
 
@@ -21,5 +22,15 @@ public:
 
 protected:
     SceneObject* _pObject = nullptr;
+};
+
+template<ComponentType type>
+class ComponentWithType: public Component
+{
+public:
+    static ComponentType GetType()
+    {
+        return type;
+    }
 };
 

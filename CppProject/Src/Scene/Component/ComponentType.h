@@ -10,6 +10,7 @@
 enum class ComponentType: int
 {
 	Camera,
+	Light,
 	Renderer
 };
 

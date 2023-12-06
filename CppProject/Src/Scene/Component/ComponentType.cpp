@@ -11,6 +11,8 @@ std::string ComponentTypeHelper::ComponentTypeToString(ComponentType data)
 	{
 		case ComponentType::Camera: 
 			return "Camera";
+		case ComponentType::Light: 
+			return "Light";
 		case ComponentType::Renderer: 
 			return "Renderer";
 		default: 
@@ -24,6 +26,7 @@ std::optional<ComponentType> ComponentTypeHelper::StringToComponentType(const st
 	static std::unordered_map<std::string, ComponentType> map = 
 	{
 		{ "Camera", ComponentType::Camera },
+		{ "Light", ComponentType::Light },
 		{ "Renderer", ComponentType::Renderer },
 	};
 	

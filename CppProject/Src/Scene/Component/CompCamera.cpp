@@ -1,5 +1,5 @@
 #include "CompCamera.h"
-#include "Camera/OrthoCamera.h"
+#include "Scene/Camera/OrthoCamera.h"
 #include "Scene/SceneObject.h"
 
 CompCamera::CompCamera(float left, float right, float bottom, float top, float near, float far)

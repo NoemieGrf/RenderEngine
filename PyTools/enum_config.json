@@ -143,6 +143,7 @@
 			"FilePath": "../CppProject/Src/Scene/Component/",
 			"Value": [
 				"Camera",
+				"Light",
 				"Renderer"
 			],
 			"StringConverter": true
