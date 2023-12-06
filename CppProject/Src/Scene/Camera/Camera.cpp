@@ -1,11 +1,21 @@
 #include "Camera.h"
 #include "Math/Math.h"
 
-Camera::Camera(float left, float right, float bottom, float top, float near, float far)
-        : _frustum({left, right, bottom, top, near, far})
-        , _needUpdateProjectionMatrix(true)
-        , _needUpdateViewMatrix(true)
-        , _needUpdateCachedVPMatrix(true)
+Camera::Camera(const Eigen::Vector2f& nearPlaneRightTop, float nearPlaneZ, float farPlaneZ, bool isPerspective)
+    : _frustum(nearPlaneRightTop, nearPlaneZ, farPlaneZ)
+    , _isPerspective(isPerspective)
+    , _needUpdateProjectionMatrix(true)
+    , _needUpdateViewMatrix(true)
+    , _needUpdateCachedVPMatrix(true)
+{
+}
+
+Camera::Camera(float fovAngle, float aspect, float nearPlaneZ, float farPlaneZ, bool isPerspective)
+    : _frustum(fovAngle, aspect, nearPlaneZ, farPlaneZ)
+    , _isPerspective(isPerspective)
+    , _needUpdateProjectionMatrix(true)
+    , _needUpdateViewMatrix(true)
+    , _needUpdateCachedVPMatrix(true)
 {
 }
 
@@ -21,12 +31,6 @@ void Camera::SetRotation(const Eigen::Quaternionf& rot)
     SetNeedUpdateViewMatrix();
 }
 
-void Camera::SetFrustum(const Frustum& frustum)
-{
-    _frustum = frustum;
-    SetNeedUpdateProjectionMatrix();
-}
-
 const Eigen::Vector3f& Camera::GetPosition() const
 {
     return _position;
@@ -37,7 +41,12 @@ const Eigen::Quaternionf& Camera::GetRotation() const
     return _rotation;
 }
 
-const Camera::Frustum& Camera::GetFrustum() const
+const Math::CameraFrustum& Camera::GetFrustum() const
+{
+    return _frustum;
+}
+
+Math::CameraFrustum& Camera::GetFrustum()
 {
     return _frustum;
 }
@@ -88,7 +97,11 @@ void Camera::UpdateProjectionMatrix()
         return;
 
     _needUpdateProjectionMatrix = false;
-    UpdateProjectionMatrixImp();
+
+    if (_isPerspective)
+        _projectionMatrix = _frustum.GetPerspectiveProjectionMatrix();
+    else
+        _projectionMatrix = _frustum.GetOrthoProjectionMatrix();
 }
 
 void Camera::SetNeedUpdateProjectionMatrix()

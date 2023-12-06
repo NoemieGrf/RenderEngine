@@ -1,31 +1,22 @@
 #pragma once
 
 #include "eigen/Eigen"
+#include "Math/CameraFrustum.h"
 
 class Camera
 {
 public:
-    struct Frustum
-    {
-        float leftCoord;
-        float rightCoord;
-        float bottomCoord;
-        float topCoord;
-        float nearCoord;
-        float farCoord;
-    };
-
-public:
-    Camera(float left, float right, float bottom, float top, float near, float far);
+    Camera(const Eigen::Vector2f& nearPlaneRightTop, float nearPlaneZ, float farPlaneZ, bool isPerspective = true);
+    Camera(float fovAngle, float aspect, float nearPlaneZ, float farPlaneZ, bool isPerspective = true);
     virtual ~Camera() = default;
 
 public:
     void SetPosition(const Eigen::Vector3f& pos);
     void SetRotation(const Eigen::Quaternionf& rot);
-    void SetFrustum(const Frustum& frustum);
     const Eigen::Vector3f& GetPosition() const;
     const Eigen::Quaternionf& GetRotation() const;
-    const Frustum& GetFrustum() const;
+    const Math::CameraFrustum& GetFrustum() const;
+    Math::CameraFrustum& GetFrustum();
 
     const Eigen::Matrix4f& GetProjectionMatrix();
     const Eigen::Matrix4f& GetViewMatrix();
@@ -33,7 +24,6 @@ public:
 
     void UpdateViewMatrix();
     void UpdateProjectionMatrix();
-    virtual void UpdateProjectionMatrixImp() = 0;
 
 protected:
     void UpdateViewProjectionMatrix();
@@ -43,8 +33,11 @@ private:
     void SetNeedUpdateViewMatrix();
 
 protected:
+    // bool
+    bool _isPerspective;
+
     // projection matrix
-    Frustum _frustum;
+    Math::CameraFrustum _frustum;
     Eigen::Matrix4f _projectionMatrix;
 
     // view matrix
