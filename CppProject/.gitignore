@@ -19,6 +19,7 @@ CTestTestfile.cmake
 *.lo
 *.o
 *.obj
+!Assets/*.obj
 
 # Precompiled Headers
 *.gch
