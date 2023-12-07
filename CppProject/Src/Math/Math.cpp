@@ -105,17 +105,6 @@ namespace Math
 
     Eigen::Matrix4f MakeOrthoProjectionMatrix(float nearPlaneHalfX, float nearPlaneHalfY, float nearPlaneZ, float farPlaneZ)
     {
-        /*
-        Eigen::Matrix4f result = Eigen::Matrix4f::Identity();
-
-        result(0, 0) = 1 / nearPlaneHalfX;
-        result(1, 1) = 1 / nearPlaneHalfY;
-        result(2, 2) = 1 / (farPlaneZ - nearPlaneZ);
-        result(2, 3) = - (farPlaneZ + nearPlaneZ) / (farPlaneZ - nearPlaneZ);
-
-        return result;
-         */
-
         float left = -nearPlaneHalfX;
         float right = nearPlaneHalfX;
         float top = nearPlaneHalfY;
@@ -127,29 +116,16 @@ namespace Math
     {
         Eigen::Matrix4f compressMatrix;
         compressMatrix <<
-                       near,    0,      0,              0,
-                       0,       near,   0,              0,
-                       0,       0,      near + far,     - near * far,
-                       0,       0,      1,              0;
+                       1,       0,      0,                      0,
+                       0,       1,      0,                      0,
+                       0,       0,      (near + far) / near,    - far,
+                       0,       0,      1 / near,               0;
 
         return MakeOrthoProjectionMatrix(left, right, top, bottom, near, far) * compressMatrix;
     }
 
     Eigen::Matrix4f MakePerspectiveProjectionMatrix(float nearPlaneHalfX, float nearPlaneHalfY, float nearPlaneZ, float farPlaneZ)
     {
-        /*
-        Eigen::Matrix4f result = Eigen::Matrix4f::Identity();
-
-        result(0, 0) = nearPlaneZ / nearPlaneHalfX;
-        result(1, 1) = nearPlaneZ / nearPlaneHalfY;
-        result(2, 3) = - (farPlaneZ + nearPlaneZ) / (farPlaneZ - nearPlaneZ);
-        result(3, 3) = 0;
-        result(3, 2) = -1;
-        result(2, 3) = -2 * farPlaneZ * nearPlaneZ / (farPlaneZ - nearPlaneZ);
-
-        return result;
-         */
-
         float left = -nearPlaneHalfX;
         float right = nearPlaneHalfX;
         float top = nearPlaneHalfY;

@@ -14,7 +14,7 @@ TestLooper::TestLooper()
 
     auto pQuadObj = PrimitiveObject::CreateQuad();
     pQuadObj->GetComponent<CompRenderer>()->ChangeMaterial(std::make_shared<Material>("Assets/Material/TextureMixtureMat.json"));
-    pQuadObj->SetPosition({0, 0, 1});
+    pQuadObj->SetPosition({0, 0, 0.11});
     _scene.AddObject(pQuadObj);
 
 
