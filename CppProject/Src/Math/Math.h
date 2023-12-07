@@ -28,7 +28,7 @@ namespace Math
      * @param up Up direction
      * @param flipZ Do flip z, camera always look at -z
      */
-    Eigen::Matrix4f LookAt(const Eigen::Vector3f& forward, const Eigen::Vector3f& up, bool flipZ = false);
+    Eigen::Matrix4f LookAt(const Eigen::Vector3f& forward, const Eigen::Vector3f& up);
 
     /**
      * Create model matrix

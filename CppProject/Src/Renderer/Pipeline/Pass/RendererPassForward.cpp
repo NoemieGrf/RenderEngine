@@ -25,6 +25,7 @@ namespace Renderer
 
             // General uniform
             pMat->GetShader(RendererPassType::Forward)->Bind();
+            pMat->GetShader(RendererPassType::Forward)->SetUniformMat4("u_ModelMatrix", pObj->GetModelMatrix());
             pMat->GetShader(RendererPassType::Forward)->SetUniformMat4("u_ViewMatrix", pMainCamera->GetViewMatrix());
             pMat->GetShader(RendererPassType::Forward)->SetUniformMat4("u_ProjectionMatrix",pMainCamera->GetProjectionMatrix());
 
