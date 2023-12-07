@@ -2,6 +2,7 @@
 
 #include <string>
 #include <unordered_map>
+#include "xxhash/xxhash.h"
 
 template<typename T>
 class XXHashGenerator

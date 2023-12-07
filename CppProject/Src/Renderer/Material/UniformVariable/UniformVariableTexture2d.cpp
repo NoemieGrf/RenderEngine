@@ -1,5 +1,5 @@
 #include "UniformVariableTexture2d.h"
-#include "Renderer/Assets/Image.h"
+#include "Renderer/Assets/AssetsPool.hpp"
 
 namespace Renderer
 {
@@ -8,7 +8,7 @@ namespace Renderer
         , _pTexture(Texture2d::Create())
         , _slot(texSlot)
     {
-        Ptr<Image> pImage = std::make_shared<Image>(texPath);
+        Ptr<Image> pImage = AssetsPool<Image>::Get(texPath);
         _pTexture->PushData(pImage);
     }
 
