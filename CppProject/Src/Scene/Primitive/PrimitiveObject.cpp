@@ -32,3 +32,8 @@ Ptr<SceneObject> PrimitiveObject::CreateQuad()
 
     return pObj;
 }
+
+Ptr<SceneObject> PrimitiveObject::CreateBox()
+{
+
+}

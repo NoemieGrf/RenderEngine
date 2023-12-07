@@ -8,4 +8,5 @@ class PrimitiveObject: public NonConstructible
 {
 public:
     static Ptr<SceneObject> CreateQuad();
+    static Ptr<SceneObject> CreateBox();
 };
