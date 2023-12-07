@@ -70,6 +70,6 @@ namespace Renderer
         }
 
     private:
-        inline static XxHashStringMap<Ptr<Shader>> _shaderPool;
+        inline static XXHashMap<std::string, Ptr<Shader>> _shaderPool;
     };
 }
