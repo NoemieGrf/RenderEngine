@@ -1,24 +1,10 @@
-#include <random>
-#include <limits>
+
 #include "XXHashMap.h"
 #include "xxhash/xxhash.h"
 
-size_t XXHashString::_seed = GenerateSeed();
+static size_t gXXHashSeed = 19679263527;
 
-size_t XXHashString::operator()(const std::string& str)
+size_t StringXXHashGenerator::operator()(const std::string& str) const
 {
-    return XXH64(str.data(), str.size(), _seed);
-}
-
-size_t XXHashString::GenerateSeed()
-{
-    std::random_device randomDevice;
-    std::mt19937 generator(randomDevice());
-    std::uniform_int_distribution<std::mt19937::result_type> dist(0, std::numeric_limits<int>::max());
-    return dist(generator);
-}
-
-size_t XXHashString::GetSeed()
-{
-    return _seed;
+    return XXH64(str.data(), str.size(), gXXHashSeed);
 }

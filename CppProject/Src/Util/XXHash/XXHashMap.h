@@ -3,19 +3,11 @@
 #include <string>
 #include <unordered_map>
 
-class XXHashString
+class StringXXHashGenerator
 {
 public:
-    size_t operator()(const std::string& str);
-
-public:
-    static size_t GetSeed();
-
-private:
-    static size_t _seed;
-    static size_t GenerateSeed();
+    size_t operator()(const std::string& str) const;
 };
 
-
 template<typename T>
-using XxHashUMap = std::unordered_map<std::string, T, XXHashString>;
+using XxHashStringMap = std::unordered_map<std::string, T, StringXXHashGenerator>;

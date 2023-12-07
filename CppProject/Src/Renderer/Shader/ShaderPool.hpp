@@ -4,6 +4,7 @@
 #include "Util/Logger/Logger.h"
 #include "Util/NonConstructible.h"
 #include "Util/NonCopyable.h"
+#include "Util/XXHash/XXHashMap.h"
 #include "Shader.h"
 #include "ShaderProgram.h"
 #include "ShaderType.h"
@@ -69,6 +70,6 @@ namespace Renderer
         }
 
     private:
-        inline static umap<std::string, Ptr<Shader>> _shaderPool;
+        inline static XxHashStringMap<Ptr<Shader>> _shaderPool;
     };
 }
