@@ -54,6 +54,25 @@ namespace Math
         return result;
     }
 
+    Eigen::Matrix4f LookAt(const Eigen::Vector3f& forward, const Eigen::Vector3f& up, bool flipZ)
+    {
+        Eigen::Vector3f rightNorm = forward.cross(up).normalized();
+        Eigen::Vector3f forwardNorm = forward.normalized();
+        Eigen::Vector3f upNorm = up.normalized();
+
+        if (flipZ)
+            forwardNorm = -forwardNorm;
+
+        Eigen::Matrix4f rotateMatrix;
+        rotateMatrix <<
+                rightNorm.x(),      rightNorm.y(),      rightNorm.z(),      0,
+                upNorm.x(),         upNorm.y(),         upNorm.z(),         0,
+                forwardNorm.x(),    forwardNorm.y(),    forwardNorm.z(),    0,
+                0,                  0,                  0,                  1;
+
+        return rotateMatrix;
+    }
+
     Eigen::Matrix4f MakeModelMatrix(const Eigen::Vector3f& pos, const Eigen::Quaternionf& rot, const Eigen::Vector3f& scale)
     {
         return Scale(scale) * Rotate(rot) * Translate(pos);
@@ -61,13 +80,7 @@ namespace Math
 
     Eigen::Matrix4f MakeViewMatrix(const Eigen::Vector3f& pos, const Eigen::Quaternionf& rot)
     {
-        // TODO Opt cal result
-        Eigen::Matrix4f translationMatrix;
-        translationMatrix << 1, 0, 0, -pos.x(),
-                0, 1, 0, -pos.y(),
-                0, 0, 1, -pos.z(),
-                0, 0, 0, 1;
-
+        Eigen::Matrix4f translationMatrix = Translate(-pos);
         Eigen::Matrix4f rotationMatrix = Rotate(rot);
 
         return rotationMatrix * translationMatrix;
