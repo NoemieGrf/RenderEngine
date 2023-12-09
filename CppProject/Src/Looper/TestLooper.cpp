@@ -19,7 +19,7 @@ TestLooper::TestLooper()
 
 
     auto pCamObj = std::make_shared<SceneObject>();
-    pCamObj->AddComponent<CompCamera>(Eigen::Vector2f{1, 1}, -0.1, -10);
+    pCamObj->AddComponent<CompCamera>(Eigen::Vector2f{1, 1}, -0.1, -10, false);
     _scene.AddObject(pCamObj);
     _scene.SetMainCamera(pCamObj);
 }

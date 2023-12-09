@@ -80,14 +80,18 @@ namespace Math
         Eigen::Matrix4f translationMatrix = Translate(-pos);
         Eigen::Matrix4f rotationMatrix = Rotate(rot.conjugate());
 
-        Eigen::Matrix4f zReverse = Eigen::Matrix4f::Identity();
-        zReverse(2, 2) = -1;
-
-        return zReverse * rotationMatrix * translationMatrix;
+        return rotationMatrix * translationMatrix;
     }
 
-    Eigen::Matrix4f MakeOrthoProjectionMatrix(float left, float right, float top, float bottom, float near, float far)
+    Eigen::Matrix4f MakeOrthoProjectionMatrix(RendererApi ndcApi, float nearPlaneHalfX, float nearPlaneHalfY, float nearPlaneZ, float farPlaneZ)
     {
+        float left = -nearPlaneHalfX;
+        float right = nearPlaneHalfX;
+        float top = nearPlaneHalfY;
+        float bottom = -nearPlaneHalfY;
+        float near = nearPlaneZ;
+        float far = farPlaneZ;
+
         Eigen::Matrix4f translationMatrix = Translate({
             - (right + left) / 2,
             - (top + bottom) / 2,
@@ -100,36 +104,53 @@ namespace Math
             2 / (near - far)
         });
 
-        return scaleMatrix * translationMatrix;
+        Eigen::Matrix4f standardOrthoProj = scaleMatrix * translationMatrix;
+
+        if (ndcApi == RendererApi::OpenGL)
+        {
+            Eigen::Matrix4f zReverse = Eigen::Matrix4f::Identity();
+            //zReverse(2, 2) = -1;
+            return zReverse * standardOrthoProj;
+        }
+
+        return standardOrthoProj;
     }
 
-    Eigen::Matrix4f MakeOrthoProjectionMatrix(float nearPlaneHalfX, float nearPlaneHalfY, float nearPlaneZ, float farPlaneZ)
+    Eigen::Matrix4f MakePerspectiveProjectionMatrix(RendererApi ndcApi, float nearPlaneHalfX, float nearPlaneHalfY, float nearPlaneZ, float farPlaneZ)
     {
         float left = -nearPlaneHalfX;
         float right = nearPlaneHalfX;
         float top = nearPlaneHalfY;
         float bottom = -nearPlaneHalfY;
-        return MakeOrthoProjectionMatrix(left, right, top, bottom, nearPlaneZ, farPlaneZ);
-    }
+        float near = nearPlaneZ;
+        float far = farPlaneZ;
 
-    Eigen::Matrix4f MakePerspectiveProjectionMatrix(float left, float right, float top, float bottom, float near, float far)
-    {
+        Eigen::Matrix4f translationMatrix = Translate({
+            - (right + left) / 2,
+            - (top + bottom) / 2,
+            - (near + far) / 2
+        });
+
+        Eigen::Matrix4f scaleMatrix = Scale({
+            2 / (right - left),
+            2 / (top - bottom),
+            2 / (near - far)
+         });
+
+        Eigen::Matrix4f standardOrthoProj = scaleMatrix * translationMatrix;
+
         Eigen::Matrix4f compressMatrix;
         compressMatrix <<
-                       1,       0,      0,                      0,
-                       0,       1,      0,                      0,
-                       0,       0,      (near + far) / near,    - far,
-                       0,       0,      1 / near,               0;
+                        near,        0,          0,              0,
+                        0,           near,       0,              0,
+                        0,           0,          near + far,     - far * near,
+                        0,           0,          1,              0;
 
-        return MakeOrthoProjectionMatrix(left, right, top, bottom, near, far) * compressMatrix;
-    }
+        if (ndcApi == RendererApi::OpenGL)
+        {
+            compressMatrix(3, 2) = -1;
+        }
 
-    Eigen::Matrix4f MakePerspectiveProjectionMatrix(float nearPlaneHalfX, float nearPlaneHalfY, float nearPlaneZ, float farPlaneZ)
-    {
-        float left = -nearPlaneHalfX;
-        float right = nearPlaneHalfX;
-        float top = nearPlaneHalfY;
-        float bottom = -nearPlaneHalfY;
-        return MakePerspectiveProjectionMatrix(left, right, top, bottom, nearPlaneZ, farPlaneZ);
+        return scaleMatrix * translationMatrix * compressMatrix;
     }
 }

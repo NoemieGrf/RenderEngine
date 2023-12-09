@@ -2,6 +2,7 @@
 #include <cmath>
 #include "Camera.h"
 #include "Math/Math.h"
+#include "Application/Application.h"
 
 Camera::Camera(const Eigen::Vector2f& nearPlaneRightTop, float nearPlaneZ, float farPlaneZ, bool isPerspective)
     : _isPerspective(isPerspective)
@@ -92,10 +93,11 @@ const Eigen::Matrix4f& Camera::GetProjectionMatrix()
     {
         _needUpdateProjectionMatrix = false;
 
+        auto api = Application::GetRenderApi();
         if (_isPerspective)
-            _projectionMatrix = Math::MakePerspectiveProjectionMatrix(_nearPlaneHalfX, _nearPlaneHalfY, _nearPlaneZ, _farPlaneZ);
+            _projectionMatrix = Math::MakePerspectiveProjectionMatrix(api, _nearPlaneHalfX, _nearPlaneHalfY, _nearPlaneZ, _farPlaneZ);
         else
-            _projectionMatrix = Math::MakeOrthoProjectionMatrix(_nearPlaneHalfX, _nearPlaneHalfY, _nearPlaneZ, _farPlaneZ);
+            _projectionMatrix = Math::MakeOrthoProjectionMatrix(api, _nearPlaneHalfX, _nearPlaneHalfY, _nearPlaneZ, _farPlaneZ);
     }
 
     return _projectionMatrix;
