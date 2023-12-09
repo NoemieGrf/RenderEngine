@@ -6,22 +6,46 @@
 namespace Math
 {
     /**
-     * Translate matrix.
-     * @param pos Translate vector.
+     * @brief TranslateMatrix matrix.
+     * @param pos TranslateMatrix vector.
      */
-    Eigen::Matrix4f Translate(const Eigen::Vector3f& pos);
+    Eigen::Matrix4f TranslateMatrix(const Eigen::Vector3f& pos);
 
     /**
-     * Rotation matrix.
-     * @param rot Rotate quaternion.
-     */
-    Eigen::Matrix4f Rotate(const Eigen::Quaternionf& rot);
-
-    /**
-     * Scale matrix.
+     * @brief Scale matrix.
      * @param scale Scale.
      */
-    Eigen::Matrix4f Scale(const Eigen::Vector3f& scale);
+    Eigen::Matrix4f ScaleMatrix(const Eigen::Vector3f& scale);
+
+    /**
+     * @brief Get rotation matrix form angle axis.
+     */
+    Eigen::Matrix4f AngleAxisToRotationMatrix(const Eigen::AngleAxisf& angleAxis);
+
+    /**
+     * @brief Get angle axis form rotation matrix.
+     */
+    Eigen::AngleAxisf RotationMatrixToAngleAxis(const Eigen::Matrix4f& rotationMat);
+
+    /**
+     * @brief Get angle axis form quaternion.
+     */
+    Eigen::Quaternionf AngleAxisToQuaternion(const Eigen::AngleAxisf& angleAxis);
+
+    /**
+     * @brief Get quaternion from angle axis.
+     */
+    Eigen::AngleAxisf QuaternionToAngleAxis(const Eigen::Quaternionf& q);
+
+    /**
+     * @brief Get rotation matrix from quaternion.
+     */
+    Eigen::Matrix4f QuaternionToRotationMatrix(const Eigen::Quaternionf& q);
+
+    /**
+     * @brief Get quaternion from rotation matrix.
+     */
+    Eigen::Quaternionf RotationMatrixToQuaternion(const Eigen::Matrix4f& rotationMat);
 
     /**
      * Rotation matrix from standard coordinate frame to look-at coordinate frame.

@@ -2,50 +2,48 @@
 
 namespace Math
 {
-    Eigen::Matrix4f Translate(const Eigen::Vector3f& pos)
+    Eigen::Matrix4f AngleAxisToRotationMatrix(const Eigen::AngleAxisf& angleAxis)
+    {
+        Eigen::Matrix4f result = Eigen::Matrix4f::Identity();
+        result.block<3, 3>(0, 0) = angleAxis.toRotationMatrix();
+        return result;
+    }
+
+    Eigen::AngleAxisf RotationMatrixToAngleAxis(const Eigen::Matrix4f& rotationMat)
+    {
+        return Eigen::AngleAxisf(rotationMat.block<3, 3>(0, 0));
+    }
+
+    Eigen::Quaternionf AngleAxisToQuaternion(const Eigen::AngleAxisf& angleAxis)
+    {
+        return Eigen::Quaternionf(angleAxis);
+    }
+
+    Eigen::AngleAxisf QuaternionToAngleAxis(const Eigen::Quaternionf& q)
+    {
+        return Eigen::AngleAxisf(q);
+    }
+
+    Eigen::Matrix4f QuaternionToRotationMatrix(const Eigen::Quaternionf& q)
+    {
+        Eigen::Matrix4f result = Eigen::Matrix4f::Identity();
+        result.block<3, 3>(0, 0) = q.toRotationMatrix();
+        return result;
+    }
+
+    Eigen::Quaternionf RotationMatrixToQuaternion(const Eigen::Matrix4f& rotationMat)
+    {
+        return Eigen::Quaternionf(rotationMat.block<3, 3>(0, 0));
+    }
+
+    Eigen::Matrix4f TranslateMatrix(const Eigen::Vector3f& pos)
     {
         Eigen::Matrix4f result = Eigen::Matrix4f::Identity();
         result.col(3) = Eigen::Vector4f{pos.x(), pos.y(), pos.z(), 1};
         return result;
     }
 
-    Eigen::Matrix4f Rotate(const Eigen::Quaternionf& rot)
-    {
-        float x = rot.x();
-        float y = rot.y();
-        float z = rot.z();
-        float w = rot.w();
-
-        Eigen::Matrix4f result = Eigen::Matrix4f::Zero();
-
-        float v2xx = 2 * x * x;
-        float v2yy = 2 * y * y;
-        float v2zz = 2 * z * z;
-        float v2xy = 2 * x * y;
-        float v2zw = 2 * z * w;
-        float v2xz = 2 * x * z;
-        float v2yw = 2 * y * w;
-        float v2yz = 2 * y * z;
-        float v2xw = 2 * x * w;
-
-        result(0, 0) = 1 - v2yy - v2zz;
-        result(0, 1) = v2xy - v2zw;
-        result(0, 2) = v2xz + v2yw;
-
-        result(1, 0) = v2xy + v2zw;
-        result(1, 1) = 1 - v2xx - v2zz;
-        result(1, 2) = v2yz - v2xw;
-
-        result(2, 0) = v2xz - v2yw;
-        result(2, 1) = v2yz + v2xw;
-        result(2, 2) = 1 - v2xx - v2yy;
-
-        result(3, 3) = 1;
-
-        return result;
-    }
-
-    Eigen::Matrix4f Scale(const Eigen::Vector3f& scale)
+    Eigen::Matrix4f ScaleMatrix(const Eigen::Vector3f& scale)
     {
         Eigen::Matrix4f result = Eigen::Matrix4f::Identity();
         result(0, 0) = scale.x();
@@ -72,13 +70,13 @@ namespace Math
 
     Eigen::Matrix4f MakeModelMatrix(const Eigen::Vector3f& pos, const Eigen::Quaternionf& rot, const Eigen::Vector3f& scale)
     {
-        return Scale(scale) * Rotate(rot) * Translate(pos);
+        return ScaleMatrix(scale) * QuaternionToRotationMatrix(rot) * TranslateMatrix(pos);
     }
 
     Eigen::Matrix4f MakeViewMatrix(const Eigen::Vector3f& pos, const Eigen::Quaternionf& rot)
     {
-        Eigen::Matrix4f translationMatrix = Translate(-pos);
-        Eigen::Matrix4f rotationMatrix = Rotate(rot.conjugate());
+        Eigen::Matrix4f translationMatrix = TranslateMatrix(-pos);
+        Eigen::Matrix4f rotationMatrix = QuaternionToRotationMatrix(rot.conjugate());
 
         return rotationMatrix * translationMatrix;
     }
@@ -92,17 +90,13 @@ namespace Math
         float near = nearPlaneZ;
         float far = farPlaneZ;
 
-        Eigen::Matrix4f translationMatrix = Translate({
-            - (right + left) / 2,
-            - (top + bottom) / 2,
-            - (near + far) / 2
-        });
+        Eigen::Matrix4f translationMatrix = TranslateMatrix({-(right + left) / 2,
+                                                             -(top + bottom) / 2,
+                                                             -(near + far) / 2});
 
-        Eigen::Matrix4f scaleMatrix = Scale({
-            2 / (right - left),
-            2 / (top - bottom),
-            2 / (near - far)
-        });
+        Eigen::Matrix4f scaleMatrix = ScaleMatrix({2 / (right - left),
+                                                   2 / (top - bottom),
+                                                   2 / (near - far)});
 
         Eigen::Matrix4f standardOrthoProj = scaleMatrix * translationMatrix;
 
@@ -125,17 +119,13 @@ namespace Math
         float near = nearPlaneZ;
         float far = farPlaneZ;
 
-        Eigen::Matrix4f translationMatrix = Translate({
-            - (right + left) / 2,
-            - (top + bottom) / 2,
-            - (near + far) / 2
-        });
+        Eigen::Matrix4f translationMatrix = TranslateMatrix({-(right + left) / 2,
+                                                             -(top + bottom) / 2,
+                                                             -(near + far) / 2});
 
-        Eigen::Matrix4f scaleMatrix = Scale({
-            2 / (right - left),
-            2 / (top - bottom),
-            2 / (near - far)
-         });
+        Eigen::Matrix4f scaleMatrix = ScaleMatrix({2 / (right - left),
+                                                   2 / (top - bottom),
+                                                   2 / (near - far)});
 
         Eigen::Matrix4f standardOrthoProj = scaleMatrix * translationMatrix;
 
