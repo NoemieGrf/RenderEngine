@@ -54,18 +54,18 @@ namespace Math
         return result;
     }
 
-    Eigen::Matrix4f LookAt(const Eigen::Vector3f& forward, const Eigen::Vector3f& up)
+    Eigen::Matrix4f LookAt(const Eigen::Vector3f& startPos, const Eigen::Vector3f& targetPos, const Eigen::Vector3f& up)
     {
-        Eigen::Vector3f rightNorm = forward.cross(up).normalized();
-        Eigen::Vector3f forwardNorm = forward.normalized();
-        Eigen::Vector3f upNorm = up.normalized();
+        Eigen::Vector3f forwardNormal = (targetPos - startPos).normalized();
+        Eigen::Vector3f upNormal = up.normalized();
+        Eigen::Vector3f rightNormal = forwardNormal.cross(upNormal);
 
         Eigen::Matrix4f rotateMatrix;
         rotateMatrix <<
-                rightNorm.x(),      rightNorm.y(),      rightNorm.z(),      0,
-                upNorm.x(),         upNorm.y(),         upNorm.z(),         0,
-                forwardNorm.x(),    forwardNorm.y(),    forwardNorm.z(),    0,
-                0,                  0,                  0,                  1;
+                     rightNormal.x(),       rightNormal.y(),        rightNormal.z(),        0,
+                     upNormal.x(),          upNormal.y(),           upNormal.z(),           0,
+                     forwardNormal.x(),     forwardNormal.y(),      forwardNormal.z(),      0,
+                     0,                     0,                      0,                      1;
 
         return rotateMatrix;
     }
