@@ -6,6 +6,11 @@
 namespace Math
 {
     /**
+     * @brief Angle axis.
+     */
+    Eigen::AngleAxisf AngleAxis(const Eigen::Vector3f& axis, float angle);
+
+    /**
      * @brief TranslateMatrix matrix.
      * @param pos TranslateMatrix vector.
      */
@@ -46,14 +51,6 @@ namespace Math
      * @brief Get quaternion from rotation matrix.
      */
     Eigen::Quaternionf RotationMatrixToQuaternion(const Eigen::Matrix4f& rotationMat);
-
-    /**
-     * Rotation matrix from standard coordinate frame to look-at coordinate frame.
-     * @param startPos From position.
-     * @param targetPos Target position.
-     * @param up Up direction.
-     */
-    Eigen::Matrix4f LookAt(const Eigen::Vector3f& startPos, const Eigen::Vector3f& targetPos, const Eigen::Vector3f& up);
 
     /**
      * Create model matrix.

@@ -1,7 +1,13 @@
+#include <numbers>
 #include "Math.h"
 
 namespace Math
 {
+    Eigen::AngleAxisf AngleAxis(const Eigen::Vector3f& axis, float angle)
+    {
+        return { angle * (float)std::numbers::pi / 180, axis };
+    }
+
     Eigen::Matrix4f AngleAxisToRotationMatrix(const Eigen::AngleAxisf& angleAxis)
     {
         Eigen::Matrix4f result = Eigen::Matrix4f::Identity();
@@ -52,22 +58,6 @@ namespace Math
         return result;
     }
 
-    Eigen::Matrix4f LookAt(const Eigen::Vector3f& startPos, const Eigen::Vector3f& targetPos, const Eigen::Vector3f& up)
-    {
-        Eigen::Vector3f forwardNormal = (targetPos - startPos).normalized();
-        Eigen::Vector3f upNormal = up.normalized();
-        Eigen::Vector3f rightNormal = forwardNormal.cross(upNormal);
-
-        Eigen::Matrix4f rotateMatrix;
-        rotateMatrix <<
-                     rightNormal.x(),       rightNormal.y(),        rightNormal.z(),        0,
-                     upNormal.x(),          upNormal.y(),           upNormal.z(),           0,
-                     forwardNormal.x(),     forwardNormal.y(),      forwardNormal.z(),      0,
-                     0,                     0,                      0,                      1;
-
-        return rotateMatrix;
-    }
-
     Eigen::Matrix4f MakeModelMatrix(const Eigen::Vector3f& pos, const Eigen::Quaternionf& rot, const Eigen::Vector3f& scale)
     {
         return ScaleMatrix(scale) * QuaternionToRotationMatrix(rot) * TranslateMatrix(pos);
@@ -75,10 +65,12 @@ namespace Math
 
     Eigen::Matrix4f MakeViewMatrix(const Eigen::Vector3f& pos, const Eigen::Quaternionf& rot)
     {
+        Eigen::Matrix4f changeHandedMatrix = Eigen::Matrix4f::Identity();
+        changeHandedMatrix(2, 2) = -1;
         Eigen::Matrix4f translationMatrix = TranslateMatrix(-pos);
         Eigen::Matrix4f rotationMatrix = QuaternionToRotationMatrix(rot.conjugate());
 
-        return rotationMatrix * translationMatrix;
+        return rotationMatrix * translationMatrix * changeHandedMatrix;
     }
 
     Eigen::Matrix4f MakeOrthoProjectionMatrix(RendererApi ndcApi, float nearPlaneHalfX, float nearPlaneHalfY, float nearPlaneZ, float farPlaneZ)
@@ -138,7 +130,7 @@ namespace Math
 
         if (ndcApi == RendererApi::OpenGL)
         {
-            compressMatrix(3, 2) = -1;
+            compressMatrix = -1 * compressMatrix;
         }
 
         return scaleMatrix * translationMatrix * compressMatrix;

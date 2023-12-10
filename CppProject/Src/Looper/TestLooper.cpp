@@ -4,6 +4,7 @@
 #include "Scene/Primitive/PrimitiveObject.h"
 #include "Scene/Component/CompCamera.h"
 #include "Scene/Component/CompRenderer.h"
+#include "Math/Math.h"
 #include "imgui.h"
 
 using namespace Renderer;
@@ -17,9 +18,9 @@ TestLooper::TestLooper()
     pQuadObj->SetPosition({0, 0, 0.11});
     _scene.AddObject(pQuadObj);
 
-
     auto pCamObj = std::make_shared<SceneObject>();
-    pCamObj->AddComponent<CompCamera>(Eigen::Vector2f{1, 1}, -0.1, -10, false);
+    pCamObj->AddComponent<CompCamera>(Eigen::Vector2f{1, 1}, -0.1, -10);
+
     _scene.AddObject(pCamObj);
     _scene.SetMainCamera(pCamObj);
 }
@@ -31,7 +32,7 @@ void TestLooper::RenderLoop()
     {
         auto pCamObj = _scene.GetMainCamera();
         auto pos = pCamObj->GetPosition();
-        pos.x() += 0.1f;
+        pos.x() += 0.001f;
         pCamObj->SetPosition(pos);
     }
 
