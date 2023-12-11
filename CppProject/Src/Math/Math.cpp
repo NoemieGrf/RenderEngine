@@ -95,7 +95,7 @@ namespace Math
         if (ndcApi == RendererApi::OpenGL)
         {
             Eigen::Matrix4f zReverse = Eigen::Matrix4f::Identity();
-            //zReverse(2, 2) = -1;
+            zReverse(2, 2) = -1;
             return zReverse * standardOrthoProj;
         }
 
