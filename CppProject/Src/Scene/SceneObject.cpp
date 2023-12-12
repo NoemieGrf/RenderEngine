@@ -87,7 +87,13 @@ void SceneObject::AddChild(const Ptr<SceneObject>& pChild)
     Eigen::Quaternionf diffLocalRotation = GetWorldRotation().inverse() * oldWorldRotation;
     pChild->SetRotation(diffLocalRotation);
 
-    Eigen::Vector3f diffLocalScale = oldWorldScale / GetWorldScale();
+    const Eigen::Vector3f& worldScale = GetWorldScale();
+    Eigen::Vector3f diffLocalScale = Eigen::Vector3f{
+        oldWorldScale.x() / worldScale.x(),
+        oldWorldScale.y() / worldScale.y(),
+        oldWorldScale.z() / worldScale.z()
+    };
+
     pChild->SetScale(diffLocalScale);
 }
 
@@ -127,4 +133,21 @@ void SceneObject::OnParentScaleChanged()
         if (pComp != nullptr)
             pComp->OnScaleSet();
     }
+}
+const Eigen::Vector3f& SceneObject::GetWorldPosition() const
+{
+    // todo
+    return {};
+}
+
+const Eigen::Quaternionf& SceneObject::GetWorldRotation() const
+{
+    // todo
+    return {};
+}
+
+const Eigen::Vector3f& SceneObject::GetWorldScale() const
+{
+    // todo
+    return {};
 }

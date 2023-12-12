@@ -13,6 +13,7 @@ namespace Renderer
         InputLayout() = default;
         InputLayout(const std::initializer_list<InputLayoutElement>& inputLayout);
         explicit InputLayout(std::vector<InputLayoutElement>&& inputLayout);
+        InputLayout& operator=(const InputLayout& rhs);
         InputLayout& operator=(InputLayout&& rhs) noexcept ;
 
     public:

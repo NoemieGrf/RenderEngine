@@ -43,4 +43,11 @@ namespace Renderer
             _stride += eachLayout.size;
         }
     }
+
+    InputLayout& InputLayout::operator=(const InputLayout& rhs)
+    {
+        _layout = rhs._layout;
+        _stride = rhs._stride;
+        return *this;
+    }
 }
