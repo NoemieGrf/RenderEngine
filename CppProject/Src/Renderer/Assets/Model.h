@@ -12,6 +12,9 @@ namespace Renderer
     public:
         friend class AssetsPool<Model>;
 
+    public:
+        const std::unordered_map<std::string, Ptr<Mesh>>& GetMeshMap() const;
+
     private:
         void Load(const std::string& path);
 

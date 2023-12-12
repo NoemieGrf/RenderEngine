@@ -31,7 +31,7 @@ void TestLooper::RenderLoop()
     if (Input::Keyboard::IsKeyDown(Input::KeyCode::A))
     {
         auto pCamObj = _scene.GetMainCamera();
-        auto pos = pCamObj->GetPosition();
+        auto pos = pCamObj->GetLocalPosition();
         pos.x() += 0.001f;
         pCamObj->SetPosition(pos);
     }

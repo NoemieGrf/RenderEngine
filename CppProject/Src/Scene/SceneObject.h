@@ -1,7 +1,6 @@
 #pragma once
 
 #include <eigen/Eigen>
-#include <unordered_map>
 #include "Define/Define.h"
 #include "Scene/Component/Component.h"
 #include "Scene/Component/ComponentType.h"
@@ -9,9 +8,21 @@
 class SceneObject
 {
 public:
-    const Eigen::Vector3f& GetPosition() const;
-    const Eigen::Quaternionf& GetRotation() const;
-    const Eigen::Vector3f& GetScale() const;
+    // name
+    const std::string& GetName() const;
+    void SetName(const std::string& name);
+
+    // relation
+    void AddChild(const Ptr<SceneObject>& pChild);
+    const uset<Ptr<SceneObject>>& GetAllChildren();
+
+    // transform
+    const Eigen::Vector3f& GetLocalPosition() const;
+    const Eigen::Vector3f& GetWorldPosition() const;
+    const Eigen::Quaternionf& GetLocalRotation() const;
+    const Eigen::Quaternionf& GetWorldRotation() const;
+    const Eigen::Vector3f& GetLocalScale() const;
+    const Eigen::Vector3f& GetWorldScale() const;
     const Eigen::Matrix4f& GetModelMatrix();
 
     void SetPosition(const Eigen::Vector3f& position);
@@ -19,25 +30,24 @@ public:
     void SetScale(const Eigen::Vector3f& scale);
 
     template<class T, class... Types>
-    void AddComponent(Types&&... Args)
-    {
-        ComponentType t = T::GetType();
-        Ptr<Component> pComp = DynamicCast<Component>(std::make_shared<T>(std::forward<Types&&>(Args)...));
-        pComp->SetSceneObject(this);
-        pComp->OnPositionSet();
-        pComp->OnRotationSet();
-        pComp->OnScaleSet();
-        _componentMap[t] = pComp;
-    }
+    void AddComponent(Types&&... Args);
 
     template<class T>
-    Ptr<T> GetComponent()
-    {
-        ComponentType t = T::GetType();
-        return DynamicCast<T>(_componentMap[t]);
-    }
+    Ptr<T> GetComponent();
 
 private:
+    void OnParentPositionChanged();
+    void OnParentRotationChanged();
+    void OnParentScaleChanged();
+
+private:
+    // name
+    std::string _name;
+
+    // relation
+    Ptr<SceneObject> _parentObject = nullptr;
+    uset<Ptr<SceneObject>> _childrenObjects;
+
     // transform
     Eigen::Vector3f _position = Eigen::Vector3f::Zero();
     Eigen::Quaternionf _rotation = Eigen::Quaternionf::Identity();
@@ -50,3 +60,22 @@ private:
     // component map
     umap<ComponentType, Ptr<Component>> _componentMap;
 };
+
+template<class T, class... Types>
+void SceneObject::AddComponent(Types&&... Args)
+{
+    ComponentType t = T::GetType();
+    Ptr<Component> pComp = DynamicCast<Component>(std::make_shared<T>(std::forward<Types&&>(Args)...));
+    pComp->SetSceneObject(this);
+    pComp->OnPositionSet();
+    pComp->OnRotationSet();
+    pComp->OnScaleSet();
+    _componentMap[t] = pComp;
+}
+
+template<class T>
+Ptr<T> SceneObject::GetComponent()
+{
+    ComponentType t = T::GetType();
+    return DynamicCast<T>(_componentMap[t]);
+}

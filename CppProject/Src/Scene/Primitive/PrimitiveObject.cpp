@@ -2,6 +2,8 @@
 #include "Scene/Component/CompRenderer.h"
 #include "Renderer/Buffer/InputAssemble.h"
 #include "Renderer/Material/Material.h"
+#include "Renderer/Assets/AssetsPool.hpp"
+#include "Renderer/Assets/Model.h"
 
 static constexpr std::array<float, 4 * (3 + 2)> QuadVert =  {
         /* left bottom */  -0.5f, -0.5f, 0.0f, /* UV */ 0.0f, 0.0f,
@@ -35,5 +37,6 @@ Ptr<SceneObject> PrimitiveObject::CreateQuad()
 
 Ptr<SceneObject> PrimitiveObject::CreateBox()
 {
-
+    auto pModel = Renderer::AssetsPool<Renderer::Model>::Get("Assets/Model/Cube.obj");
+    auto allMesh = pModel->GetMeshMap();
 }

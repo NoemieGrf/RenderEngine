@@ -40,7 +40,7 @@ const Eigen::Matrix4f& CompCamera::GetViewMatrix()
     if (_needUpdateViewMatrix)
     {
         _needUpdateViewMatrix = false;
-        _viewMatrix = Math::MakeViewMatrix(_pObject->GetPosition(), _pObject->GetRotation());
+        _viewMatrix = Math::MakeViewMatrix(_pObject->GetWorldPosition(), _pObject->GetWorldRotation());
     }
 
     return _viewMatrix;

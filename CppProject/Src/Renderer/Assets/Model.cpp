@@ -158,5 +158,9 @@ namespace Renderer
             assert(pMesh->_vertexData.size() == _vertexData.size());
         }
     }
+    const std::unordered_map<std::string, Ptr<Mesh>>& Model::GetMeshMap() const
+    {
+        return _meshMap;
+    }
 }
 
