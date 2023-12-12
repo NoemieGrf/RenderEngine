@@ -13,10 +13,13 @@ namespace Renderer
         friend class Model;
 
     public:
+        const std::vector<float>& GetVertexData() const;
+        const std::vector<unsigned int>& GetIndexData() const;
+        const InputLayout& GetLayout() const;
 
     private:
         std::vector<float> _vertexData;
-        std::vector<int> _indexData;
+        std::vector<unsigned int> _indexData;
         InputLayout _dataLayout;
     };
 }

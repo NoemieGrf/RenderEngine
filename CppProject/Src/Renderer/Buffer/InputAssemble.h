@@ -5,6 +5,7 @@
 #include "Define/Define.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "Renderer/Assets/Mesh.h"
 
 namespace Renderer
 {
@@ -33,5 +34,6 @@ namespace Renderer
 
     public:
         static Ptr<InputAssemble> Create();
+        static Ptr<InputAssemble> Create(const Ptr<Mesh>& pMesh);
     };
 }

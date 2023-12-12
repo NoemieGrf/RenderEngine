@@ -23,6 +23,20 @@ namespace Renderer
         return nullptr;
     }
 
+    Ptr<InputAssemble> InputAssemble::Create(const Ptr<Mesh>& pMesh)
+    {
+        Ptr<InputAssemble> pInputAssemble = Create();
+
+        const auto& vertexData = pMesh->GetVertexData();
+        const auto& indexData = pMesh->GetIndexData();
+
+        pInputAssemble->SetVertexBuffer(vertexData.data(), vertexData.size());
+        pInputAssemble->SetIndexBuffer(indexData.data(), indexData.size());
+        pInputAssemble->SetInputLayout(pMesh->GetLayout());
+
+        return pInputAssemble;
+    }
+
     void InputAssemble::SetInputLayout(const InputLayout& layout)
     {
         _inputLayout = layout;
