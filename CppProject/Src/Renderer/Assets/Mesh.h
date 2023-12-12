@@ -16,7 +16,7 @@ namespace Renderer
 
     private:
         std::vector<float> _vertexData;
-        std::vector<float> _indexData;
+        std::vector<int> _indexData;
         InputLayout _dataLayout;
     };
 }

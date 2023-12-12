@@ -1,3 +1,4 @@
+#include <cassert>
 #include "Model.h"
 #include "tinyobjloader/tiny_obj_loader.h"
 #include "Util/Logger/Logger.h"
@@ -52,68 +53,109 @@ namespace Renderer
             }
         };
 
-        std::vector<UniqueVertex> _vertexData;
-        std::vector<float> _vertexBufferData;
-        std::vector<int> _indexData;
-        std::unordered_map<UniqueVertex, int, UniqueVertexHash> _vertexToIndexMap;
-
-        // for each single shape
-        for (const auto& singleShape: shapes)
+        for (int shapeIndex = 0; shapeIndex < shapes.size(); shapeIndex++)
         {
-            singleShape.name;
-            const auto& singleShapeMesh = singleShape.mesh;
+            // May not mesh
+            if (shapes[shapeIndex].mesh.indices.empty())
+                continue;
 
+            // Create mesh
+            std::string meshName = shapes[shapeIndex].name;
+            if (meshName.empty())
+                meshName = std::to_string(shapeIndex);
+
+            Ptr<Mesh> pMesh = std::make_shared<Mesh>();
+            _meshMap[meshName] = pMesh;
+
+            // Prepare
+            const auto& singleMeshData = shapes[shapeIndex].mesh;
+            std::vector<UniqueVertex> _vertexData;
+            std::unordered_map<UniqueVertex, int, UniqueVertexHash> _vertexToIndexMap;
+            pMesh->_vertexData.clear();
+            pMesh->_indexData.clear();
             size_t indexOffset = 0;
 
-            // for each face
-            for (auto vertexNum: singleShapeMesh.num_face_vertices)
+            // Check layout
+            const auto& firstFaceFirstVertex = singleMeshData.indices[0];
+            bool meshHasNormal = firstFaceFirstVertex.normal_index >= 0;
+            bool meshHasTexCoord = firstFaceFirstVertex.texcoord_index >= 0;
             {
-                // for each vertex
-                for (size_t i = 0; i < vertexNum; i++)
+                std::vector<InputLayoutElement> layoutElements;
+                layoutElements.emplace_back(Renderer::ShaderDataType::Float3, "a_Position");
+
+                if (meshHasNormal)
+                    layoutElements.emplace_back(Renderer::ShaderDataType::Float3, "a_Normal");
+
+                if (meshHasTexCoord)
+                    layoutElements.emplace_back(Renderer::ShaderDataType::Float2, "a_TexCoord");
+
+                pMesh->_dataLayout = InputLayout(std::move(layoutElements));
+            }
+
+            // For each face
+            for (auto faceVertexNum: singleMeshData.num_face_vertices)
+            {
+                // For each face vertex
+                for (size_t i = 0; i < faceVertexNum; i++)
                 {
-                    tinyobj::index_t index = singleShapeMesh.indices[indexOffset + i];
+                    tinyobj::index_t index = singleMeshData.indices[indexOffset + i];
 
                     UniqueVertex uniqueVertex { index.vertex_index, index.normal_index, index.vertex_index };
 
-                    // same vertex already exists, add index to index buffer, no more vertex data
+                    // Same vertex already exists, add index to index buffer, no more vertex data
                     if (_vertexToIndexMap.contains(uniqueVertex))
                     {
-                        _indexData.push_back(_vertexToIndexMap[uniqueVertex]);
+                        pMesh->_indexData.push_back(_vertexToIndexMap[uniqueVertex]);
+                        continue;
                     }
-                    else
+
+                    _vertexData.push_back(uniqueVertex);
+                    _vertexToIndexMap[uniqueVertex] = _vertexData.size();
+                    pMesh->_indexData.push_back(_vertexToIndexMap[uniqueVertex]);
+
+                    // Add vertex data
+                    pMesh->_vertexData.push_back(attrib.vertices[3 * index.vertex_index + 0]);
+                    pMesh->_vertexData.push_back(attrib.vertices[3 * index.vertex_index + 1]);
+                    pMesh->_vertexData.push_back(attrib.vertices[3 * index.vertex_index + 2]);
+
+                    // Add normal data
+                    if (meshHasNormal)
                     {
-                        _vertexData.push_back(uniqueVertex);
-                        _vertexToIndexMap[uniqueVertex] = _vertexData.size();
+                        if (index.normal_index >= 0)
+                        {
+                            pMesh->_vertexData.push_back(attrib.normals[3 * index.normal_index + 0]);
+                            pMesh->_vertexData.push_back(attrib.normals[3 * index.normal_index + 1]);
+                            pMesh->_vertexData.push_back(attrib.normals[3 * index.normal_index + 2]);
+                        }
+                        else
+                        {
+                            pMesh->_vertexData.push_back(0);
+                            pMesh->_vertexData.push_back(0);
+                            pMesh->_vertexData.push_back(0);
+                        }
                     }
 
-
-
-
-                    std::array<float, 8> vertexData { 0 };
-
-                    // vertex
-                    vertexData[0] = attrib.vertices[3 * index.vertex_index + 0];
-                    vertexData[1] = attrib.vertices[3 * index.vertex_index + 1];
-                    vertexData[2] = attrib.vertices[3 * index.vertex_index + 2];
-
-                    // normal (if `normal_index` is zero or positive. negative = no normal data)
-                    if (index.normal_index >= 0)
+                    // Add tex coord
+                    if (meshHasTexCoord)
                     {
-                        vertexData[3] = attrib.normals[3 * index.normal_index + 0];
-                        vertexData[4] = attrib.normals[3 * index.normal_index + 1];
-                        vertexData[5] = attrib.normals[3 * index.normal_index + 2];
+                        if (index.texcoord_index >= 0)
+                        {
+                            pMesh->_vertexData.push_back(attrib.texcoords[3 * index.texcoord_index + 0]);
+                            pMesh->_vertexData.push_back(attrib.texcoords[3 * index.texcoord_index + 1]);
+                        }
+                        else
+                        {
+                            pMesh->_vertexData.push_back(0);
+                            pMesh->_vertexData.push_back(0);
+                        }
                     }
 
-                    // tex coord (if `texcoord_index` is zero or positive. negative = no tex coord data)
-                    if (index.texcoord_index >= 0)
-                    {
-                        vertexData[6] = attrib.texcoords[2 * index.texcoord_index + 0];
-                        vertexData[7] = attrib.texcoords[2 * index.texcoord_index + 1];
-                    }
-
-                    indexOffset += vertexNum;
+                    indexOffset += faceVertexNum;
                 }
             }
+
+            // Mesh load finish
+            assert(pMesh->_vertexData.size() == _vertexData.size());
         }
     }
 }
