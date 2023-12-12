@@ -1,3 +1,4 @@
+
 #include "Mesh.h"
 #include "tinyobjloader/tiny_obj_loader.h"
 #include "Util/Logger/Logger.h"
@@ -26,47 +27,93 @@ namespace Renderer
         if (!reader.Warning().empty())
             Util::Logger::LogWarn("Load obj at `{}`: {}", path, reader.Warning());
 
-        auto& attrib = reader.GetAttrib();
-        auto& shapes = reader.GetShapes();
-        auto& material = reader.GetMaterials();
+        const auto& attrib = reader.GetAttrib();
+        const auto& shapes = reader.GetShapes();
 
-        for (size_t s = 0; s < shapes.size(); s++)
+        struct UniqueVertex
         {
-            size_t index_offset = 0;
+            int vertexIndex;
+            int normalIndex;
+            int texIndex;
 
-            for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++)
+            bool operator==(const UniqueVertex& other) const
             {
-                size_t fv = size_t(shapes[s].mesh.num_face_vertices[f]);
+                return vertexIndex == other.vertexIndex
+                       && normalIndex == other.normalIndex
+                       && texIndex == other.texIndex;
+            }
+        };
 
-                // Loop over vertices in the face.
-                for (size_t v = 0; v < fv; v++)
+        struct UniqueVertexHash
+        {
+            size_t operator() (const UniqueVertex& data) const
+            {
+                return std::hash<int>()(data.vertexIndex)
+                       ^ std::hash<int>()(data.normalIndex)
+                       ^ std::hash<int>()(data.texIndex);
+            }
+        };
+
+        std::vector<UniqueVertex> _vertexData;
+        std::vector<float> _vertexBufferData;
+        std::vector<int> _indexData;
+        std::unordered_map<UniqueVertex, int, UniqueVertexHash> _vertexToIndexMap;
+
+        // for each single shape
+        for (const auto& singleShape: shapes)
+        {
+            const auto& singleShapeMesh = singleShape.mesh;
+
+            size_t indexOffset = 0;
+
+            // for each face
+            for (auto vertexNum: singleShapeMesh.num_face_vertices)
+            {
+                // for each vertex
+                for (size_t i = 0; i < vertexNum; i++)
                 {
-                    // access to vertex
-                    tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
-                    tinyobj::real_t vx = attrib.vertices[3 * size_t(idx.vertex_index) + 0];
-                    tinyobj::real_t vy = attrib.vertices[3 * size_t(idx.vertex_index) + 1];
-                    tinyobj::real_t vz = attrib.vertices[3 * size_t(idx.vertex_index) + 2];
+                    tinyobj::index_t index = singleShapeMesh.indices[indexOffset + i];
 
-                    // Check if `normal_index` is zero or positive. negative = no normal data
-                    if (idx.normal_index >= 0)
+                    UniqueVertex uniqueVertex { index.vertex_index, index.normal_index, index.vertex_index };
+
+                    // same vertex already exists, add index to index buffer, no more vertex data
+                    if (_vertexToIndexMap.contains(uniqueVertex))
                     {
-                        tinyobj::real_t nx = attrib.normals[3 * size_t(idx.normal_index) + 0];
-                        tinyobj::real_t ny = attrib.normals[3 * size_t(idx.normal_index) + 1];
-                        tinyobj::real_t nz = attrib.normals[3 * size_t(idx.normal_index) + 2];
+                        _indexData.push_back(_vertexToIndexMap[uniqueVertex]);
+                    }
+                    else
+                    {
+                        _vertexData.push_back(uniqueVertex);
+                        _vertexToIndexMap[uniqueVertex] = _vertexData.size();
                     }
 
-                    // Check if `texcoord_index` is zero or positive. negative = no texcoord data
-                    if (idx.texcoord_index >= 0)
+
+
+
+                    std::array<float, 8> vertexData { 0 };
+
+                    // vertex
+                    vertexData[0] = attrib.vertices[3 * index.vertex_index + 0];
+                    vertexData[1] = attrib.vertices[3 * index.vertex_index + 1];
+                    vertexData[2] = attrib.vertices[3 * index.vertex_index + 2];
+
+                    // normal (if `normal_index` is zero or positive. negative = no normal data)
+                    if (index.normal_index >= 0)
                     {
-                        tinyobj::real_t tx = attrib.texcoords[2 * size_t(idx.texcoord_index) + 0];
-                        tinyobj::real_t ty = attrib.texcoords[2 * size_t(idx.texcoord_index) + 1];
+                        vertexData[3] = attrib.normals[3 * index.normal_index + 0];
+                        vertexData[4] = attrib.normals[3 * index.normal_index + 1];
+                        vertexData[5] = attrib.normals[3 * index.normal_index + 2];
                     }
+
+                    // tex coord (if `texcoord_index` is zero or positive. negative = no tex coord data)
+                    if (index.texcoord_index >= 0)
+                    {
+                        vertexData[6] = attrib.texcoords[2 * index.texcoord_index + 0];
+                        vertexData[7] = attrib.texcoords[2 * index.texcoord_index + 1];
+                    }
+
+                    indexOffset += vertexNum;
                 }
-
-                index_offset += fv;
-
-                // per-face material
-                shapes[s].mesh.material_ids[f];
             }
         }
     }
