@@ -16,6 +16,13 @@ namespace Renderer
         UpdateStride();
     }
 
+    InputLayout& InputLayout::operator=(InputLayout&& rhs) noexcept
+    {
+        _stride = rhs._stride;
+        _layout = std::move(rhs._layout);
+        return *this;
+    }
+
     const std::vector<InputLayoutElement>& InputLayout::GetLayout() const
     {
         return _layout;
