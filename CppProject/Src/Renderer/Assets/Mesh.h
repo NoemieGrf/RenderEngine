@@ -10,15 +10,13 @@ namespace Renderer
 {
     class Mesh
     {
+        friend class Model;
+
     public:
-        friend class AssetsPool<Mesh>;
-
 
     private:
-        void Load(const std::string& path);
-
-    private:
-        std::vector<float> _data;
-
+        std::vector<float> _vertexData;
+        std::vector<float> _indexData;
+        InputLayout _dataLayout;
     };
 }
