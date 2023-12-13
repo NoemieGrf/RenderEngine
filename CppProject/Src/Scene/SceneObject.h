@@ -18,11 +18,11 @@ public:
 
     // transform
     const Eigen::Vector3f& GetLocalPosition() const;
-    const Eigen::Vector3f& GetWorldPosition() const;
+    Eigen::Vector3f GetWorldPosition() const;
     const Eigen::Quaternionf& GetLocalRotation() const;
-    const Eigen::Quaternionf& GetWorldRotation() const;
+    Eigen::Quaternionf GetWorldRotation() const;
     const Eigen::Vector3f& GetLocalScale() const;
-    const Eigen::Vector3f& GetWorldScale() const;
+    Eigen::Vector3f GetWorldScale() const;
     const Eigen::Matrix4f& GetModelMatrix();
 
     void SetPosition(const Eigen::Vector3f& position);

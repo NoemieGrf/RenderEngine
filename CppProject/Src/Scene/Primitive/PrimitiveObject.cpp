@@ -5,38 +5,48 @@
 #include "Renderer/Assets/AssetsPool.hpp"
 #include "Renderer/Assets/Model.h"
 
-static constexpr std::array<float, 4 * (3 + 2)> QuadVert =  {
-        /* left bottom */  -0.5f, -0.5f, 0.0f, /* UV */ 0.0f, 0.0f,
-        /* right bottom */  0.5f, -0.5f, 0.0f, /* UV */ 1.0f, 0.0f,
-        /* right top */     0.5f,  0.5f, 0.0f, /* UV */ 1.0f, 1.0f,
-        /* left top */     -0.5f,  0.5f, 0.0f, /* UV */ 0.0f, 1.0f
-};
-
-static constexpr std::array<unsigned int, 6> QuadIndices = {0, 1, 2, 0, 2, 3 };
-
-static Renderer::InputLayout QuadVertLayout = {
-        Renderer::InputLayoutElement {Renderer::ShaderDataType::Float3, "a_Position"},
-        Renderer::InputLayoutElement {Renderer::ShaderDataType::Float2, "a_TexCoord"},
-};
-
 Ptr<SceneObject> PrimitiveObject::CreateQuad()
 {
-    Ptr<SceneObject> pObj = std::make_shared<SceneObject>();
-
-    auto pInputAssemble = Renderer::InputAssemble::Create();
-    pInputAssemble->SetInputLayout(QuadVertLayout);
-    pInputAssemble->SetVertexBuffer(QuadVert.data(), QuadVert.size());
-    pInputAssemble->SetIndexBuffer(QuadIndices.data(), QuadIndices.size());
-
-    auto pDefaultMaterial = std::make_shared<Renderer::Material>("Assets/Material/DefaultMaterial.json");
-
-    pObj->AddComponent<CompRenderer>(pInputAssemble, pDefaultMaterial);
-
-    return pObj;
+    return LoadFromObj("Assets/Model/Quad.obj");
 }
 
 Ptr<SceneObject> PrimitiveObject::CreateBox()
 {
-    auto pModel = Renderer::AssetsPool<Renderer::Model>::Get("Assets/Model/Cube.obj");
+    return LoadFromObj("Assets/Model/Cube.obj");
+}
+
+Ptr<SceneObject> PrimitiveObject::LoadFromObj(const std::string& path)
+{
+    auto pModel = Renderer::AssetsPool<Renderer::Model>::Get(path);
     auto allMesh = pModel->GetMeshMap();
+
+    if (allMesh.empty())
+        return nullptr;
+
+    if (allMesh.size() == 1)
+    {
+        Ptr<SceneObject> pObj = std::make_shared<SceneObject>();
+
+        auto pInputAssemble = Renderer::InputAssemble::Create(allMesh.begin()->second);
+        auto pDefaultMaterial = std::make_shared<Renderer::Material>("Assets/Material/DefaultMaterial.json");
+        pObj->AddComponent<CompRenderer>(pInputAssemble, pDefaultMaterial);
+
+        return pObj;
+    }
+    else
+    {
+        Ptr<SceneObject> pParentObj = std::make_shared<SceneObject>();
+        for (const auto& [name, mesh]: allMesh)
+        {
+            Ptr<SceneObject> pObj = std::make_shared<SceneObject>();
+
+            auto pInputAssemble = Renderer::InputAssemble::Create(allMesh.begin()->second);
+            auto pDefaultMaterial = std::make_shared<Renderer::Material>("Assets/Material/DefaultMaterial.json");
+            pObj->AddComponent<CompRenderer>(pInputAssemble, pDefaultMaterial);
+
+            pParentObj->AddChild(pObj);
+        }
+
+        return pParentObj;
+    }
 }

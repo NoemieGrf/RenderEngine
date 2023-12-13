@@ -92,9 +92,9 @@ void SceneObject::SetName(const std::string& name)
 
 void SceneObject::AddChild(const Ptr<SceneObject>& pChild)
 {
-    const Eigen::Vector3f& oldWorldPosition = pChild->GetWorldPosition();
-    const Eigen::Quaternionf& oldWorldRotation = pChild->GetWorldRotation();
-    const Eigen::Vector3f& oldWorldScale = pChild->GetWorldScale();
+    Eigen::Vector3f oldWorldPosition = pChild->GetWorldPosition();
+    Eigen::Quaternionf oldWorldRotation = pChild->GetWorldRotation();
+    Eigen::Vector3f oldWorldScale = pChild->GetWorldScale();
 
     if (!_childrenObjects.contains(pChild))
         _childrenObjects.insert(pChild);
@@ -152,20 +152,33 @@ void SceneObject::OnParentScaleChanged()
             pComp->OnScaleSet();
     }
 }
-const Eigen::Vector3f& SceneObject::GetWorldPosition() const
+Eigen::Vector3f SceneObject::GetWorldPosition() const
 {
-    // todo
-    return {};
+    if (_parentObject == nullptr)
+        return _position;
+    else
+        return _position + _parentObject->GetWorldPosition();
 }
 
-const Eigen::Quaternionf& SceneObject::GetWorldRotation() const
+Eigen::Quaternionf SceneObject::GetWorldRotation() const
 {
-    // todo
-    return {};
+    if (_parentObject == nullptr)
+        return _rotation;
+    else
+        return _parentObject->GetWorldRotation() * _rotation;
 }
 
-const Eigen::Vector3f& SceneObject::GetWorldScale() const
+Eigen::Vector3f SceneObject::GetWorldScale() const
 {
-    // todo
-    return {};
+    if (_parentObject == nullptr)
+        return _scale;
+    else
+    {
+        Eigen::Vector3f parentScale = _parentObject->GetWorldScale();
+        return Eigen::Vector3f {
+                _scale.x() * parentScale.x(),
+                _scale.y() * parentScale.y(),
+                _scale.z() * parentScale.z()
+        };
+    }
 }
