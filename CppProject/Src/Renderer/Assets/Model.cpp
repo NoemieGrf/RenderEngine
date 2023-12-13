@@ -109,8 +109,8 @@ namespace Renderer
                         continue;
                     }
 
-                    _vertexData.push_back(uniqueVertex);
                     _vertexToIndexMap[uniqueVertex] = _vertexData.size();
+                    _vertexData.push_back(uniqueVertex);
                     pMesh->_indexData.push_back(_vertexToIndexMap[uniqueVertex]);
 
                     // Add vertex data
@@ -140,8 +140,8 @@ namespace Renderer
                     {
                         if (index.texcoord_index >= 0)
                         {
-                            pMesh->_vertexData.push_back(attrib.texcoords[3 * index.texcoord_index + 0]);
-                            pMesh->_vertexData.push_back(attrib.texcoords[3 * index.texcoord_index + 1]);
+                            pMesh->_vertexData.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
+                            pMesh->_vertexData.push_back(attrib.texcoords[2 * index.texcoord_index + 1]);
                         }
                         else
                         {
@@ -149,13 +149,13 @@ namespace Renderer
                             pMesh->_vertexData.push_back(0);
                         }
                     }
-
-                    indexOffset += faceVertexNum;
                 }
+
+                indexOffset += faceVertexNum;
             }
 
             // Mesh load finish
-            assert(pMesh->_vertexData.size() == _vertexData.size());
+            assert(pMesh->_vertexData.size() * sizeof(float) == _vertexData.size() * pMesh->_dataLayout.GetStride());
         }
     }
     const std::unordered_map<std::string, Ptr<Mesh>>& Model::GetMeshMap() const

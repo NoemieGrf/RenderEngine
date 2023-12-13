@@ -35,6 +35,7 @@ namespace Renderer
 
     void InputLayout::UpdateStride()
     {
+        _stride = 0;
         unsigned int offset = 0;
         for (auto& eachLayout : _layout)
         {
