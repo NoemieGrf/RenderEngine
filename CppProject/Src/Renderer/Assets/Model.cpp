@@ -79,18 +79,11 @@ namespace Renderer
             const auto& firstFaceFirstVertex = singleMeshData.indices[0];
             bool meshHasNormal = firstFaceFirstVertex.normal_index >= 0;
             bool meshHasTexCoord = firstFaceFirstVertex.texcoord_index >= 0;
-            {
-                std::vector<InputLayoutElement> layoutElements;
-                layoutElements.emplace_back(Renderer::ShaderDataType::Float3, "a_Position");
-
-                if (meshHasNormal)
-                    layoutElements.emplace_back(Renderer::ShaderDataType::Float3, "a_Normal");
-
-                if (meshHasTexCoord)
-                    layoutElements.emplace_back(Renderer::ShaderDataType::Float2, "a_TexCoord");
-
-                pMesh->_dataLayout = InputLayout(std::move(layoutElements));
-            }
+            pMesh->_dataLayout = InputLayout({
+                    InputLayoutElement{ Renderer::ShaderDataType::Float3, "a_Position" },
+                    InputLayoutElement{ Renderer::ShaderDataType::Float3, "a_Normal" },
+                    InputLayoutElement{ Renderer::ShaderDataType::Float2, "a_TexCoord" }
+            });
 
             // For each face
             for (auto faceVertexNum: singleMeshData.num_face_vertices)
@@ -119,35 +112,29 @@ namespace Renderer
                     pMesh->_vertexData.push_back(attrib.vertices[3 * index.vertex_index + 2]);
 
                     // Add normal data
-                    if (meshHasNormal)
+                    if (meshHasNormal && index.normal_index >= 0)
                     {
-                        if (index.normal_index >= 0)
-                        {
-                            pMesh->_vertexData.push_back(attrib.normals[3 * index.normal_index + 0]);
-                            pMesh->_vertexData.push_back(attrib.normals[3 * index.normal_index + 1]);
-                            pMesh->_vertexData.push_back(attrib.normals[3 * index.normal_index + 2]);
-                        }
-                        else
-                        {
-                            pMesh->_vertexData.push_back(0);
-                            pMesh->_vertexData.push_back(0);
-                            pMesh->_vertexData.push_back(0);
-                        }
+                        pMesh->_vertexData.push_back(attrib.normals[3 * index.normal_index + 0]);
+                        pMesh->_vertexData.push_back(attrib.normals[3 * index.normal_index + 1]);
+                        pMesh->_vertexData.push_back(attrib.normals[3 * index.normal_index + 2]);
+                    }
+                    else
+                    {
+                        pMesh->_vertexData.push_back(0);
+                        pMesh->_vertexData.push_back(0);
+                        pMesh->_vertexData.push_back(0);
                     }
 
                     // Add tex coord
-                    if (meshHasTexCoord)
+                    if (meshHasTexCoord && index.texcoord_index >= 0)
                     {
-                        if (index.texcoord_index >= 0)
-                        {
-                            pMesh->_vertexData.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
-                            pMesh->_vertexData.push_back(attrib.texcoords[2 * index.texcoord_index + 1]);
-                        }
-                        else
-                        {
-                            pMesh->_vertexData.push_back(0);
-                            pMesh->_vertexData.push_back(0);
-                        }
+                        pMesh->_vertexData.push_back(attrib.texcoords[2 * index.texcoord_index + 0]);
+                        pMesh->_vertexData.push_back(attrib.texcoords[2 * index.texcoord_index + 1]);
+                    }
+                    else
+                    {
+                        pMesh->_vertexData.push_back(0);
+                        pMesh->_vertexData.push_back(0);
                     }
                 }
 
