@@ -37,6 +37,12 @@ void SceneObject::SetPosition(const Eigen::Vector3f& position)
         if (pComp != nullptr)
             pComp->OnPositionSet();
     }
+
+    for (auto& childObj: _childrenObjects)
+    {
+        if (childObj != nullptr)
+            childObj->OnParentPositionChanged();
+    }
 }
 
 void SceneObject::SetRotation(const Eigen::Quaternionf& rotation)
@@ -49,6 +55,12 @@ void SceneObject::SetRotation(const Eigen::Quaternionf& rotation)
         if (pComp != nullptr)
             pComp->OnRotationSet();
     }
+
+    for (auto& childObj: _childrenObjects)
+    {
+        if (childObj != nullptr)
+            childObj->OnParentRotationChanged();
+    }
 }
 
 void SceneObject::SetScale(const Eigen::Vector3f& scale)
@@ -60,6 +72,12 @@ void SceneObject::SetScale(const Eigen::Vector3f& scale)
     {
         if (pComp != nullptr)
             pComp->OnScaleSet();
+    }
+
+    for (auto& childObj: _childrenObjects)
+    {
+        if (childObj != nullptr)
+            childObj->OnParentScaleChanged();
     }
 }
 const std::string& SceneObject::GetName() const
