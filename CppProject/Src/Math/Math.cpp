@@ -22,7 +22,7 @@ namespace Math
 
     Eigen::Quaternionf AngleAxisToQuaternion(const Eigen::AngleAxisf& angleAxis)
     {
-        return Eigen::Quaternionf(angleAxis);
+        return Eigen::Quaternionf(angleAxis).normalized();
     }
 
     Eigen::AngleAxisf QuaternionToAngleAxis(const Eigen::Quaternionf& q)

@@ -15,9 +15,14 @@ void Time::Update()
     _frameTimer.SetNow();
 }
 
-double Time::DeltaTime()
+double Time::DeltaTimeMilliSecond()
 {
     return _deltaTime;
+}
+
+double Time::DeltaTimeSecond()
+{
+    return _deltaTime / 1000;
 }
 
 double Time::TimeSinceBegin()

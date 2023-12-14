@@ -17,6 +17,7 @@ public:
     const Ptr<SceneObject>& GetMainCamera() const;
 
     const std::vector<Ptr<SceneObject>>& GetAllObjects() const;
+    const const Ptr<SceneObject>& FindFirstObjectByName(const std::string& name) const;
 
 private:
     std::vector<Ptr<SceneObject>> _sceneObjects;

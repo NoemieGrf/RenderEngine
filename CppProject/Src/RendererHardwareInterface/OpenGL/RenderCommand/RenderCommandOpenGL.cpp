@@ -106,6 +106,9 @@ namespace Renderer
         // enable depth test
         ::glEnable(GL_DEPTH_TEST);
 
+        // cull face
+        ::glCullFace(GL_BACK);
+
         return true;
     }
 

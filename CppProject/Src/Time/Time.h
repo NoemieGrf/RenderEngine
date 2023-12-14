@@ -8,7 +8,8 @@ class Time: public NonConstructible
 public:
     static void Init();
     static void Update();
-    static double DeltaTime();
+    static double DeltaTimeMilliSecond();
+    static double DeltaTimeSecond();
     static double TimeSinceBegin();
     static double GetFrameTimerElapsed();
 

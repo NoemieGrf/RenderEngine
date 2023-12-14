@@ -7,12 +7,16 @@
 
 Ptr<SceneObject> PrimitiveObject::CreateQuad()
 {
-    return LoadFromObj("Assets/Primitive/Model/Quad.obj");
+    Ptr<SceneObject> obj = LoadFromObj("Assets/Primitive/Model/Quad.obj");
+    obj->SetName("Quad");
+    return obj;
 }
 
 Ptr<SceneObject> PrimitiveObject::CreateCube()
 {
-    return LoadFromObj("Assets/Primitive/Model/Cube.obj");
+    Ptr<SceneObject> obj = LoadFromObj("Assets/Primitive/Model/Cube.obj");
+    obj->SetName("Cube");
+    return obj;
 }
 
 Ptr<SceneObject> PrimitiveObject::LoadFromObj(const std::string& path)

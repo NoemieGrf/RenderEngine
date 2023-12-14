@@ -3,7 +3,7 @@
 #include "Renderer/Buffer/IndexBuffer.h"
 #include "Scene/Primitive/PrimitiveObject.h"
 #include "Scene/Component/CompCamera.h"
-#include "Scene/Component/CompRenderer.h"
+#include "Time/Time.h"
 #include "Math/Math.h"
 #include "imgui.h"
 
@@ -13,10 +13,11 @@ TestLooper::TestLooper()
 {
     _scene.SetRendererPipeline(RendererPipelineType::Forward);
 
-    auto pQuadObj = PrimitiveObject::CreateQuad();
-    pQuadObj->GetComponent<CompRenderer>()->ChangeMaterial(std::make_shared<Material>("Assets/Material/TextureMixtureMat.json"));
+    auto pQuadObj = PrimitiveObject::CreateCube();
+    //pQuadObj->GetComponent<CompRenderer>()->ChangeMaterial(std::make_shared<Material>("Assets/Material/TextureMixtureMat.json"));
     pQuadObj->SetPosition({0, 0, -10});
     pQuadObj->SetScale({0.7f, 0.7f, 1.0f});
+    pQuadObj->SetRotation(Math::AngleAxisToQuaternion(Math::AngleAxis({1, 1, 1}, 30)));
     _scene.AddObject(pQuadObj);
 
     auto pCamObj = std::make_shared<SceneObject>();
@@ -36,6 +37,14 @@ void TestLooper::RenderLoop()
         auto pos = pCamObj->GetLocalPosition();
         pos.x() += 0.001f;
         pCamObj->SetPosition(pos);
+    }
+
+    const auto& pObj = _scene.FindFirstObjectByName("Cube");
+    if (pObj != nullptr)
+    {
+        Eigen::Quaternionf rot = pObj->GetWorldRotation();
+        rot = Math::AngleAxisToQuaternion(Math::AngleAxis({1, 1, 1}, 10 * Time::DeltaTimeSecond())) * rot;
+        pObj->SetRotation(rot);
     }
 
     _scene.Render();
