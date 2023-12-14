@@ -60,7 +60,7 @@ namespace Math
 
     Eigen::Matrix4f MakeModelMatrix(const Eigen::Vector3f& pos, const Eigen::Quaternionf& rot, const Eigen::Vector3f& scale)
     {
-        return ScaleMatrix(scale) * QuaternionToRotationMatrix(rot) * TranslateMatrix(pos);
+        return TranslateMatrix(pos) * QuaternionToRotationMatrix(rot) * ScaleMatrix(scale);
     }
 
     Eigen::Matrix4f MakeViewMatrix(const Eigen::Vector3f& pos, const Eigen::Quaternionf& rot)
