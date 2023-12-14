@@ -29,7 +29,7 @@ namespace Renderer
 
     bool RenderCommandOpenGL::SetUp()
     {
-        HWND hWnd = reinterpret_cast<HWND>(Application::GetWindowHandle());
+        HWND hWnd = static_cast<HWND>(Application::GetWindowHandle());
 
         // init openGL pixel format
         PIXELFORMATDESCRIPTOR pfd =
@@ -91,10 +91,10 @@ namespace Renderer
         ::glDebugMessageCallback(&DebugMessageCallback, nullptr);
 
         // version
-        Util::Logger::LogInfo("OpenGL Version: {}", (const char*)::glGetString(GL_VERSION));
-        Util::Logger::LogInfo("OpenGL Vendor: {}", (const char*)::glGetString(GL_VENDOR));
-        Util::Logger::LogInfo("OpenGL Renderer: {}", (const char*)::glGetString(GL_RENDERER));
-        Util::Logger::LogInfo("OpenGL Shader Version: {}", (const char*)::glGetString(GL_SHADING_LANGUAGE_VERSION));
+        Util::Logger::LogInfo("OpenGL Version: {}", reinterpret_cast<const char*>(::glGetString(GL_VERSION)));
+        Util::Logger::LogInfo("OpenGL Vendor: {}", reinterpret_cast<const char*>(::glGetString(GL_VENDOR)));
+        Util::Logger::LogInfo("OpenGL Renderer: {}", reinterpret_cast<const char*>(::glGetString(GL_RENDERER)));
+        Util::Logger::LogInfo("OpenGL Shader Version: {}", reinterpret_cast<const char*>(::glGetString(GL_SHADING_LANGUAGE_VERSION)));
 
         // set viewport
         ::glViewport(0, 0, Application::GetWindowHeight(), Application::GetWindowWidth());
@@ -117,7 +117,7 @@ namespace Renderer
         ::wglMakeCurrent(nullptr, nullptr);
         ::wglDeleteContext(_pData->_hRC);
 
-        HWND hWnd = reinterpret_cast<HWND>(Application::GetWindowHandle());
+        HWND hWnd = static_cast<HWND>(Application::GetWindowHandle());
         ::ReleaseDC(hWnd, _pData->_hDC);
     }
 

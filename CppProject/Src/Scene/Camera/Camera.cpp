@@ -64,8 +64,8 @@ void Camera::Adjust(const Eigen::Vector2f& nearPlaneRightTop, float nearPlaneZ, 
     _nearPlaneZ = nearPlaneZ;
     _farPlaneZ = farPlaneZ;
 
-    _aspect = (float)_nearPlaneHalfY / _nearPlaneHalfX;
-    _fovRadian = 2 * std::atan((double)_nearPlaneHalfX / (-nearPlaneZ));
+    _aspect = _nearPlaneHalfY / _nearPlaneHalfX;
+    _fovRadian = 2 * std::atan(static_cast<double>(_nearPlaneHalfX) / (-nearPlaneZ));
 
     _needUpdateProjectionMatrix = true;
 }

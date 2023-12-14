@@ -9,8 +9,7 @@ namespace Renderer
 {
     Ptr<Texture2d> Texture2d::Create()
     {
-        auto api = Application::GetRenderApi();
-        switch (api) 
+        switch (Application::GetRenderApi())
         {
             case RendererApi::OpenGL:
                 return std::make_shared<Texture2dOpenGL>();

@@ -125,52 +125,52 @@ LRESULT ApplicationWinImp::OnMsgWmMouseMove(HWND hWnd, UINT msg, WPARAM wParam, 
 
 LRESULT ApplicationWinImp::OnMsgWmLButtonDown(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    POINTS pt = MAKEPOINTS(lParam);
-    Input::Mouse::OnLeftMousePressed(pt.x, pt.y);
+    auto [x, y] = MAKEPOINTS(lParam);
+    Input::Mouse::OnLeftMousePressed(x, y);
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
 LRESULT ApplicationWinImp::OnMsgWmLButtonUp(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    POINTS pt = MAKEPOINTS(lParam);
-    Input::Mouse::OnLeftMouseReleased(pt.x, pt.y);
+    auto [x, y] = MAKEPOINTS(lParam);
+    Input::Mouse::OnLeftMouseReleased(x, y);
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
 LRESULT ApplicationWinImp::OnMsgWmMButtonDown(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    POINTS pt = MAKEPOINTS(lParam);
-    Input::Mouse::OnMiddleMousePressed(pt.x, pt.y);
+    auto [x, y] = MAKEPOINTS(lParam);
+    Input::Mouse::OnMiddleMousePressed(x, y);
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
 LRESULT ApplicationWinImp::OnMsgWmMButtonUp(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    POINTS pt = MAKEPOINTS(lParam);
-    Input::Mouse::OnMiddleMouseReleased(pt.x, pt.y);
+    auto [x, y] = MAKEPOINTS(lParam);
+    Input::Mouse::OnMiddleMouseReleased(x, y);
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
 LRESULT ApplicationWinImp::OnMsgWmRButtonDown(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    POINTS pt = MAKEPOINTS(lParam);
-    Input::Mouse::OnRightMousePressed(pt.x, pt.y);
+    auto [x, y] = MAKEPOINTS(lParam);
+    Input::Mouse::OnRightMousePressed(x, y);
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
 LRESULT ApplicationWinImp::OnMsgWmRButtonUp(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    POINTS pt = MAKEPOINTS(lParam);
-    Input::Mouse::OnRightMouseReleased(pt.x, pt.y);
+    auto [x, y] = MAKEPOINTS(lParam);
+    Input::Mouse::OnRightMouseReleased(x, y);
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
 LRESULT ApplicationWinImp::OnMsgWmMouseWheel(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     // https://learn.microsoft.com/en-us/windows/win32/inputdev/wm-mousewheel
-    POINTS pt = MAKEPOINTS(lParam);
+    auto [x, y] = MAKEPOINTS(lParam);
     int wheelDelta = GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA;
-    Input::Mouse::OnWheelDelta(pt.x, pt.y, wheelDelta);
+    Input::Mouse::OnWheelDelta(x, y, wheelDelta);
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 

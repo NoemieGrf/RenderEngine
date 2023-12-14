@@ -48,7 +48,7 @@ namespace Input
 
         inline static std::unordered_set<KeyCode> _pressingKey;
         inline static std::unordered_set<KeyCode> _releasingKey;
-        inline static std::array<bool, (int)KeyCode::Count> _keyState;
+        inline static std::array<bool, static_cast<int>(KeyCode::Count)> _keyState;
         inline static std::queue<Event> _eventQueue;
     };
 }

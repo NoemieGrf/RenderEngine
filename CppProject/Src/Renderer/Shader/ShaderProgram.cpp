@@ -7,7 +7,7 @@ namespace Renderer
 {
     ShaderProgram::ShaderProgram()
     {
-        std::fill(_shaderArray.begin(), _shaderArray.end(), nullptr);
+        std::ranges::fill(_shaderArray, nullptr);
     }
 
     Ptr<ShaderProgram> ShaderProgram::Create()

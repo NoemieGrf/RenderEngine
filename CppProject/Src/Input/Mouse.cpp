@@ -4,21 +4,21 @@
 
 namespace Input
 {
-    Mouse::Event::Event(Mouse::EventType t, int x, int y)
+    Mouse::Event::Event(EventType t, int x, int y)
         : eventType(t)
         , x(x)
         , y(y)
     {
     }
 
-    Mouse::ButtonEvent::ButtonEvent(Mouse::EventType t, MouseButton btn, int x, int y, bool down)
+    Mouse::ButtonEvent::ButtonEvent(EventType t, MouseButton btn, int x, int y, bool down)
         : Event(t, x, y)
         , mouseButton(btn)
         , isDown(down)
     {
     }
 
-    Mouse::WheelEvent::WheelEvent(Mouse::EventType t, int x, int y, bool up, int delta)
+    Mouse::WheelEvent::WheelEvent(EventType t, int x, int y, bool up, int delta)
             : Event(t, x, y)
             , isUp(up)
             , wheelDelta(delta)
@@ -27,8 +27,8 @@ namespace Input
 
     void Mouse::ProcessEvent()
     {
-        std::fill(_buttonPressing.begin(), _buttonPressing.end(), false);
-        std::fill(_buttonReleasing.begin(), _buttonReleasing.end(), false);
+        std::ranges::fill(_buttonPressing, false);
+        std::ranges::fill(_buttonReleasing, false);
         _wheelScrollingUp = false;
         _wheelScrollingDown = false;
         _wheelDelta = 0;
@@ -51,24 +51,23 @@ namespace Input
                     Ptr<const ButtonEvent> pButtonEvent = DynamicCast<ButtonEvent>(pEvent);
                     assert(pButtonEvent != nullptr);
 
-                    bool isDown = pButtonEvent->isDown;
-                    if (isDown)
+                    if (pButtonEvent->isDown)
                     {
-                        bool isNewPress = !_buttonState[(int)pButtonEvent->mouseButton];
+                        bool isNewPress = !_buttonState[static_cast<int>(pButtonEvent->mouseButton)];
 
-                        _buttonState[(int)pButtonEvent->mouseButton] = true;
+                        _buttonState[static_cast<int>(pButtonEvent->mouseButton)] = true;
 
                         if (isNewPress)
-                            _buttonPressing[(int)pButtonEvent->mouseButton] = true;
+                            _buttonPressing[static_cast<int>(pButtonEvent->mouseButton)] = true;
                     }
                     else
                     {
-                        bool isNewRelease = _buttonState[(int)pButtonEvent->mouseButton];
+                        bool isNewRelease = _buttonState[static_cast<int>(pButtonEvent->mouseButton)];
 
-                        _buttonState[(int)pButtonEvent->mouseButton] = false;
+                        _buttonState[static_cast<int>(pButtonEvent->mouseButton)] = false;
 
                         if (isNewRelease)
-                            _buttonReleasing[(int)pButtonEvent->mouseButton] = true;
+                            _buttonReleasing[static_cast<int>(pButtonEvent->mouseButton)] = true;
                     }
                     break;
                 }
@@ -105,9 +104,9 @@ namespace Input
 
     void Mouse::Clear()
     {
-        std::fill(_buttonPressing.begin(), _buttonPressing.end(), false);
-        std::fill(_buttonReleasing.begin(), _buttonReleasing.end(), false);
-        std::fill(_buttonState.begin(), _buttonState.end(), false);
+        std::ranges::fill(_buttonPressing, false);
+        std::ranges::fill(_buttonReleasing, false);
+        std::ranges::fill(_buttonState, false);
         _wheelScrollingUp = false;
         _wheelScrollingDown = false;
         _wheelDelta = 0;
@@ -133,17 +132,17 @@ namespace Input
 
     bool Mouse::IsButtonDown(MouseButton button)
     {
-        return _buttonState[(int)button];
+        return _buttonState[static_cast<int>(button)];
     }
 
     bool Mouse::IsButtonPressing(MouseButton button)
     {
-        return _buttonPressing[(int)button];
+        return _buttonPressing[static_cast<int>(button)];
     }
 
     bool Mouse::IsButtonReleasing(MouseButton button)
     {
-        return _buttonReleasing[(int)button];
+        return _buttonReleasing[static_cast<int>(button)];
     }
 
     bool Mouse::IsInWindow()

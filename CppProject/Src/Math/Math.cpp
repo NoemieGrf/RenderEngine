@@ -5,7 +5,7 @@ namespace Math
 {
     Eigen::AngleAxisf AngleAxis(const Eigen::Vector3f& axis, float angle)
     {
-        return { angle * (float)std::numbers::pi / 180, axis };
+        return { angle * static_cast<float>(std::numbers::pi) / 180, axis };
     }
 
     Eigen::Matrix4f AngleAxisToRotationMatrix(const Eigen::AngleAxisf& angleAxis)
@@ -121,12 +121,12 @@ namespace Math
 
         if (ndcApi == RendererApi::OpenGL)
         {
-            Eigen::Matrix4f resultWithReverseW = -1 * scaleMatrix * translationMatrix * compressMatrix;
+            Eigen::Matrix4f resultWithReverseW = -1 * standardOrthoProj * compressMatrix;
             Eigen::Matrix4f reverseZ = Eigen::Matrix4f::Identity();
             reverseZ(2, 2) = -1;
             return reverseZ * resultWithReverseW;
         }
         else
-            return scaleMatrix * translationMatrix * compressMatrix;
+            return standardOrthoProj * compressMatrix;
     }
 }

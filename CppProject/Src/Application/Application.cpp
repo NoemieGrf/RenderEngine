@@ -109,7 +109,7 @@ void Application::UpdateRender()
 void Application::WaitForTargetFrame()
 {
     double thisFrameElapsed = Time::GetFrameTimerElapsed() / 1000;
-    double thisFrameAtLeastElapsed = 1000 / (double)_targetFrame;
+    double thisFrameAtLeastElapsed = 1000 / static_cast<double>(_targetFrame);
     if (thisFrameElapsed > thisFrameAtLeastElapsed)
         return;
 
@@ -119,7 +119,7 @@ void Application::WaitForTargetFrame()
     waitTimer.SetNow();
     while (true)
     {
-        double elapsed = (double)waitTimer.GetInterval() / 1000;
+        double elapsed = static_cast<double>(waitTimer.GetInterval()) / 1000;
         if (elapsed > waitTime)
             break;
     }
@@ -142,7 +142,7 @@ RendererApi Application::GetRenderApi()
 
 void* Application::GetWindowHandle()
 {
-    return reinterpret_cast<void*>(_pImpl->GetWindowHandle());
+    return _pImpl->GetWindowHandle();
 }
 
 uint64_t Application::GetFrameCount()

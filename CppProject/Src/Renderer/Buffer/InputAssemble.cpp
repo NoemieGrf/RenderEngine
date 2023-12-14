@@ -42,7 +42,7 @@ namespace Renderer
         _inputLayout = layout;
     }
 
-    void InputAssemble::SetVertexBuffer(Ptr<VertexBuffer>& pVertexBuffer)
+    void InputAssemble::SetVertexBuffer(const Ptr<VertexBuffer>& pVertexBuffer)
     {
         _pVertexBuffer = pVertexBuffer;
     }
@@ -52,7 +52,7 @@ namespace Renderer
         _pVertexBuffer = VertexBuffer::Create(vertices, length);
     }
 
-    void InputAssemble::SetIndexBuffer(Ptr<IndexBuffer>& pIndexBuffer)
+    void InputAssemble::SetIndexBuffer(const Ptr<IndexBuffer>& pIndexBuffer)
     {
         _pIndexBuffer = pIndexBuffer;
     }

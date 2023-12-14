@@ -1,6 +1,9 @@
 #include "SceneObject.h"
 #include "Math/Math.h"
 
+
+#include <ranges>
+
 const Eigen::Vector3f& SceneObject::GetLocalPosition() const
 {
     return _position;
@@ -32,7 +35,7 @@ void SceneObject::SetPosition(const Eigen::Vector3f& position)
     _position = position;
     _needUpdateModelMatrix = true;
 
-    for (auto& [key, pComp]: _componentMap)
+    for (auto& pComp: _componentMap | std::views::values)
     {
         if (pComp != nullptr)
             pComp->OnPositionSet();
@@ -50,7 +53,7 @@ void SceneObject::SetRotation(const Eigen::Quaternionf& rotation)
     _rotation = rotation;
     _needUpdateModelMatrix = true;
 
-    for (auto& [key, pComp]: _componentMap)
+    for (auto& pComp: _componentMap | std::views::values)
     {
         if (pComp != nullptr)
             pComp->OnRotationSet();
@@ -68,7 +71,7 @@ void SceneObject::SetScale(const Eigen::Vector3f& scale)
     _scale = scale;
     _needUpdateModelMatrix = true;
 
-    for (auto& [key, pComp]: _componentMap)
+    for (auto& pComp: _componentMap | std::views::values)
     {
         if (pComp != nullptr)
             pComp->OnScaleSet();
@@ -124,7 +127,7 @@ void SceneObject::OnParentPositionChanged()
 {
     _needUpdateModelMatrix = true;
 
-    for (auto& [key, pComp]: _componentMap)
+    for (auto& pComp: _componentMap | std::views::values)
     {
         if (pComp != nullptr)
             pComp->OnPositionSet();
@@ -135,7 +138,7 @@ void SceneObject::OnParentRotationChanged()
 {
     _needUpdateModelMatrix = true;
 
-    for (auto& [key, pComp]: _componentMap)
+    for (auto& pComp: _componentMap | std::views::values)
     {
         if (pComp != nullptr)
             pComp->OnRotationSet();
@@ -146,7 +149,7 @@ void SceneObject::OnParentScaleChanged()
 {
     _needUpdateModelMatrix = true;
 
-    for (auto& [key, pComp]: _componentMap)
+    for (auto& pComp: _componentMap | std::views::values)
     {
         if (pComp != nullptr)
             pComp->OnScaleSet();

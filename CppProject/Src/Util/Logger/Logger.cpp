@@ -6,7 +6,7 @@
 
 namespace Util
 {
-    void Logger::SetFilterLevel(Logger::Level targetLevel)
+    void Logger::SetFilterLevel(Level targetLevel)
     {
         _filterLevel = targetLevel;
     }

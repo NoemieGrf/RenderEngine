@@ -47,7 +47,7 @@ namespace Input
             virtual ~Event() = default;
         };
 
-        struct ButtonEvent : public Event
+        struct ButtonEvent : Event
         {
             bool isDown;
             MouseButton mouseButton;
@@ -55,7 +55,7 @@ namespace Input
             ButtonEvent(EventType, MouseButton, int, int, bool);
         };
 
-        struct WheelEvent : public Event
+        struct WheelEvent : Event
         {
             bool isUp;
             int wheelDelta;
@@ -97,9 +97,9 @@ namespace Input
         inline static int _wheelDelta;
         inline static bool _isMouseInWindow = true;
 
-        inline static std::array<bool, (int)MouseButton::Count> _buttonState;
-        inline static std::array<bool, (int)MouseButton::Count> _buttonPressing;
-        inline static std::array<bool, (int)MouseButton::Count> _buttonReleasing;
+        inline static std::array<bool, static_cast<int>(MouseButton::Count)> _buttonState;
+        inline static std::array<bool, static_cast<int>(MouseButton::Count)> _buttonPressing;
+        inline static std::array<bool, static_cast<int>(MouseButton::Count)> _buttonReleasing;
 
         inline static std::queue<Ptr<Event>> _eventQueue;
     };

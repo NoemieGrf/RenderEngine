@@ -9,7 +9,7 @@ void Time::Init()
 void Time::Update()
 {
     auto deltaTimeInMacroSecond = _globalTimer.GetIntervalAndSetNow();
-    _deltaTime = (double)deltaTimeInMacroSecond / 1000;
+    _deltaTime = static_cast<double>(deltaTimeInMacroSecond) / 1000;
     _timeSinceBegin += _deltaTime;
 
     _frameTimer.SetNow();
@@ -33,7 +33,7 @@ double Time::TimeSinceBegin()
 double Time::GetFrameTimerElapsed()
 {
     auto deltaTimeInMacroSecond = _frameTimer.GetIntervalAndSetNow();
-    return (double)deltaTimeInMacroSecond / 1000;
+    return static_cast<double>(deltaTimeInMacroSecond) / 1000;
 }
 
 

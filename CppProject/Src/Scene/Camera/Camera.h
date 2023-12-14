@@ -20,7 +20,7 @@ public:
     const Eigen::Matrix4f& GetProjectionMatrix();
 
     void Adjust(const Eigen::Vector2f& nearPlaneRightTop, float nearPlaneZ, float farPlaneZ);
-    void Adjust(float fov, float aspect, float nearPlaneZ, float farPlaneZ);
+    void Adjust(float fovAngle, float aspect, float nearPlaneZ, float farPlaneZ);
 
 private:
     // bool

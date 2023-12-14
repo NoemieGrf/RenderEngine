@@ -12,25 +12,24 @@ namespace Input
 
         while (!_eventQueue.empty())
         {
-            const auto& topEvent = _eventQueue.front();
-
-            if (topEvent.eventType == EventType::KeyDown)
+            const auto& [eventType, keyCode] = _eventQueue.front();
+            if (eventType == EventType::KeyDown)
             {
-                bool isNewPress = !_keyState[(int)topEvent.keyCode];
+                bool isNewPress = !_keyState[static_cast<int>(keyCode)];
 
-                _keyState[(int)topEvent.keyCode] = true;
+                _keyState[static_cast<int>(keyCode)] = true;
 
                 if (isNewPress)
-                    _pressingKey.insert(topEvent.keyCode);
+                    _pressingKey.insert(keyCode);
             }
-            else if (topEvent.eventType == EventType::KeyUp)
+            else if (eventType == EventType::KeyUp)
             {
-                bool isNewRelease = _keyState[(int)topEvent.keyCode];
+                bool isNewRelease = _keyState[static_cast<int>(keyCode)];
 
-                _keyState[(int)topEvent.keyCode] = false;
+                _keyState[static_cast<int>(keyCode)] = false;
 
                 if (isNewRelease)
-                    _releasingKey.insert(topEvent.keyCode);
+                    _releasingKey.insert(keyCode);
             }
 
             _eventQueue.pop();
@@ -45,22 +44,22 @@ namespace Input
         while (!_eventQueue.empty())
             _eventQueue.pop();
 
-        std::fill(_keyState.begin(), _keyState.end(), false);
+        std::ranges::fill(_keyState, false);
     }
 
     bool Keyboard::IsKeyDown(KeyCode keycode)
     {
-        return _keyState[(int)keycode];
+        return _keyState[static_cast<int>(keycode)];
     }
 
     bool Keyboard::IsKeyPressing(KeyCode keycode)
     {
-        return _pressingKey.find(keycode) != _pressingKey.end();
+        return _pressingKey.contains(keycode);
     }
 
     bool Keyboard::IsKeyReleasing(KeyCode keycode)
     {
-        return _releasingKey.find(keycode) != _releasingKey.end();
+        return _releasingKey.contains(keycode);
     }
 
     void Keyboard::OnKeyPressed(KeyCode keycode)
