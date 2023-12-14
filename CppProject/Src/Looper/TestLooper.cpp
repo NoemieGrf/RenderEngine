@@ -1,6 +1,5 @@
 #include "TestLooper.h"
 #include "Input/Keyboard.h"
-#include "Renderer/Buffer/IndexBuffer.h"
 #include "Scene/Primitive/PrimitiveObject.h"
 #include "Scene/Component/CompCamera.h"
 #include "Time/Time.h"

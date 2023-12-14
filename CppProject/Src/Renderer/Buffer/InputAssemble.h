@@ -19,16 +19,16 @@ namespace Renderer
         virtual void UnBind() = 0;
 
         void SetInputLayout(const InputLayout& layout);
-        void SetVertexBuffer(Ptr<VertexBuffer>& pVertexBuffer);
+        void SetVertexBuffer(const Ptr<VertexBuffer>& pVertexBuffer);
         void SetVertexBuffer(const float* vertices, unsigned int length);
-        void SetIndexBuffer(Ptr<IndexBuffer>& pIndexBuffer);
+        void SetIndexBuffer(const Ptr<IndexBuffer>& pIndexBuffer);
         void SetIndexBuffer(const unsigned int* indices, unsigned int length);
         const InputLayout& GetInputLayout() const;
         const Ptr<VertexBuffer>& GetVertexBuffer() const;
         const Ptr<IndexBuffer>& GetIndexBuffer() const;
 
     protected:
-        InputLayout _inputLayout;
+        InputLayout _inputLayout = {};
         Ptr<VertexBuffer> _pVertexBuffer;
         Ptr<IndexBuffer> _pIndexBuffer;
 
