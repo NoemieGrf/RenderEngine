@@ -8,7 +8,7 @@ class PrimitiveObject: public NonConstructible
 {
 public:
     static Ptr<SceneObject> CreateQuad();
-    static Ptr<SceneObject> CreateBox();
+    static Ptr<SceneObject> CreateCube();
 
 private:
     static Ptr<SceneObject> LoadFromObj(const std::string& path);

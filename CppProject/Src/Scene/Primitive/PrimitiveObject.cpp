@@ -10,7 +10,7 @@ Ptr<SceneObject> PrimitiveObject::CreateQuad()
     return LoadFromObj("Assets/Primitive/Model/Quad.obj");
 }
 
-Ptr<SceneObject> PrimitiveObject::CreateBox()
+Ptr<SceneObject> PrimitiveObject::CreateCube()
 {
     return LoadFromObj("Assets/Primitive/Model/Cube.obj");
 }

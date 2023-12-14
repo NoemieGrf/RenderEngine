@@ -15,12 +15,13 @@ TestLooper::TestLooper()
 
     auto pQuadObj = PrimitiveObject::CreateQuad();
     pQuadObj->GetComponent<CompRenderer>()->ChangeMaterial(std::make_shared<Material>("Assets/Material/TextureMixtureMat.json"));
-    pQuadObj->SetPosition({0, 0, 0.11});
+    pQuadObj->SetPosition({0, 0, -10});
     pQuadObj->SetScale({0.7f, 0.7f, 1.0f});
     _scene.AddObject(pQuadObj);
 
     auto pCamObj = std::make_shared<SceneObject>();
-    pCamObj->AddComponent<CompCamera>(Eigen::Vector2f{1, 1}, -0.1, -10, false);
+    pCamObj->AddComponent<CompCamera>(Eigen::Vector2f{1, 1}, -20, -100);
+    pCamObj->SetPosition({0, 0, 25});
 
     _scene.AddObject(pCamObj);
     _scene.SetMainCamera(pCamObj);

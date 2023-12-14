@@ -72,11 +72,7 @@ namespace Math
      *
      * For standard ortho projection, before projection matrix, camera looks at -z, near value
      * and far value are less than zero, 0 > near > far. The standard ortho projection maps near
-     * value to -1 and maps far value to +1. After projection, camera is still looks to -z.\n\n
-     *
-     * If target api is OpenGL: in OpenGL standard NDC, y-axis is up, x-axis is right, looks to +z,
-     * which is opposite with the result of the standard ortho projection. So the result will manually
-     * reverse z-axis. (Change right-handed axis to left-handed axis.)\n\n
+     * value to -1 and maps far value to +1. \n\n
      *
      * @param ndcApi Target NDC coordinates API.
      * @param nearPlaneHalfX Near plane half width.
@@ -88,6 +84,9 @@ namespace Math
 
     /**
      * @brief Projection matrix of perspective camera, frustum is symmetry by x-axis & y-axis. \n\n
+     *
+     * In OpenGL, gl_Position's w value can not be less than zero. OpenGL defines clip space to -w <= x,y,z < w,
+     * so if w is less than zero, clip space flipped, which leads nothing drew.
      *
      * @param ndcApi Target NDC coordinates API.
      * @param nearPlaneHalfX Near plane half width.

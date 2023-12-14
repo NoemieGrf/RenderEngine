@@ -65,12 +65,10 @@ namespace Math
 
     Eigen::Matrix4f MakeViewMatrix(const Eigen::Vector3f& pos, const Eigen::Quaternionf& rot)
     {
-        Eigen::Matrix4f changeHandedMatrix = Eigen::Matrix4f::Identity();
-        changeHandedMatrix(2, 2) = -1;
         Eigen::Matrix4f translationMatrix = TranslateMatrix(-pos);
         Eigen::Matrix4f rotationMatrix = QuaternionToRotationMatrix(rot.conjugate());
 
-        return rotationMatrix * translationMatrix * changeHandedMatrix;
+        return rotationMatrix * translationMatrix;
     }
 
     Eigen::Matrix4f MakeOrthoProjectionMatrix(RendererApi ndcApi, float nearPlaneHalfX, float nearPlaneHalfY, float nearPlaneZ, float farPlaneZ)
@@ -91,13 +89,6 @@ namespace Math
                                                    2 / (near - far)});
 
         Eigen::Matrix4f standardOrthoProj = scaleMatrix * translationMatrix;
-
-        if (ndcApi == RendererApi::OpenGL)
-        {
-            Eigen::Matrix4f zReverse = Eigen::Matrix4f::Identity();
-            zReverse(2, 2) = -1;
-            return zReverse * standardOrthoProj;
-        }
 
         return standardOrthoProj;
     }
@@ -129,10 +120,8 @@ namespace Math
                         0,           0,          1,              0;
 
         if (ndcApi == RendererApi::OpenGL)
-        {
-            compressMatrix = -1 * compressMatrix;
-        }
-
-        return scaleMatrix * translationMatrix * compressMatrix;
+            return -1 * scaleMatrix * translationMatrix * compressMatrix;
+        else
+            return scaleMatrix * translationMatrix * compressMatrix;
     }
 }
