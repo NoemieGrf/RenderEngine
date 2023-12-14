@@ -120,7 +120,12 @@ namespace Math
                         0,           0,          1,              0;
 
         if (ndcApi == RendererApi::OpenGL)
-            return -1 * scaleMatrix * translationMatrix * compressMatrix;
+        {
+            Eigen::Matrix4f resultWithReverseW = -1 * scaleMatrix * translationMatrix * compressMatrix;
+            Eigen::Matrix4f reverseZ = Eigen::Matrix4f::Identity();
+            reverseZ(2, 2) = -1;
+            return reverseZ * resultWithReverseW;
+        }
         else
             return scaleMatrix * translationMatrix * compressMatrix;
     }

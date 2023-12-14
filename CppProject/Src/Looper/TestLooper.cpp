@@ -15,14 +15,12 @@ TestLooper::TestLooper()
 
     auto pQuadObj = PrimitiveObject::CreateCube();
     //pQuadObj->GetComponent<CompRenderer>()->ChangeMaterial(std::make_shared<Material>("Assets/Material/TextureMixtureMat.json"));
-    pQuadObj->SetPosition({0, 0, -10});
-    pQuadObj->SetScale({0.7f, 0.7f, 1.0f});
-    pQuadObj->SetRotation(Math::AngleAxisToQuaternion(Math::AngleAxis({1, 1, 1}, 30)));
+    pQuadObj->SetPosition({0, 0, -2});
+    pQuadObj->SetScale({0.7f, 0.7f, 0.7f});
     _scene.AddObject(pQuadObj);
 
     auto pCamObj = std::make_shared<SceneObject>();
-    pCamObj->AddComponent<CompCamera>(Eigen::Vector2f{1, 1}, -20, -100);
-    pCamObj->SetPosition({0, 0, 25});
+    pCamObj->AddComponent<CompCamera>(Eigen::Vector2f{1, 1}, -1, -100);
 
     _scene.AddObject(pCamObj);
     _scene.SetMainCamera(pCamObj);
@@ -43,7 +41,9 @@ void TestLooper::RenderLoop()
     if (pObj != nullptr)
     {
         Eigen::Quaternionf rot = pObj->GetWorldRotation();
-        rot = Math::AngleAxisToQuaternion(Math::AngleAxis({1, 1, 1}, 10 * Time::DeltaTimeSecond())) * rot;
+        rot = Math::AngleAxisToQuaternion(Math::AngleAxis({1, 1, 1}, 30 * Time::DeltaTimeSecond())) * rot;
+        rot = Math::AngleAxisToQuaternion(Math::AngleAxis({-1, 1, 1}, 25 * Time::DeltaTimeSecond())) * rot;
+        rot = Math::AngleAxisToQuaternion(Math::AngleAxis({-1, 1, -1}, 35 * Time::DeltaTimeSecond())) * rot;
         pObj->SetRotation(rot);
     }
 

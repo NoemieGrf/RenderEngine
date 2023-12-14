@@ -85,8 +85,12 @@ namespace Math
     /**
      * @brief Projection matrix of perspective camera, frustum is symmetry by x-axis & y-axis. \n\n
      *
-     * In OpenGL, gl_Position's w value can not be less than zero. OpenGL defines clip space to -w <= x,y,z < w,
-     * so if w is less than zero, clip space flipped, which leads nothing drew.
+     * In OpenGL, we should apply two modifications to standard perspective projection result. The first
+     * is multiply -1 to result. Because gl_Position's w value can not be less than zero. In OpenGL,
+     * a clip space is defined to -w <= x,y,z < w, so if w is less than zero, clip space flipped,
+     * which leads nothing drew. The second modification is to reverse z. The NDC coordinate in OpenGL
+     * is left-handed system, but our coordinates in every calculation step is right-handed system,
+     * so we need to flip z coordinate to fit OpenGL NDC space.
      *
      * @param ndcApi Target NDC coordinates API.
      * @param nearPlaneHalfX Near plane half width.
