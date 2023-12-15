@@ -283,8 +283,8 @@ class Processor:
         pass
 
 
-def main() -> None:
-    config_file: str = 'enum_config.json'
+if __name__ == '__main__':
+    config_file: str = 'enum_helper_gen_config.json'
     with open(config_file, 'r', encoding='utf-8') as fp:
         enum_config_array = json.load(fp)['EnumGenConfig']
         for single_enum_config in enum_config_array:
@@ -292,7 +292,3 @@ def main() -> None:
             processor.generator_header_file()
             processor.generate_cpp_file()
     pass
-
-
-if __name__ == '__main__':
-    main()
