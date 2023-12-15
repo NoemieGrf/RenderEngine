@@ -13,5 +13,9 @@ namespace Renderer
     public: // override
         bool Compile() override;
         void LoadFromString(const char* data) override;
+        void LoadFromBinaray(const char* data, int size) override;
+
+    private:
+        bool _needCompile = true;
     };
 }

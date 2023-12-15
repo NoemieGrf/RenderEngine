@@ -13,6 +13,7 @@ namespace Renderer
     public:
         virtual bool Compile() = 0;
         virtual void LoadFromString(const char* data) = 0;
+        virtual void LoadFromBinaray(const char* data, int size) = 0;
         virtual ShaderType GetShaderType() = 0;
 
     };

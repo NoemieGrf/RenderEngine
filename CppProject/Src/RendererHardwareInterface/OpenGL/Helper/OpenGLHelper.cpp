@@ -28,15 +28,13 @@ namespace Renderer
         return GL_FLOAT;
     }
 
-    bool OpenGLHelper::CompileShader(unsigned int shaderId)
+    bool OpenGLHelper::CheckShaderState(unsigned int shaderId)
     {
-        ::glCompileShader(shaderId);
-
         GLint flag;
         ::glGetShaderiv(shaderId, GL_COMPILE_STATUS, &flag);
         if (flag == GL_FALSE)
         {
-            Util::Logger::LogError("Shader Compile Fail: {}", GetShaderInfoLog(shaderId));
+            Util::Logger::LogError("Shader State Fail: {}", GetShaderInfoLog(shaderId));
             return false;
         }
 

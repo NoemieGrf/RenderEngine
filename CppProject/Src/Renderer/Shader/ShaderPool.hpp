@@ -62,6 +62,11 @@ namespace Renderer
             }
         }
 
+        static Ptr<Shader> GetShaderBinary(const std::string& path)
+        {
+
+        }
+
         static void DeleteShader(const std::string& path)
         {
             auto findResult = _shaderPool.find(path);

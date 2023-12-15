@@ -99,7 +99,7 @@ def spirv_disassemble(spirv_cross_path: str, spirv_bin_path: str, glsl_src_path:
             glsl_full_path: str = glsl_dir + '/' + glsl_name
             os.makedirs(glsl_dir, exist_ok=True)
 
-            cmd = '{} {}'.format(spirv_cross_path, spv_full_path)
+            cmd = '{} {} --no-es'.format(spirv_cross_path, spv_full_path)
 
             print('\tcall: {}'.format(cmd))
             result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)

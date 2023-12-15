@@ -12,7 +12,7 @@ namespace Renderer
     {
     public:
         static GLenum GetShaderDataTypeGlEnum(ShaderDataType type);
-        static bool CompileShader(unsigned int shaderId);
+        static bool CheckShaderState(unsigned int shaderId);
         static std::string GetShaderInfoLog(unsigned int shaderId);
         static std::string GetProgramInfoLog(unsigned int programId);
 
