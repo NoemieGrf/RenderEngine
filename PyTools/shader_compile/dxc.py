@@ -1,10 +1,10 @@
 import os
 import subprocess
-import util
+from . import tool_path
 
 
 def _dxc_gen_cmd(hlsl_path: str, shader_type: str, out_path: str) -> str:
-    cmd = util.get_dxc_path()
+    cmd = tool_path.get_dxc_path()
     if shader_type == 'vertex':
         cmd += ' -T vs_6_0 '
     elif shader_type == 'pixel':
@@ -46,11 +46,11 @@ def hlsl_compile_spirv_bin(hlsl_path: str, shader_type: str) -> None:
     cmd: str = _dxc_gen_cmd(hlsl_path, shader_type, bin_path)
     cmd += ' -spirv'
 
-    print('\tcall: {}'.format(cmd))
+    print('\tcall: {}\n\n'.format(cmd))
     result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     if len(result.stdout) > 0:
-        print('\t\t[dxc] {}'.format(result.stdout))
+        print('\t[dxc] {}\n\n'.format(result.stdout))
 
     if len(result.stderr) > 0:
-        print('\t\t[dxc] {}'.format(result.stderr))
+        print('\t[dxc] {}\n\n'.format(result.stderr))

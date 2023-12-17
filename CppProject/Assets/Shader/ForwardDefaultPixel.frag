@@ -1,9 +1,9 @@
-#version 420 core
+#version 430 core
 
 layout (location = 0) out vec4 color;
 
-in vec2 v_TexCoord;
-in vec3 v_Normal;
+layout(location = 0) in vec2 v_TexCoord;
+layout(location = 1) in vec3 v_Normal;
 
 void main()
 {

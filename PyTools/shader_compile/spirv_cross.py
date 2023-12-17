@@ -1,5 +1,5 @@
 import subprocess
-import util
+import tool_path
 
 
 def spv_decompile_glsl(spv_path: str) -> None:
