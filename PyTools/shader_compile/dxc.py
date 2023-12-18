@@ -20,19 +20,19 @@ def hlsl_compile_dx_bin(hlsl_path: str, shader_type: str) -> None:
     if file_suffix != 'hlsl':
         return
 
-    print('\tcompile hlsl {} src: {}'.format(shader_type, hlsl_path))
+    print('compile hlsl {} src: {}\n'.format(shader_type, hlsl_path))
     bin_path: str = hlsl_path.replace('.hlsl', '.bin')
 
     cmd: str = _dxc_gen_cmd(hlsl_path, shader_type, bin_path)
 
-    print('\tcall: {}'.format(cmd))
+    print('call: {}\n'.format(cmd))
     result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     if len(result.stdout) > 0:
-        print('\t\t[dxc] {}'.format(result.stdout))
+        print('[dxc] {}\n'.format(result.stdout))
 
     if len(result.stderr) > 0:
-        print('\t\t[dxc] {}'.format(result.stderr))
+        print('[dxc] {}\n'.format(result.stderr))
 
 
 def hlsl_compile_spirv_bin(hlsl_path: str, shader_type: str) -> None:
@@ -40,17 +40,17 @@ def hlsl_compile_spirv_bin(hlsl_path: str, shader_type: str) -> None:
     if file_suffix != 'hlsl':
         return
 
-    print('\tcompile hlsl {} src: {}'.format(shader_type, hlsl_path))
+    print('compile hlsl {} src: {}\n'.format(shader_type, hlsl_path))
     bin_path: str = hlsl_path.replace('.hlsl', '.spv')
 
     cmd: str = _dxc_gen_cmd(hlsl_path, shader_type, bin_path)
     cmd += ' -spirv'
 
-    print('\tcall: {}\n\n'.format(cmd))
+    print('call: {}\n'.format(cmd))
     result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     if len(result.stdout) > 0:
-        print('\t[dxc] {}\n\n'.format(result.stdout))
+        print('[dxc] {}\n'.format(result.stdout))
 
     if len(result.stderr) > 0:
-        print('\t[dxc] {}\n\n'.format(result.stderr))
+        print('[dxc] {}\n'.format(result.stderr))

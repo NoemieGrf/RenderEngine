@@ -8,12 +8,15 @@ layout (location = 0) uniform mat4 u_ModelMatrix;
 layout (location = 1) uniform mat4 u_ViewMatrix;
 layout (location = 2) uniform mat4 u_ProjectionMatrix;
 
-layout(location = 0) out vec2 v_TexCoord;
-layout(location = 1) out vec3 v_Normal;
+layout(location = 0) out vec3 v_FragPos;
+layout(location = 1) out vec2 v_TexCoord;
+layout(location = 2) out vec3 v_Normal;
 
 void main()
 {
     v_TexCoord = a_TexCoord;
-    v_Normal = a_Normal;
-    gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_ModelMatrix * vec4(a_Position, 1.0);
+    v_Normal = mat3(transpose(inverse(u_ModelMatrix))) * a_Normal;
+    v_FragPos = vec3(u_ModelMatrix * vec4(a_Position, 1.0));
+
+    gl_Position = u_ProjectionMatrix * u_ViewMatrix * vec4(v_FragPos, 1.0);
 }

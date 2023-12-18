@@ -1,5 +1,5 @@
 import subprocess
-import tool_path
+from . import tool_path
 
 
 def spv_decompile_glsl(spv_path: str) -> None:
@@ -10,7 +10,7 @@ def spv_decompile_glsl(spv_path: str) -> None:
     print('\tdecompile spv {}'.format(spv_path))
     glsl_src_path: str = spv_path.replace('.spv', '.spv.glsl')
 
-    cmd = '{} {} --output {} --no-es'.format(util.get_spirv_cross_path(), spv_path, glsl_src_path)
+    cmd = '{} {} --output {} --no-es'.format(tool_path.get_spirv_cross_path(), spv_path, glsl_src_path)
 
     print('\tcall: {}'.format(cmd))
     result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)

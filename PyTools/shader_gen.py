@@ -10,7 +10,7 @@ def main() -> None:
             file_suffix: str = file_name.split('.')[-1]
 
             # compile glsl
-            if file_suffix == 'vert' or file_suffix == 'frag' or file_suffix == 'glsl':
+            if file_suffix == 'vert' or file_suffix == 'frag':
                 glslc.compile_glsl(file_full_path)
 
     pass
