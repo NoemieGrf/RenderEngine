@@ -12,6 +12,7 @@ namespace Renderer
 	enum class UniformVariableType: int
 	{
 		Int,
+		Uint,
 		Float,
 		Float3,
 		Mat3,

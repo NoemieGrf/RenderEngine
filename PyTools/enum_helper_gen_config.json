@@ -107,6 +107,7 @@
 			"FilePath": "../CppProject/Src/Renderer/Material/UniformVariable/",
 			"Value": [
 				"Int",
+				"Uint",
 				"Float",
 				"Float3",
 				"Mat3",

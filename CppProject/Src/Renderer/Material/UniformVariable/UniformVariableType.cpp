@@ -13,6 +13,8 @@ namespace Renderer
 		{
 			case UniformVariableType::Int: 
 				return "Int";
+			case UniformVariableType::Uint: 
+				return "Uint";
 			case UniformVariableType::Float: 
 				return "Float";
 			case UniformVariableType::Float3: 
@@ -34,6 +36,7 @@ namespace Renderer
 		static std::unordered_map<std::string, UniformVariableType> map = 
 		{
 			{ "Int", UniformVariableType::Int },
+			{ "Uint", UniformVariableType::Uint },
 			{ "Float", UniformVariableType::Float },
 			{ "Float3", UniformVariableType::Float3 },
 			{ "Mat3", UniformVariableType::Mat3 },

@@ -5,6 +5,7 @@
 #include "UniformVariable/UniformVariableType.h"
 #include "Util/Logger/Logger.h"
 #include "Renderer/Material/UniformVariable/UniformVariableTexture2d.h"
+#include "Renderer/Material/UniformVariable/UniformVariableNumeric.h"
 
 namespace Renderer
 {
