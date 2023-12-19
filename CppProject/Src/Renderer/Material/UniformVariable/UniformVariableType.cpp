@@ -15,6 +15,8 @@ namespace Renderer
 				return "Int";
 			case UniformVariableType::Float: 
 				return "Float";
+			case UniformVariableType::Float3: 
+				return "Float3";
 			case UniformVariableType::Mat3: 
 				return "Mat3";
 			case UniformVariableType::Mat4: 
@@ -33,6 +35,7 @@ namespace Renderer
 		{
 			{ "Int", UniformVariableType::Int },
 			{ "Float", UniformVariableType::Float },
+			{ "Float3", UniformVariableType::Float3 },
 			{ "Mat3", UniformVariableType::Mat3 },
 			{ "Mat4", UniformVariableType::Mat4 },
 			{ "Texture2D", UniformVariableType::Texture2D },

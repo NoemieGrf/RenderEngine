@@ -12,7 +12,8 @@ namespace Renderer
     void VertexShaderOpenGL::LoadFromString(const char* data)
     {
         _shaderId = ::glCreateShader(GL_VERTEX_SHADER);
-        ::glShaderSource(_shaderId, 1, &data, nullptr); _needCompile = true;
+        ::glShaderSource(_shaderId, 1, &data, nullptr);
+        _needCompile = true;
     }
 
     void VertexShaderOpenGL::LoadFromBinaray(const char* data, int size)

@@ -5,8 +5,10 @@
 
 #include "Define/Define.h"
 #include "ShaderType.h"
-#include "ShaderPool.hpp"
 #include "Shader.h"
+#include "Renderer/Assets/AssetsPool.hpp"
+#include "Renderer/Shader/SpecificShader/VertexShader.h"
+#include "Renderer/Shader/SpecificShader/PixelShader.h"
 
 namespace Renderer
 {
@@ -35,7 +37,7 @@ namespace Renderer
         virtual void AttachShader(const Ptr<Shader>& pShader) = 0;
 
     protected:
-        std::array<Ptr<Shader>, (int)ShaderType::Count> _shaderArray;
+        std::array<Ptr<Shader>, static_cast<int>(ShaderType::Count)> _shaderArray;
 
     public:
         static Ptr<ShaderProgram> Create();
@@ -44,11 +46,16 @@ namespace Renderer
     template<ShaderType T>
     Ptr<Shader> ShaderProgram::AddShader(const std::string& path)
     {
-        auto pShader = ShaderPool<T>::GetShader(path);
+        Ptr<Shader> pShader = nullptr;
+        if constexpr (T == ShaderType::Vertex)
+            pShader = AssetsPool<VertexShader>::Get(path);
+        else if constexpr (T == ShaderType::Pixel)
+            pShader = AssetsPool<PixelShader>::Get(path);
+
         if (pShader == nullptr)
             return nullptr;
 
-        _shaderArray[(int)T] = pShader;
+        _shaderArray[static_cast<int>(T)] = pShader;
         AttachShader(pShader);
 
         return pShader;
@@ -57,7 +64,7 @@ namespace Renderer
     template<ShaderType T>
     Ptr<Shader> ShaderProgram::GetShader()
     {
-        return _shaderArray[(int)T];
+        return _shaderArray[static_cast<int>(T)];
     }
 
 }

@@ -2,11 +2,11 @@
 	"Forward": {
 		"Vertex":
 		{
-			"Path": "Assets/Shader/ForwardDefaultVertex.vert"
+			"Path": "Assets/Shader/ForwardUnlit/ForwardUnlit/.vert"
 		},
 		"Pixel":
 		{
-			"Path": "Assets/Shader/ForwardDefaultPixel.frag"
+			"Path": "Assets/Shader/ForwardUnlit/ForwardUnlit/.frag"
 		}
 	}
 }

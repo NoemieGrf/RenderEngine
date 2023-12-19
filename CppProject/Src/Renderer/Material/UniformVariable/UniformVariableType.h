@@ -13,6 +13,7 @@ namespace Renderer
 	{
 		Int,
 		Float,
+		Float3,
 		Mat3,
 		Mat4,
 		Texture2D
