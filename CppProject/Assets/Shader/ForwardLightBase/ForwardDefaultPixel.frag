@@ -1,6 +1,6 @@
 #version 430 core
 
-#include "Library/Light.glsl"
+#include "../Library/Light.glsl"
 #define NR_POINT_LIGHTS 4
 
 layout (location = 0) out vec4 color;
