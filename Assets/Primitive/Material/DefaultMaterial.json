@@ -1,0 +1,21 @@
+{
+	"Forward": {
+		"Vertex":
+		{
+			"Path": "Assets/Shader/ForwardUnlit/ForwardUnlit.vert"
+		},
+		"Pixel":
+		{
+			"Path": "Assets/Shader/ForwardUnlit/ForwardUnlit.frag",
+			"Uniform": [
+				{
+					"Name": "u_Color",
+					"Type": "Float3",
+					"X": 0.2,
+					"Y": 0.2,
+					"Z": 0.2
+				}
+			]
+		}
+	}
+}
