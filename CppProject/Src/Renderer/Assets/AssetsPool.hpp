@@ -18,9 +18,7 @@ namespace Renderer
             if (findResult != _pool.end())
                 return findResult->second;
 
-            Ptr<T> pResult = std::make_shared<T>();
-            pResult->Load(path);
-
+            Ptr<T> pResult = T::Create(path);
             _pool[path] = pResult;
             return pResult;
         }

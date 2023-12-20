@@ -149,5 +149,12 @@ namespace Renderer
     {
         return _meshMap;
     }
+
+    Ptr<Model> Model::Create(const std::string& path)
+    {
+        Ptr<Model> pModel = std::make_shared<Model>();
+        pModel->Load(path);
+        return pModel;
+    }
 }
 

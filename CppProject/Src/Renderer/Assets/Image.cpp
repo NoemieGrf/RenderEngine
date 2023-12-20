@@ -26,6 +26,13 @@ namespace Renderer
         return _channels;
     }
 
+    Ptr<Image> Image::Create(const std::string& path)
+    {
+        Ptr<Image> pImage = std::make_shared<Image>();
+        pImage->Load(path);
+        return pImage;
+    }
+
     void Image::Load(const std::string& path)
     {
         stbi_set_flip_vertically_on_load(true);

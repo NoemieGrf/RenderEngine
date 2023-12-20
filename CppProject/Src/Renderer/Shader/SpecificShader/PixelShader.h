@@ -12,6 +12,6 @@ namespace Renderer
         ShaderType GetShaderType() override;
 
     public:
-        static Ptr<PixelShader> Create();
+        static Ptr<PixelShader> Create(const std::string& binPath);
     };
 }

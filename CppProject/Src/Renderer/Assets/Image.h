@@ -1,16 +1,14 @@
 #pragma once
 
-#include <string>
 #include <cstddef>
-#include "AssetsPool.hpp"
+#include <string>
+#include "Define/Define.h"
 
 namespace Renderer 
 {
     class Image
     {
     public:
-        friend class AssetsPool<Image>;
-
         struct Size
         {
             int width;
@@ -24,6 +22,8 @@ namespace Renderer
         const std::byte* GetData() const;
         Size GetSize() const;
         int GetChannels() const;
+
+        static Ptr<Image> Create(const std::string& path);
 
     private:
         void Load(const std::string& path);

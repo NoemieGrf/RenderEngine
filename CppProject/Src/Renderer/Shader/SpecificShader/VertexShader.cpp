@@ -6,12 +6,15 @@
 namespace Renderer
 {
 
-    Ptr<VertexShader> VertexShader::Create()
+    Ptr<VertexShader> VertexShader::Create(const std::string& binPath)
     {
+        Ptr<VertexShaderOpenGL> pResult = nullptr;
+
         switch (Application::GetRenderApi())
         {
             case RendererApi::OpenGL:
-                return std::make_shared<VertexShaderOpenGL>();
+                pResult = std::make_shared<VertexShaderOpenGL>();
+                break;
             case RendererApi::Vulkan:
                 break;
             case RendererApi::D3D11:
@@ -20,7 +23,10 @@ namespace Renderer
                 break;
         }
 
-        return nullptr;
+        if (pResult != nullptr)
+            pResult->Load(binPath);
+
+        return pResult;
     }
 
     ShaderType VertexShader::GetShaderType()

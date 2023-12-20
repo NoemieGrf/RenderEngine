@@ -2,7 +2,6 @@
 
 #include <unordered_map>
 #include "Define/Define.h"
-#include "AssetsPool.hpp"
 #include "Mesh.h"
 
 namespace Renderer
@@ -10,10 +9,9 @@ namespace Renderer
     class Model
     {
     public:
-        friend class AssetsPool<Model>;
-
-    public:
         const std::unordered_map<std::string, Ptr<Mesh>>& GetMeshMap() const;
+
+        static Ptr<Model> Create(const std::string& path);
 
     private:
         void Load(const std::string& path);

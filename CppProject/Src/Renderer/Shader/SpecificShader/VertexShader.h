@@ -13,6 +13,6 @@ namespace Renderer
         ShaderType GetShaderType() override;
 
     public:
-        static Ptr<VertexShader> Create();
+        static Ptr<VertexShader> Create(const std::string& binPath);
     };
 }
