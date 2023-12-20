@@ -1,5 +1,6 @@
 #include "Material.h"
 #include <fstream>
+#include <functional>
 #include "nlohmann/json.hpp"
 #include "Renderer/Shader/ShaderType.h"
 #include "UniformVariable/UniformVariableType.h"
@@ -9,6 +10,74 @@
 
 namespace Renderer
 {
+    class MaterialJsonHelper
+    {
+    public:
+        static void ParseUniformVar(const nlohmann::basic_json<>& node, std::function<void(const Ptr<UniformVariable>&)> onUniVarCreate)
+        {
+            if (node.contains("Uniform") && node["Uniform"].is_array())
+            {
+                for (const auto& uniformVarConfig: node["Uniform"])
+                {
+                    Ptr<UniformVariable> pUniVar = CreateUniformVar(uniformVarConfig);
+                    onUniVarCreate(pUniVar);
+                }
+            }
+        }
+
+        static Ptr<UniformVariable> CreateUniformVar(const nlohmann::basic_json<>& uniformVarConfig)
+        {
+            Ptr<UniformVariable> pUniVar = nullptr;
+
+            const std::string& uniVarType = uniformVarConfig["Type"];
+            const std::string& uniVarName = uniformVarConfig["Name"];
+            if (uniVarType == UniformVariableTypeHelper::UniformVariableTypeToString(UniformVariableType::Texture2D))
+            {
+                const std::string& texPath = uniformVarConfig["Path"];
+                int slot = uniformVarConfig["Slot"];
+                pUniVar = std::make_shared<UniformVariableTexture2d>(uniVarName, texPath, slot);
+            }
+            else if (uniVarType == UniformVariableTypeHelper::UniformVariableTypeToString(UniformVariableType::Int))
+            {
+                int value = uniformVarConfig["Value"];
+                pUniVar = std::make_shared<UniformVariableNumeric<int>>(uniVarName, value);
+            }
+            else if (uniVarType == UniformVariableTypeHelper::UniformVariableTypeToString(UniformVariableType::Uint))
+            {
+                unsigned int value = uniformVarConfig["Value"];
+                pUniVar = std::make_shared<UniformVariableNumeric<unsigned int>>(uniVarName, value);
+            }
+            else if (uniVarType == UniformVariableTypeHelper::UniformVariableTypeToString(UniformVariableType::Float))
+            {
+                float value = uniformVarConfig["Value"];
+                pUniVar = std::make_shared<UniformVariableNumeric<float>>(uniVarName, value);
+            }
+            else if (uniVarType == UniformVariableTypeHelper::UniformVariableTypeToString(UniformVariableType::Float2))
+            {
+                const float x = uniformVarConfig["X"];
+                const float y = uniformVarConfig["Y"];
+                pUniVar = std::make_shared<UniformVariableNumeric<Eigen::Vector2f>>(uniVarName, Eigen::Vector2f { x, y });
+            }
+            else if (uniVarType == UniformVariableTypeHelper::UniformVariableTypeToString(UniformVariableType::Float3))
+            {
+                const float x = uniformVarConfig["X"];
+                const float y = uniformVarConfig["Y"];
+                const float z = uniformVarConfig["Z"];
+                pUniVar = std::make_shared<UniformVariableNumeric<Eigen::Vector3f>>(uniVarName, Eigen::Vector3f { x, y, z });
+            }
+            else if (uniVarType == UniformVariableTypeHelper::UniformVariableTypeToString(UniformVariableType::Float4))
+            {
+                const float x = uniformVarConfig["X"];
+                const float y = uniformVarConfig["Y"];
+                const float z = uniformVarConfig["Z"];
+                const float w = uniformVarConfig["W"];
+                pUniVar = std::make_shared<UniformVariableNumeric<Eigen::Vector4f>>(uniVarName, Eigen::Vector4f { x, y, z, w });
+            }
+
+            return pUniVar;
+        }
+    };
+
     Material::Material(const std::string& materialPath)
     {
         std::ifstream fileStream(materialPath);
@@ -33,17 +102,27 @@ namespace Renderer
 
             auto pShader = ShaderProgram::Create();
 
+            // uniform create callback
+            std::function<void(const Ptr<UniformVariable>&)> onUniVarCreate = [this, &pass](const Ptr<UniformVariable>& pUniVar)
+            {
+                if (pUniVar != nullptr)
+                    _passUniVars[pass.value()].push_back(pUniVar);
+            };
+
             // vertex
-            std::string vertexShaderTypeName = ShaderTypeHelper::ShaderTypeToString(ShaderType::Vertex);
+            const std::string& vertexShaderTypeName = ShaderTypeHelper::ShaderTypeToString(ShaderType::Vertex);
             if (passShaderConfig.contains(vertexShaderTypeName))
             {
                 auto vertexNode = passShaderConfig[vertexShaderTypeName];
                 const std::string& shaderPath = vertexNode["Path"];
                 pShader->AddShader<ShaderType::Vertex>(shaderPath);
+
+                // uniform
+                MaterialJsonHelper::ParseUniformVar(vertexNode, onUniVarCreate);
             }
 
             // pixel
-            std::string pixelShaderTypeName = ShaderTypeHelper::ShaderTypeToString(ShaderType::Pixel);
+            const std::string& pixelShaderTypeName = ShaderTypeHelper::ShaderTypeToString(ShaderType::Pixel);
             if (passShaderConfig.contains(pixelShaderTypeName))
             {
                 // attach shader
@@ -52,20 +131,7 @@ namespace Renderer
                 pShader->AddShader<ShaderType::Pixel>(shaderPath);
 
                 // uniform
-                if (pixelNode.contains("Uniform") && pixelNode["Uniform"].is_array())
-                {
-                    for (const auto& uniformVarConfig: pixelNode["Uniform"])
-                    {
-                        if (uniformVarConfig["Type"] == UniformVariableTypeHelper::UniformVariableTypeToString(UniformVariableType::Texture2D))
-                        {
-                            const std::string& name = uniformVarConfig["Name"];
-                            const std::string& texPath = uniformVarConfig["Path"];
-                            int slot = uniformVarConfig["Slot"];
-                            Ptr<UniformVariable> pUniVar = std::make_shared<UniformVariableTexture2d>(name, texPath, slot);
-                            _passUniVars[pass.value()].push_back(pUniVar);
-                        }
-                    }
-                }
+                MaterialJsonHelper::ParseUniformVar(pixelNode, onUniVarCreate);
             }
 
             pShader->Compile();

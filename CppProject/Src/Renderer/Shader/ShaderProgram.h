@@ -30,7 +30,9 @@ namespace Renderer
         virtual void SetUniformInt(const std::string& name, int value) = 0;
         virtual void SetUniformUnsignedInt(const std::string& name, unsigned int value) = 0;
         virtual void SetUniformFloat(const std::string& name, float value) = 0;
+        virtual void SetUniformFloat2(const std::string& name, const Eigen::Vector2f& value) = 0;
         virtual void SetUniformFloat3(const std::string& name, const Eigen::Vector3f& value) = 0;
+        virtual void SetUniformFloat4(const std::string& name, const Eigen::Vector4f& value) = 0;
         virtual void SetUniformMat3(const std::string& name, const Eigen::Matrix3f& mat) = 0;
         virtual void SetUniformMat4(const std::string& name, const Eigen::Matrix4f& mat) = 0;
 

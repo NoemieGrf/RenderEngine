@@ -76,12 +76,28 @@ namespace Renderer
         ::glUniform1f(location, value);
     }
 
+    void ShaderProgramOpenGL::SetUniformFloat2(const std::string& name, const Eigen::Vector2f& value)
+    {
+        const GLint location = ::glGetUniformLocation(_shaderProgramId, name.c_str());
+        assert(location != GL_INVALID_VALUE && location != GL_INVALID_OPERATION);
+
+        ::glUniform2f(location, value.x(), value.y());
+    }
+
     void ShaderProgramOpenGL::SetUniformFloat3(const std::string& name, const Eigen::Vector3f& value)
     {
         const GLint location = ::glGetUniformLocation(_shaderProgramId, name.c_str());
         assert(location != GL_INVALID_VALUE && location != GL_INVALID_OPERATION);
 
         ::glUniform3f(location, value.x(), value.y(), value.z());
+    }
+
+    void ShaderProgramOpenGL::SetUniformFloat4(const std::string& name, const Eigen::Vector4f& value)
+    {
+        const GLint location = ::glGetUniformLocation(_shaderProgramId, name.c_str());
+        assert(location != GL_INVALID_VALUE && location != GL_INVALID_OPERATION);
+
+        ::glUniform4f(location, value.x(), value.y(), value.z(), value.w());
     }
 
     void ShaderProgramOpenGL::SetUniformMat3(const std::string& name, const Eigen::Matrix3f& mat)

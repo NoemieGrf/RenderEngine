@@ -14,7 +14,9 @@ namespace Renderer
 		Int,
 		Uint,
 		Float,
+		Float2,
 		Float3,
+		Float4,
 		Mat3,
 		Mat4,
 		Texture2D
