@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeSharedSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug-VS CLang" ENABLED="true" GENERATION_DIR="build_debug" CONFIG_NAME="Debug" TOOLCHAIN_NAME="VS CLang" />
+      <configuration PROFILE_NAME="Release-VS CLang" ENABLED="true" GENERATION_DIR="build_release" CONFIG_NAME="Release" TOOLCHAIN_NAME="VS CLang" />
+    </configurations>
+  </component>
+</project>
