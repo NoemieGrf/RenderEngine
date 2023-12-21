@@ -1,6 +1,6 @@
 import os.path
-from shader_compile import glslc
-from miscs import path_miscs
+from tools.shader_compile import glslc
+from tools.miscs import path_miscs
 
 
 def main() -> None:

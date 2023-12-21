@@ -1,4 +1,4 @@
-from miscs import path_miscs
+from tools.miscs import path_miscs
 import shutil
 
 

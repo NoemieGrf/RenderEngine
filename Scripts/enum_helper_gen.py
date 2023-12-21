@@ -1,7 +1,7 @@
 import json
-from codegen.enum_gen_config import EnumConfig
-from codegen.function_gen_config import FunctionConfig
-from codegen.code_generator import CodeGenerator
+from tools.codegen.enum_gen_config import EnumConfig
+from tools.codegen.function_gen_config import FunctionConfig
+from tools.codegen.code_generator import CodeGenerator
 
 
 class CustomEnumConverterConfig:
