@@ -1,10 +1,10 @@
 import os
 import subprocess
-from . import tool_path
+from ..miscs import path_miscs
 
 
 def _dxc_gen_cmd(hlsl_path: str, shader_type: str, out_path: str) -> str:
-    cmd = tool_path.get_dxc_path()
+    cmd = path_miscs.get_dxc_path()
     if shader_type == 'vertex':
         cmd += ' -T vs_6_0 '
     elif shader_type == 'pixel':

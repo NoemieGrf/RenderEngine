@@ -1,12 +1,12 @@
 import os.path
 from shader_compile import glslc
-from shader_compile import tool_path
+from miscs import path_miscs
 
 
 def main() -> None:
-    src_dir: str = '../CppProject/Assets/Shader/'
+    src_dir: str = '../Assets/Shader/'
 
-    tool_path.clear_dir('../CppProject/Assets/ShaderBin/')
+    path_miscs.clear_dir('../Assets/ShaderBin/')
 
     for root, dir_list, file_list in os.walk(src_dir):
         for file_name in file_list:

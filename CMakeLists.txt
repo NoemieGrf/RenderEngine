@@ -60,11 +60,11 @@ target_link_libraries(${TargetName}
         d3d11.lib # d3d
 )
 
-# copy assets folder
-add_custom_command(
-        TARGET ${TargetName} PRE_BUILD
-        COMMAND ${CMAKE_COMMAND}
-        -E copy_directory
-        ${CMAKE_CURRENT_SOURCE_DIR}/Assets
-        ${CMAKE_CURRENT_BINARY_DIR}/Assets
-)
+# copy assets folder -> use python to do this
+# add_custom_command(
+#         TARGET ${TargetName} PRE_BUILD
+#         COMMAND ${CMAKE_COMMAND}
+#         -E copy_directory
+#         ${CMAKE_CURRENT_SOURCE_DIR}/Assets
+#         ${CMAKE_CURRENT_BINARY_DIR}/Assets
+# )
