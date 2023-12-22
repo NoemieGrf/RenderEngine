@@ -8,7 +8,75 @@ namespace Renderer
 {
     static void DebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
     {
-        Util::Logger::LogError("Source {}, type {}, id {}, severity {}, length {}, {}", source, type, id, severity, length, message);
+        std::string messageSource;
+        switch (source)
+        {
+        case GL_DEBUG_SOURCE_API:
+            messageSource = "OpenGL";
+            break;
+        case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+            messageSource = "Windows";
+            break;
+        case GL_DEBUG_SOURCE_SHADER_COMPILER:
+            messageSource = "Shader Compiler";
+            break;
+        case GL_DEBUG_SOURCE_THIRD_PARTY:
+            messageSource = "Third Party";
+            break;
+        case GL_DEBUG_SOURCE_APPLICATION:
+            messageSource = "Application";
+            break;
+        case GL_DEBUG_SOURCE_OTHER:
+        default:
+            messageSource = "Other";
+            break;
+        }
+
+        std::string messageType;
+        switch (type)
+        {
+        case GL_DEBUG_TYPE_ERROR:
+            messageType = "Error";
+            break;
+        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+            messageType = "Deprecated Behavior";
+            break;
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+            messageType = "Undefined Behavior";
+            break;
+        case GL_DEBUG_TYPE_PORTABILITY:
+            messageType = "Portability";
+            break;
+        case GL_DEBUG_TYPE_PERFORMANCE:
+            messageType = "Performance";
+            break;
+        case GL_DEBUG_TYPE_OTHER:
+        default:
+            messageType = "Other";
+            break;
+        }
+
+        std::string messageSeverity;
+        switch (severity)
+        {
+        case GL_DEBUG_SEVERITY_HIGH:
+            messageSeverity = "High";
+            break;
+        case GL_DEBUG_SEVERITY_MEDIUM:
+            messageSeverity = "Medium";
+            break;
+        case GL_DEBUG_SEVERITY_LOW:
+            messageSeverity = "Low";
+            break;
+        default:
+            messageSeverity = "Other";
+            break;
+        }
+
+        if (type == GL_DEBUG_TYPE_ERROR)
+            Util::Logger::LogError("[GLErrorCallback][{}][{}][{}] {}", messageSource, messageType, messageSeverity, message);
+        else
+            Util::Logger::LogWarn("[GLErrorCallback][{}][{}][{}] {}", messageSource, messageType, messageSeverity, message);
     }
 
     void RenderCommandOpenGL::ClearColor(const Eigen::Vector4f& color)
@@ -88,6 +156,7 @@ namespace Renderer
         }
 
         // set gl error callback
+        ::glEnable(GL_DEBUG_OUTPUT);
         ::glDebugMessageCallback(&DebugMessageCallback, nullptr);
 
         // version
