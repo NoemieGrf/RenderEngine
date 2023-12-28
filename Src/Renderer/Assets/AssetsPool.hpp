@@ -4,7 +4,7 @@
 
 #include "Define/Define.h"
 #include "Util/NonConstructible.h"
-#include "Util/XXHash/XXHashMap.h"
+#include "ThirdParty/XXHash/XXHashMap.h"
 
 namespace Renderer
 {
