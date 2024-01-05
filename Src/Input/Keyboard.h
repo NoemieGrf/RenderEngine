@@ -4,7 +4,7 @@
 #include <array>
 #include <unordered_set>
 
-#include "Util/NonConstructible.h"
+#include "Helper/NonConstructible.h"
 #include "KeyCode.h"
 
 class Application;
@@ -12,7 +12,7 @@ class ApplicationWinImp;
 
 namespace Input
 {
-    class Keyboard : public NonConstructible
+    class Keyboard : public Helper::NonConstructible
     {
     public:
         friend class ::Application;

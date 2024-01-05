@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Util/Timer/Timer.h"
-#include "Util/NonConstructible.h"
+#include "Helper/Timer.h"
+#include "Helper/NonConstructible.h"
 
-class Time: public NonConstructible
+class Time: public Helper::NonConstructible
 {
 public:
     static void Init();
@@ -14,8 +14,8 @@ public:
     static double GetFrameTimerElapsed();
 
 private:
-    static inline Util::Timer _globalTimer = Util::Timer();
-    static inline Util::Timer _frameTimer = Util::Timer();
+    static inline Helper::Timer _globalTimer = Helper::Timer();
+    static inline Helper::Timer _frameTimer = Helper::Timer();
     static inline double _deltaTime = 0;
     static inline double _timeSinceBegin = 0;
 };

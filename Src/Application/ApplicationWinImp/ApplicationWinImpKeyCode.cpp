@@ -1,6 +1,6 @@
 #include "ApplicationWinImp.h"
 #include "Input/KeyCode.h"
-#include "Util/Logger/Logger.h"
+#include "Helper/Logger.h"
 
 Input::KeyCode WinVirtualKeyToKeyCode(WPARAM wParam)
 {
@@ -132,7 +132,7 @@ Input::KeyCode WinVirtualKeyToKeyCode(WPARAM wParam)
         case VK_BROWSER_FORWARD: return Input::KeyCode::AppForward;
     }
 
-    Util::Logger::LogWarn("UnKnow input, WPara = 0x{:x}", wParam);
+    Helper::Logger::LogWarn("UnKnow input, WPara = 0x{:x}", wParam);
 
     return Input::KeyCode::None;
 }

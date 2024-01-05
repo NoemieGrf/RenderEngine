@@ -1,21 +1,22 @@
 #pragma once
 
-#include <vector>
+#include <string>
 #include "Define/WindowsPlatform.h"
-#include "Util/NonCopyable.h"
+#include "Helper/NonCopyable.h"
 
 class Application;
 
-class ApplicationWinImp : public NonCopyable
+class ApplicationWinImp : public Helper::NonCopyable
 {
 public:
     ApplicationWinImp();
 
 public:
     HWND GetWindowHandle() const;
-    void RegisterAndCreateWindow(int width, int height, const char* windowName);
-    void ShowWindow();
+    void RegisterWin32Window();
+    void ShowWin32Window(int width, int height, const std::wstring& windowName);
     void DestroyWindow();
+    void UnRegisterWindow();
     LRESULT HandleMsgDispatch(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 private:
@@ -39,6 +40,6 @@ private:
     HWND _hWnd = nullptr;
 
 private:
-    static constexpr const char* WND_CLASS_NAME = "Graphic Render";
+    static constexpr const wchar_t* WND_CLASS_NAME = L"Graphic Render";
 
 };

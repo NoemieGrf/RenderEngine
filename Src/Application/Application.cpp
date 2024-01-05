@@ -1,6 +1,6 @@
 
 #include "Application.h"
-#include "Util/Logger/Logger.h"
+#include "Helper/Logger.h"
 #include "Renderer/RenderCommand/RenderCommand.h"
 #include "Editor/Editor.h"
 #include "Input/Keyboard.h"
@@ -14,16 +14,16 @@ void Application::InitWindow(RendererApi api, int windowWidth, int windowHeight)
     _width = windowWidth;
     _height = windowHeight;
 
-    Util::Logger::InitConsoleLogger();
+    Helper::Logger::InitConsoleLogger();
 
 #ifdef BUILD_RELEASE
-    Util::Logger::InitFileLogger("./log.txt");
-    Util::Logger::SetFilterLevel(Util::Logger::Level::Error);
+    Helper::Logger::InitFileLogger("./log.txt");
+    Helper::Logger::SetFilterLevel(Util::Logger::Level::Error);
 #endif
 
     _pImpl = new ApplicationWinImp();
-    _pImpl->RegisterAndCreateWindow(_width, _height, WINDOW_NAME);
-    _pImpl->ShowWindow();
+    _pImpl->RegisterWin32Window();
+    _pImpl->ShowWin32Window(_width, _height, WINDOW_NAME);
 
     Renderer::RenderCommand::Init();
     Editor::Environment::Init();
@@ -39,6 +39,7 @@ void Application::DestroyWindow()
     Renderer::RenderCommand::Destroy();
 
     _pImpl->DestroyWindow();
+    _pImpl->UnRegisterWindow();
 
     delete _pImpl;
 }
@@ -115,7 +116,7 @@ void Application::WaitForTargetFrame()
 
     // windows should not use sleep to wait
     double waitTime = thisFrameAtLeastElapsed - thisFrameElapsed;
-    Util::Timer waitTimer;
+    Helper::Timer waitTimer;
     waitTimer.SetNow();
     while (true)
     {

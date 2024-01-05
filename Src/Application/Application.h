@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include "AppLooper.h"
 #include "Util/NonConstructible.h"
 #include "Define/RendererApi.h"
@@ -60,6 +61,6 @@ private:
     inline static std::vector<AppLooper*> _loopLogic {};
 
     /* Const */
-    inline static constexpr const char* WINDOW_NAME = "Graphic Render";
+    inline static constexpr const wchar_t* WINDOW_NAME = L"Graphic Render";
 
 };
