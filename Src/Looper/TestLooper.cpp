@@ -36,7 +36,7 @@ void TestLooper::RenderLoop()
         pCamObj->SetPosition(pos);
     }
 
-    const auto& pObj = _scene.FindFirstObjectByName("Cube");
+    auto pObj = _scene.FindFirstObjectByName("Cube");
     if (pObj != nullptr)
     {
         Eigen::Quaternionf rot = pObj->GetWorldRotation();

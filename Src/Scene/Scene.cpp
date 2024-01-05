@@ -40,12 +40,13 @@ const std::vector<Ptr<SceneObject>>& Scene::GetAllObjects() const
 {
     return _sceneObjects;
 }
-const Ptr<SceneObject>& Scene::FindFirstObjectByName(const std::string& name) const
+
+SceneObject* Scene::FindFirstObjectByName(const std::string& name) const
 {
     for (const auto& pObj: _sceneObjects)
     {
         if (pObj->GetName() == name)
-            return pObj;
+            return pObj.get();
     }
 
     return nullptr;
