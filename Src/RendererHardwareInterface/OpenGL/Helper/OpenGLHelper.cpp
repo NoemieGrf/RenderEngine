@@ -1,5 +1,5 @@
 #include "OpenGLHelper.h"
-#include "Util/Logger/Logger.h"
+#include <Helper/Logger.h>
 
 namespace Renderer
 {
@@ -34,7 +34,7 @@ namespace Renderer
         ::glGetShaderiv(shaderId, GL_COMPILE_STATUS, &flag);
         if (flag == GL_FALSE)
         {
-            Util::Logger::LogError("Shader State Fail: {}", GetShaderInfoLog(shaderId));
+            Helper::Logger::LogError("Shader State Fail: {}", GetShaderInfoLog(shaderId));
             return false;
         }
 

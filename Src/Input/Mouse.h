@@ -3,7 +3,7 @@
 #include <queue>
 #include <array>
 
-#include "Util/NonConstructible.h"
+#include <Helper/NonConstructible.h>
 #include "Define/Define.h"
 
 class Application;
@@ -21,7 +21,7 @@ namespace Input
         Count
     };
 
-    class Mouse: public NonConstructible
+    class Mouse: public Helper::NonConstructible
     {
     public:
         friend class ::Application;

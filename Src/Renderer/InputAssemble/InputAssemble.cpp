@@ -1,7 +1,7 @@
 #include "InputAssemble.h"
 
 #include "Application/Application.h"
-#include "RendererHardwareInterface/OpenGL/Buffer/InputAssembleOpenGL.h"
+#include "RendererHardwareInterface/OpenGL/InputAssemble/InputAssembleOpenGL.h"
 
 namespace Renderer
 {

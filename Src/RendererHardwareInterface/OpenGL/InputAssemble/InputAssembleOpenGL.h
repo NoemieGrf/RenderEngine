@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Renderer/Buffer/InputAssemble.h"
+#include "Renderer/InputAssemble/InputAssemble.h"
 
 namespace Renderer
 {

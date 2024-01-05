@@ -1,9 +1,10 @@
-#include "Shader.h"
-#include "Util/Logger/Logger.h"
-#include "Util/StringUtil.hpp"
-#include "Application/Application.h"
 #include <fstream>
 #include <memory>
+#include <Helper/Logger.h>
+#include <Helper/String.h>
+
+#include "Shader.h"
+#include "Application/Application.h"
 
 namespace Renderer
 {
@@ -15,7 +16,7 @@ namespace Renderer
         switch (Application::GetRenderApi())
         {
             case RendererApi::OpenGL:
-                Util::StringOperation::Replace(binPath, std::string("/Shader/"), std::string("/ShaderBin/Spirv/"));
+                Helper::String::Replace(binPath, std::string("/Shader/"), std::string("/ShaderBin/Spirv/"));
                 binPath += ".spv";
                 break;
             case RendererApi::Vulkan:
@@ -27,7 +28,7 @@ namespace Renderer
         std::ifstream fs(binPath, std::ios::in | std::ios::binary);
         if (!fs.is_open())
         {
-            Util::Logger::LogError("Get shader fail: {}", binPath);
+            Helper::Logger::LogError("Get shader fail: {}", binPath);
             return;
         }
 

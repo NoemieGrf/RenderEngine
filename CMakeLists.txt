@@ -12,10 +12,12 @@ find_package(OpenGL REQUIRED)
 
 file (GLOB_RECURSE ResFiles Resource/*.rc)
 file (GLOB_RECURSE SrcFiles Src/*.cpp)
+file (GLOB_RECURSE HelperSrcFiles Helper/src/*.cpp)
 file (GLOB_RECURSE ManifestFiles Manifest/*.manifest)
 
 add_executable(${TargetName}
         ${SrcFiles}
+        ${HelperSrcFiles}
         ${ResFiles}
         ${ManifestFiles}
         ${ImGuiDir}/backends/imgui_impl_dx11.cpp
@@ -44,6 +46,7 @@ set_target_properties(${TargetName} PROPERTIES
 
 target_include_directories(${TargetName}
         PRIVATE
+        Helper/src/ # Helper
         Src/ # self root
         ThirdParty/ # eigen
         ${ImGuiDir}   # imgui

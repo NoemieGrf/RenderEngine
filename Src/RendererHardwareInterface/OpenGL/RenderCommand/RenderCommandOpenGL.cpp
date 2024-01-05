@@ -1,8 +1,8 @@
+#include <Helper/Logger.h>
 #include "RenderCommandOpenGL.h"
 #include "Application/Application.h"
 #include "Define/WindowsPlatform.h"
 #include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
-#include "Util/Logger/Logger.h"
 
 namespace Renderer
 {
@@ -74,9 +74,9 @@ namespace Renderer
         }
 
         if (type == GL_DEBUG_TYPE_ERROR)
-            Util::Logger::LogError("[GLErrorCallback][{}][{}][{}] {}", messageSource, messageType, messageSeverity, message);
+            Helper::Logger::LogError("[GLErrorCallback][{}][{}][{}] {}", messageSource, messageType, messageSeverity, message);
         else
-            Util::Logger::LogWarn("[GLErrorCallback][{}][{}][{}] {}", messageSource, messageType, messageSeverity, message);
+            Helper::Logger::LogWarn("[GLErrorCallback][{}][{}][{}] {}", messageSource, messageType, messageSeverity, message);
     }
 
     void RenderCommandOpenGL::ClearColor(const Eigen::Vector4f& color)
@@ -160,10 +160,10 @@ namespace Renderer
         ::glDebugMessageCallback(&DebugMessageCallback, nullptr);
 
         // version
-        Util::Logger::LogInfo("OpenGL Version: {}", reinterpret_cast<const char*>(::glGetString(GL_VERSION)));
-        Util::Logger::LogInfo("OpenGL Vendor: {}", reinterpret_cast<const char*>(::glGetString(GL_VENDOR)));
-        Util::Logger::LogInfo("OpenGL Renderer: {}", reinterpret_cast<const char*>(::glGetString(GL_RENDERER)));
-        Util::Logger::LogInfo("OpenGL Shader Version: {}", reinterpret_cast<const char*>(::glGetString(GL_SHADING_LANGUAGE_VERSION)));
+        Helper::Logger::LogInfo("OpenGL Version: {}", reinterpret_cast<const char*>(::glGetString(GL_VERSION)));
+        Helper::Logger::LogInfo("OpenGL Vendor: {}", reinterpret_cast<const char*>(::glGetString(GL_VENDOR)));
+        Helper::Logger::LogInfo("OpenGL Renderer: {}", reinterpret_cast<const char*>(::glGetString(GL_RENDERER)));
+        Helper::Logger::LogInfo("OpenGL Shader Version: {}", reinterpret_cast<const char*>(::glGetString(GL_SHADING_LANGUAGE_VERSION)));
 
         // set viewport
         ::glViewport(0, 0, Application::GetWindowHeight(), Application::GetWindowWidth());

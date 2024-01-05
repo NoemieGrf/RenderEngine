@@ -1,15 +1,15 @@
 #pragma once
 
 #include <string>
+#include <Helper/NonConstructible.h>
 
 #include "Define/Define.h"
-#include "Util/NonConstructible.h"
 #include "ThirdParty/XXHash/XXHashMap.h"
 
 namespace Renderer
 {
     template<class T>
-    class AssetsPool: public NonConstructible
+    class AssetsPool: public Helper::NonConstructible
     {
     public:
         static Ptr<T> Get(const std::string& path)

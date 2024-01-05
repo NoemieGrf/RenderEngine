@@ -1,6 +1,5 @@
 #pragma once
 
-#include "InputLayout.h"
 #include "Define/Define.h"
 
 namespace Renderer

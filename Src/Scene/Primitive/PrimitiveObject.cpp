@@ -1,6 +1,6 @@
 #include "PrimitiveObject.h"
 #include "Scene/Component/CompRenderer.h"
-#include "Renderer/Buffer/InputAssemble.h"
+#include "Renderer/InputAssemble/InputAssemble.h"
 #include "Renderer/Material/Material.h"
 #include "Renderer/Assets/AssetsPool.hpp"
 #include "Renderer/Assets/Model.h"

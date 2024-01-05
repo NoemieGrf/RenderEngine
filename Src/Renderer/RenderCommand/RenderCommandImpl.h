@@ -1,16 +1,16 @@
 #pragma once
 
+#include <Helper/NonCopyable.h>
+
 #include "Define/Define.h"
-#include "Util/NonCopyable.h"
-#include "Define/RendererApi.h"
-#include "Renderer/Buffer/InputAssemble.h"
+#include "Renderer/InputAssemble/InputAssemble.h"
 #include "Renderer/Shader/ShaderProgram.h"
 #include "Renderer/Material/Material.h"
 #include "eigen/Eigen"
 
 namespace Renderer
 {
-    class RenderCommandImpl : public NonCopyable
+    class RenderCommandImpl : public Helper::NonCopyable
     {
     public:
         virtual ~RenderCommandImpl() = default;

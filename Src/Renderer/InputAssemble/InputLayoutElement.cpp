@@ -1,4 +1,4 @@
-#include "../Buffer/BufferLayout/InputLayoutElement.h"
+#include "InputLayoutElement.h"
 
 namespace Renderer
 {

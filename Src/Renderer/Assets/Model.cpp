@@ -1,7 +1,7 @@
 #include <cassert>
+#include <Helper/Logger.h>
 #include "Model.h"
 #include "tinyobjloader/tiny_obj_loader.h"
-#include "Util/Logger/Logger.h"
 
 namespace Renderer
 {
@@ -16,15 +16,15 @@ namespace Renderer
         if (!readSuccess)
         {
             if (!reader.Error().empty())
-                Util::Logger::LogError("Load obj fail at `{}`, error message = {}", path, reader.Error());
+                Helper::Logger::LogError("Load obj fail at `{}`, error message = {}", path, reader.Error());
             else
-                Util::Logger::LogError("Load obj fail at `{}`, error message = unknown", path);
+                Helper::Logger::LogError("Load obj fail at `{}`, error message = unknown", path);
 
             return;
         }
 
         if (!reader.Warning().empty())
-            Util::Logger::LogWarn("Load obj at `{}`: {}", path, reader.Warning());
+            Helper::Logger::LogWarn("Load obj at `{}`: {}", path, reader.Warning());
 
         const auto& attrib = reader.GetAttrib();
         const auto& shapes = reader.GetShapes();

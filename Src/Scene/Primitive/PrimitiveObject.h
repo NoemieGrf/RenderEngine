@@ -1,10 +1,11 @@
 #pragma once
 
+#include <Helper/NonConstructible.h>
+
 #include "Define/Define.h"
-#include "Util/NonConstructible.h"
 #include "Scene/SceneObject.h"
 
-class PrimitiveObject: public NonConstructible
+class PrimitiveObject: public Helper::NonConstructible
 {
 public:
     static Ptr<SceneObject> CreateQuad();

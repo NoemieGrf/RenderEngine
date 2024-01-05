@@ -1,12 +1,13 @@
 #pragma once
 
 #include <vector>
+#include <Helper/NonConstructible.h>
+
 #include "AppLooper.h"
-#include "Util/NonConstructible.h"
 #include "Define/RendererApi.h"
 #include "ApplicationWinImp/ApplicationWinImp.h"
 
-class Application : public NonConstructible
+class Application : public Helper::NonConstructible
 {
 public:
     friend class ApplicationWinImp;

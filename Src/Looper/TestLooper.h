@@ -1,10 +1,7 @@
 #pragma once
 
 #include "Application/AppLooper.h"
-#include "Renderer/Shader/ShaderProgram.h"
-#include "Renderer/Buffer/InputAssemble.h"
-#include "Renderer/Material/Material.h"
-#include "Scene/Component/CompRenderer.h"
+#include "Renderer/InputAssemble/InputAssemble.h"
 #include "Scene/Scene.h"
 
 class TestLooper : public AppLooper

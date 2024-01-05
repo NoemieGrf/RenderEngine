@@ -2,13 +2,13 @@
 
 #include <string>
 #include <eigen/Eigen>
+#include <Helper/NonConstructible.h>
 #include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
 #include "Renderer/Shader/ShaderDataType.h"
-#include "Util/NonConstructible.h"
 
 namespace Renderer
 {
-    class OpenGLHelper: public NonConstructible
+    class OpenGLHelper: public Helper::NonConstructible
     {
     public:
         static GLenum GetShaderDataTypeGlEnum(ShaderDataType type);

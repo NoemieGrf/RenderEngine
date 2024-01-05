@@ -1,9 +1,9 @@
+#include <Helper/Logger.h>
 #include "ShaderProgramOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/Shader/SpecificShader/VertexShaderOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/Shader/SpecificShader/PixelShaderOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
 #include "RendererHardwareInterface/OpenGL/Helper/OpenGLHelper.h"
-#include "Util/Logger/Logger.h"
 
 namespace Renderer
 {
@@ -19,7 +19,7 @@ namespace Renderer
         Ptr<IOpenGLShaderId> pOpenGLShader = DynamicCast<IOpenGLShaderId>(pShader);
         if (pOpenGLShader == nullptr)
         {
-            Util::Logger::LogWarn("Shader convert fail `{}` when attaching.", ShaderTypeHelper::ShaderTypeToString(pShader->GetShaderType()));
+            Helper::Logger::LogWarn("Shader convert fail `{}` when attaching.", ShaderTypeHelper::ShaderTypeToString(pShader->GetShaderType()));
             return;
         }
 
@@ -40,7 +40,7 @@ namespace Renderer
         ::glGetProgramiv(_shaderProgramId, GL_LINK_STATUS, &success);
         if (success == GL_FALSE)
         {
-            Util::Logger::LogError("Shader Link Fail: {}", OpenGLHelper::GetProgramInfoLog(_shaderProgramId));
+            Helper::Logger::LogError("Shader Link Fail: {}", OpenGLHelper::GetProgramInfoLog(_shaderProgramId));
             return false;
         }
 

@@ -1,10 +1,11 @@
 #include "Material.h"
 #include <fstream>
 #include <functional>
+#include <Helper/Logger.h>
+
 #include "nlohmann/json.hpp"
 #include "Renderer/Shader/ShaderType.h"
 #include "UniformVariable/UniformVariableType.h"
-#include "Util/Logger/Logger.h"
 #include "Renderer/Material/UniformVariable/UniformVariableTexture2d.h"
 #include "Renderer/Material/UniformVariable/UniformVariableNumeric.h"
 
@@ -83,7 +84,7 @@ namespace Renderer
         std::ifstream fileStream(materialPath);
         if (!fileStream.is_open())
         {
-            Util::Logger::LogError("Get material fail: {}", materialPath);
+            Helper::Logger::LogError("Get material fail: {}", materialPath);
             return;
         }
 
@@ -96,7 +97,7 @@ namespace Renderer
             auto pass = RendererPassTypeHelper::StringToRendererPassType(passName);
             if (!pass.has_value())
             {
-                Util::Logger::LogError("Material pass error, {}, {}", materialPath, passName);
+                Helper::Logger::LogError("Material pass error, {}, {}", materialPath, passName);
                 continue;
             }
 

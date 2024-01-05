@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Component.h"
-#include "Renderer/Buffer/InputAssemble.h"
+#include "Renderer/InputAssemble/InputAssemble.h"
 #include "Renderer/Material/Material.h"
 
 class CompRenderer: public ComponentWithType<ComponentType::Renderer>

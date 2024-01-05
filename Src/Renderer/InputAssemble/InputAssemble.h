@@ -3,9 +3,9 @@
 #include <vector>
 
 #include "Define/Define.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
 #include "Renderer/Assets/Mesh.h"
+#include "Renderer/Buffer/VertexBuffer.h"
+#include "Renderer/Buffer/IndexBuffer.h"
 
 namespace Renderer
 {

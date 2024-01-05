@@ -3,7 +3,7 @@
 #include <string>
 #include <array>
 #include "Define/Define.h"
-#include "Renderer/Buffer/InputLayout.h"
+#include "Renderer/InputAssemble/InputLayout.h"
 #include "AssetsPool.hpp"
 
 namespace Renderer
