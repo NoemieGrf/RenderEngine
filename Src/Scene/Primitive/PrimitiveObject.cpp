@@ -7,14 +7,14 @@
 
 Ptr<SceneObject> PrimitiveObject::CreateQuad()
 {
-    Ptr<SceneObject> obj = LoadFromObj("Assets/Primitive/Model/Quad.obj");
+    Ptr<SceneObject> obj = LoadFromObj("Assets/Model/Primitive/Quad.obj");
     obj->SetName("Quad");
     return obj;
 }
 
 Ptr<SceneObject> PrimitiveObject::CreateCube()
 {
-    Ptr<SceneObject> obj = LoadFromObj("Assets/Primitive/Model/Cube.obj");
+    Ptr<SceneObject> obj = LoadFromObj("Assets/Model/Primitive/Cube.obj");
     obj->SetName("Cube");
     return obj;
 }
@@ -32,7 +32,7 @@ Ptr<SceneObject> PrimitiveObject::LoadFromObj(const std::string& path)
         Ptr<SceneObject> pObj = std::make_shared<SceneObject>();
 
         auto pInputAssemble = Renderer::InputAssemble::Create(allMesh.begin()->second);
-        auto pDefaultMaterial = std::make_shared<Renderer::Material>("Assets/Primitive/Material/DefaultMaterial.json");
+        auto pDefaultMaterial = std::make_shared<Renderer::Material>("Assets/Material/Primitive/DefaultMaterial.json");
         pObj->AddComponent<CompRenderer>(pInputAssemble, pDefaultMaterial);
 
         return pObj;
@@ -45,7 +45,7 @@ Ptr<SceneObject> PrimitiveObject::LoadFromObj(const std::string& path)
             Ptr<SceneObject> pObj = std::make_shared<SceneObject>();
 
             auto pInputAssemble = Renderer::InputAssemble::Create(allMesh.begin()->second);
-            auto pDefaultMaterial = std::make_shared<Renderer::Material>("Assets/Primitive/Material/DefaultMaterial.json");
+            auto pDefaultMaterial = std::make_shared<Renderer::Material>("Assets/Material/Primitive/DefaultMaterial.json");
             pObj->AddComponent<CompRenderer>(pInputAssemble, pDefaultMaterial);
 
             pParentObj->AddChild(pObj);
