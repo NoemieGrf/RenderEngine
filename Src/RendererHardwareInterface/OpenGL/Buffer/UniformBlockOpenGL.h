@@ -10,6 +10,6 @@ namespace Renderer
         void UpdateOffset() override;
 
     private:
-        constexpr int STD140_ALIGN = 16;
+        static constexpr int STD140_ALIGN = 16;
     };
 }

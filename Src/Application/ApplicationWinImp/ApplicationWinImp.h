@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include "Define/WindowsPlatform.h"
-#include "Helper/NonCopyable.h"
+#include <Helper/NonCopyable.h>
+#include <Helper/WinApi/WindowsPlatform.h>
 
 class Application;
 

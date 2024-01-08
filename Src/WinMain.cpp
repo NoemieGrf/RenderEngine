@@ -1,4 +1,5 @@
 
+#include <Helper/WinApi/WindowsPlatform.h>
 #include "Define/RendererApi.h"
 #include "Application/Application.h"
 #include "Looper/TestLooper.h"

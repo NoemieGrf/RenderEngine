@@ -4,13 +4,11 @@
 
 namespace Renderer
 {
-    struct RhiOpenGLData;
-
     class RenderCommandOpenGL : public RenderCommandImpl
     {
     public:
         RenderCommandOpenGL();
-        ~RenderCommandOpenGL() override;
+        ~RenderCommandOpenGL() override = default;
 
     public:
         bool SetUp() override;
@@ -20,10 +18,12 @@ namespace Renderer
         void Submit(RendererPassType pass, const Ptr<InputAssemble>& pInputAssemble, const Ptr<Material>& pMaterial) override;
 
     public:
-        const RhiOpenGLData* GetData() const;
+        const void* GetDeviceContextHandle() const;
+        const void* GetRenderCoontextHandle() const;
 
     private:
-        RhiOpenGLData* _pData;
+        void* _hDeviceConext;
+        void* _hRenderContext;
 
     };
 }

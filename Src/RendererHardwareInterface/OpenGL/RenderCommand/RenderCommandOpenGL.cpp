@@ -1,7 +1,7 @@
 #include <Helper/Logger.h>
+#include <Helper/WinApi/WinApiWindow.h>
 #include "RenderCommandOpenGL.h"
 #include "Application/Application.h"
-#include "Define/WindowsPlatform.h"
 #include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
 
 namespace Renderer
@@ -86,63 +86,26 @@ namespace Renderer
     }
 
     RenderCommandOpenGL::RenderCommandOpenGL()
+        : _hDeviceConext(nullptr)
+        , _hRenderContext(nullptr)
     {
-        _pData = new RhiOpenGLData();
-    }
-
-    RenderCommandOpenGL::~RenderCommandOpenGL()
-    {
-        delete _pData;
     }
 
     bool RenderCommandOpenGL::SetUp()
     {
-        HWND hWnd = static_cast<HWND>(Application::GetWindowHandle());
-
-        // init openGL pixel format
-        PIXELFORMATDESCRIPTOR pfd =
-                {
-                        sizeof(PIXELFORMATDESCRIPTOR),
-                        1,
-                        PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,    // Flags
-                        PFD_TYPE_RGBA,        // The kind of framebuffer.
-                        32,                   // Color depth of the framebuffer.
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        24,
-                        8,
-                        0
-                };
-
-        _pData->_hDC = ::GetDC(hWnd);
-        GLuint pixelFormat = ::ChoosePixelFormat(_pData->_hDC, &pfd);
-        auto setFormatSuccess = ::SetPixelFormat(_pData->_hDC, pixelFormat, &pfd);
+        void* hWnd = Application::GetWindowHandle();
+        auto setFormatSuccess = Helper::Win::Window::OpenGL::PrepareWindowPixelFormat(hWnd);
         if (!setFormatSuccess)
             return false;
 
-        // create opengl renderer context
-        _pData->_hRC = ::wglCreateContext(_pData->_hDC);
-        auto makeContextSuccess = ::wglMakeCurrent(_pData->_hDC, _pData->_hRC);
+        _hDeviceConext = Helper::Win::Window::GetDeviceContext(hWnd);
+        _hRenderContext = Helper::Win::Window::OpenGL::CreateRenderContext(_hDeviceConext);
+
+        auto makeContextSuccess = Helper::Win::Window::OpenGL::BindRenderContext(_hDeviceConext, _hRenderContext);
         if (!makeContextSuccess)
         {
-            ::wglMakeCurrent(nullptr, nullptr);
-            ::wglDeleteContext(_pData->_hRC);
+            Helper::Win::Window::OpenGL::BindRenderContext(nullptr, nullptr);
+            Helper::Win::Window::OpenGL::DestroyRenderContext(_hRenderContext);
             return false;
         }
 
@@ -150,8 +113,8 @@ namespace Renderer
         auto gladSuccess = ::gladLoadGL();
         if (!gladSuccess)
         {
-            ::wglMakeCurrent(nullptr, nullptr);
-            ::wglDeleteContext(_pData->_hRC);
+            Helper::Win::Window::OpenGL::BindRenderContext(nullptr, nullptr);
+            Helper::Win::Window::OpenGL::DestroyRenderContext(_hRenderContext);
             return false;
         }
 
@@ -183,16 +146,15 @@ namespace Renderer
 
     void RenderCommandOpenGL::Destroy()
     {
-        ::wglMakeCurrent(nullptr, nullptr);
-        ::wglDeleteContext(_pData->_hRC);
-
-        HWND hWnd = static_cast<HWND>(Application::GetWindowHandle());
-        ::ReleaseDC(hWnd, _pData->_hDC);
+        void* hWnd = Application::GetWindowHandle();
+        Helper::Win::Window::OpenGL::BindRenderContext(nullptr, nullptr);
+        Helper::Win::Window::OpenGL::DestroyRenderContext(_hRenderContext);
+        Helper::Win::Window::ReleaseDeviceContext(hWnd, _hDeviceConext);
     }
 
     void RenderCommandOpenGL::SwapBuffer()
     {
-        ::SwapBuffers(_pData->_hDC);
+        Helper::Win::Window::DeviceContextSwapBuffer(_hDeviceConext);
     }
 
     void RenderCommandOpenGL::Submit(RendererPassType pass, const Ptr<InputAssemble>& pInputAssemble, const Ptr<Material>& pMaterial)
@@ -207,9 +169,14 @@ namespace Renderer
                 nullptr);
     }
 
-    const RhiOpenGLData* RenderCommandOpenGL::GetData() const
+    const void* RenderCommandOpenGL::GetDeviceContextHandle() const
     {
-        return _pData;
+        return _hDeviceConext;
+    }
+
+    const void* RenderCommandOpenGL::GetRenderCoontextHandle() const
+    {
+        return _hRenderContext;
     }
 
 }

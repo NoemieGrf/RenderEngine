@@ -5,7 +5,8 @@
 
 #include "AppLooper.h"
 #include "Define/RendererApi.h"
-#include "ApplicationWinImp/ApplicationWinImp.h"
+
+class ApplicationWinImp;
 
 class Application : public Helper::NonConstructible
 {
