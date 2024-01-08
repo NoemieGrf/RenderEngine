@@ -2,6 +2,11 @@
 
 namespace Renderer
 {
+    UniformBlockOpenGL::UniformBlockOpenGL(const std::string& name)
+        : UniformBlock(name)
+    {
+    }
+
     void UniformBlockOpenGL::UpdateOffset()
     {
         int currentLeftAlign = STD140_ALIGN;

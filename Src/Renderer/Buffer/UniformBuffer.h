@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Define/Define.h"
+#include "UniformBlock.h"
 
 namespace Renderer
 {
@@ -15,5 +16,8 @@ namespace Renderer
 
     public:
         static Ptr<UniformBuffer> Create();
+
+    private:
+        Ptr<UniformBlock> _pUniformBlock;
     };
 }

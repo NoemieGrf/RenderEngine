@@ -9,5 +9,8 @@ namespace Renderer
     public:
         void Init() override;
         void Renderer(const Scene* pScene) override;
+
+    private:
+        PassUniform _pUniBlockMvp;
     };
 }
