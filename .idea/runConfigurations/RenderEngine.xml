@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="RenderEngine" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="true" EMULATE_TERMINAL="false" WORKING_DIR="file://$CMakeProjectDir$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="RenderEngine" TARGET_NAME="RenderEngine" CONFIG_NAME="Debug-VS CLang" RUN_TARGET_PROJECT_NAME="RenderEngine" RUN_TARGET_NAME="RenderEngine">
+    <method v="2">
+      <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+    </method>
+  </configuration>
+</component>
