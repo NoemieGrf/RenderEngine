@@ -1,6 +1,6 @@
 #include "PixelShaderOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
-#include "RendererHardwareInterface/OpenGL/Helper/OpenGLHelper.h"
+#include "RendererHardwareInterface/OpenGL/Utility/OpenGLHelper.h"
 
 namespace Renderer
 {
@@ -21,7 +21,7 @@ namespace Renderer
         _shaderId = ::glCreateShader(GL_FRAGMENT_SHADER);
         ::glShaderBinary(1, &_shaderId, GL_SHADER_BINARY_FORMAT_SPIR_V, data, size);
         ::glSpecializeShader(_shaderId, "main", 0, nullptr, nullptr);
-        OpenGLHelper::CheckShaderState(_shaderId);
+        OpenUtility::CheckShaderState(_shaderId);
 
         _needCompile = false;
     }
@@ -32,6 +32,6 @@ namespace Renderer
             return true;
 
         ::glCompileShader(_shaderId);
-        return OpenGLHelper::CheckShaderState(_shaderId);
+        return OpenUtility::CheckShaderState(_shaderId);
     }
 }

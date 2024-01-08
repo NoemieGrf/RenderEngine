@@ -1,6 +1,6 @@
 #include "InputAssembleOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
-#include "RendererHardwareInterface/OpenGL/Helper/OpenGLHelper.h"
+#include "RendererHardwareInterface/OpenGL/Utility/OpenGLHelper.h"
 
 namespace Renderer
 {
@@ -25,7 +25,7 @@ namespace Renderer
         for (const auto& element : _inputLayout.GetLayout())
         {
             auto dataCount = ShaderDataTypeHelper::GetShaderDataCount(element.dataType);
-            GLenum glEnum = OpenGLHelper::GetShaderDataTypeGlEnum(element.dataType);
+            GLenum glEnum = OpenUtility::GetShaderDataTypeGlEnum(element.dataType);
             bool normalized = element.normalized ? GL_TRUE : GL_FALSE;
             auto stride = _inputLayout.GetStride();
             auto offset = element.offset;

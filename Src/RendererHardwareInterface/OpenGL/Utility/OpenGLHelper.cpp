@@ -3,7 +3,7 @@
 
 namespace Renderer
 {
-    GLenum OpenGLHelper::GetShaderDataTypeGlEnum(ShaderDataType type)
+    GLenum OpenUtility::GetShaderDataTypeGlEnum(ShaderDataType type)
     {
         switch (type)
         {
@@ -28,7 +28,7 @@ namespace Renderer
         return GL_FLOAT;
     }
 
-    bool OpenGLHelper::CheckShaderState(unsigned int shaderId)
+    bool OpenUtility::CheckShaderState(unsigned int shaderId)
     {
         GLint flag;
         ::glGetShaderiv(shaderId, GL_COMPILE_STATUS, &flag);
@@ -41,7 +41,7 @@ namespace Renderer
         return true;
     }
 
-    std::string OpenGLHelper::GetShaderInfoLog(unsigned int shaderId)
+    std::string OpenUtility::GetShaderInfoLog(unsigned int shaderId)
     {
         CheckInfoBuffer();
 
@@ -50,7 +50,7 @@ namespace Renderer
         return std::string{ _pInfoLogBuffer };
     }
 
-    std::string OpenGLHelper::GetProgramInfoLog(unsigned int programId)
+    std::string OpenUtility::GetProgramInfoLog(unsigned int programId)
     {
         CheckInfoBuffer();
 
@@ -59,7 +59,7 @@ namespace Renderer
         return std::string{ _pInfoLogBuffer };
     }
 
-    void OpenGLHelper::CheckInfoBuffer()
+    void OpenUtility::CheckInfoBuffer()
     {
         if (_pInfoLogBuffer == nullptr)
             _pInfoLogBuffer = new char[GL_INFO_BUFFER_SIZE];

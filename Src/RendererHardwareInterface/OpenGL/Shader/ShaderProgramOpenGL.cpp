@@ -3,7 +3,7 @@
 #include "RendererHardwareInterface/OpenGL/Shader/SpecificShader/VertexShaderOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/Shader/SpecificShader/PixelShaderOpenGL.h"
 #include "RendererHardwareInterface/OpenGL/Glad/Glad.h"
-#include "RendererHardwareInterface/OpenGL/Helper/OpenGLHelper.h"
+#include "RendererHardwareInterface/OpenGL/Utility/OpenGLHelper.h"
 
 namespace Renderer
 {
@@ -40,7 +40,7 @@ namespace Renderer
         ::glGetProgramiv(_shaderProgramId, GL_LINK_STATUS, &success);
         if (success == GL_FALSE)
         {
-            Helper::Logger::LogError("Shader Link Fail: {}", OpenGLHelper::GetProgramInfoLog(_shaderProgramId));
+            Helper::Logger::LogError("Shader Link Fail: {}", OpenUtility::GetProgramInfoLog(_shaderProgramId));
             return false;
         }
 
