@@ -2,5 +2,8 @@
 
 namespace Renderer
 {
+    Ptr<UniformBuffer> UniformBuffer::Create()
+    {
 
+    }
 }

@@ -1,4 +1,4 @@
-#include "OpenGLHelper.h"
+#include "OpenGLUtility.h"
 #include <Helper/Logger.h>
 
 namespace Renderer
